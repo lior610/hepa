@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Users List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Gender</th>
+                <th>Kind</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row, replace with dynamic content -->
+            <% for(let i = 0; i < users.length; i++ ) { %>
+            <tr>
+                <td><%= users[i].full_name %></td>
+                <td><%= users[i].username %></td>
+                <td><%= users[i].mail %></td>
+                <td><%= users[i].phone %></td>
+                <td><%= users[i].address.number %> <%= users[i].address.street %>, <%= users[i].address.city %></td>
+                <td><%= users[i].gender %></td>
+                <td><%= users[i].kind %></td>
+            </tr>
+            <% } %>
+            <!-- Additional rows can be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

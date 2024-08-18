@@ -2,7 +2,7 @@ const usersService = require("../services/users")
 
 const showAllUsers = async (req, res) => {
     users = await usersService.getUsers();
-    res.render("users.ejs", {users})
+    return res.json(users);
 }
 
 const createUser = async (req, res) => {
@@ -24,9 +24,9 @@ const createUser = async (req, res) => {
 
 //{ users : usersModel.getAllUsers() }
 
-function addUser(req, res) {
-    res.render("addUser.ejs")
-}
+// function addUser(req, res) {
+//     res.render("addUser.ejs")
+// }
 
 // function deleteArticle(req, res) {
 //     const articleId = req.query.id
@@ -34,4 +34,4 @@ function addUser(req, res) {
 //     //showAllArticles(req, res);
 //     res.redirect("/")
 // }
-module.exports = {addUser, showAllUsers, createUser}
+module.exports = {showAllUsers, createUser}

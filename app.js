@@ -10,6 +10,6 @@ const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static("public"))
-server.use(users)
+server.use('/api', users)
 
 server.listen(80)

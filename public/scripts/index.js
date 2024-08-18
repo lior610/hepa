@@ -4,7 +4,7 @@ async function getUsers(){
     const results = await res.json()
     console.log(results)
     for (let i = 0; i < results.length; i++ ) {
-        result = results[i]
+        let result = results[i]
         let user = document.getElementById("tablerow").innerHTML;
         for (const key in result) {
             let data = "";
@@ -18,9 +18,19 @@ async function getUsers(){
             }
             user = user.replace("{" + key + "}", data)
         }
+        user = user.replace("{_id}", result["_id"])
         document.getElementById("tablebody").innerHTML += user
     }
 
 }
+async function deleteUser(id) {
+    await fetch(`http://localhost/api/user/${id}`, {
+        method: "DELETE",
+    })
+    window.location.href = "/"
+}
 
+async function editUser(id) {
+    window.location.href = `/edituser.html?id=${id}`
+}
 getUsers()

@@ -22,16 +22,39 @@ const createUser = async (req, res) => {
     res.redirect("/")
 }
 
-//{ users : usersModel.getAllUsers() }
+const editUser = async (req, res) => {
+    const address = {
+        number: req.body.address_number,
+        street: req.body.address_street,
+        city: req.body.address_city
+    }
+    const updatedUser = await usersService.editUser(req.params.id,
+                                                  req.body.full_name,
+                                                  req.body.username,
+                                                  req.body.password,
+                                                  req.body.mail,
+                                                  req.body.phone,
+                                                  address,
+                                                  req.body.gender,
+                                                  req.body.kind
+                                                )
+    res.redirect("/")
+}
 
-// function addUser(req, res) {
-//     res.render("addUser.ejs")
-// }
+async function getUser(req, res) {
+    const userId = req.params.id
+    user = await usersService.getUser(userId);
+    return res.json(user);
+}
 
-// function deleteArticle(req, res) {
-//     const articleId = req.query.id
-//     articleModel.deleteArticle(articleId)
-//     //showAllArticles(req, res);
-//     res.redirect("/")
-// }
-module.exports = {showAllUsers, createUser}
+async function deleteUser(req, res) {
+    const userId = req.params.id
+
+    try {
+        await usersService.deleteUser(userId);
+        res.status(200).send("added successfully");
+    } catch (error) {
+        res.status(500).send("Error deleting user: " + error.message);
+    }
+}
+module.exports = {showAllUsers, createUser, deleteUser, editUser, getUser}

@@ -4,7 +4,7 @@ async function getUser() {
     const Id = urlParams.get("id");
 
     try {
-        const res = await fetch(`http://localhost/api/user/${Id}`, {
+        const res = await fetch(`/api/user/${Id}`, {
             method: "GET"
         });
 
@@ -38,9 +38,9 @@ async function putData() {
 async function submit() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const Id = urlParams.get("id");
+    const id = urlParams.get("id");
 
-    res = await fetch(`http://localhost/api/user/${id}`, {
+    res = await fetch(`/api/user/${id}`, {
         method: "POST"
     })
 

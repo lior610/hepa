@@ -1,5 +1,5 @@
 async function getUsers(){
-    const url = "http://localhost/api/"
+    const url = "/api/"
     const res = await fetch(url)
     const results = await res.json()
     console.log(results)
@@ -24,7 +24,7 @@ async function getUsers(){
 
 }
 async function deleteUser(id) {
-    await fetch(`http://localhost/api/user/${id}`, {
+    await fetch(`/api/user/${id}`, {
         method: "DELETE",
     })
     window.location.href = "/"

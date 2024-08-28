@@ -14,19 +14,19 @@ const getConcerts = async () => {
     return concerts;
 }
 
-const deleteConcert = async (userId) => {
-    return await Concert.deleteOne({"_id": userId});
+const deleteConcert = async (id) => {
+    return await Concert.deleteOne({"_id": id});
 }
 
-const editConcert = async (userId, full_name, username, password,
-    mail, phone, address, gender, kind) => {
-    const data = {full_name, username, password,
-        mail, phone, address, gender, kind}
-    return await Concert.updateOne({"_id": userId}, data)
+const editConcert = async (id, artist_name, date, hour, door_opening, 
+    location, ticket_amout, picture) => {
+    const data = {artist_name, date, hour, door_opening, 
+        location, ticket_amout, picture}
+    return await Concert.updateOne({"_id": id}, data)
 }
 
-const getConcert = async(userId) => {
-    let concerts = await Concert.find({"_id": userId})
+const getConcert = async(id) => {
+    let concerts = await Concert.find({"_id": id})
     return concerts;
 }
 

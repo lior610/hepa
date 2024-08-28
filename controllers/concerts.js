@@ -6,37 +6,26 @@ const showAllConcerts = async (req, res) => {
 }
 
 const createConcert = async (req, res) => {
-    const address = {
-        number: req.body.address_number,
-        street: req.body.address_street,
-        city: req.body.address_city
-    }
-    const newConcert = await concertsService.createConcert(req.body.full_name,
-                                                  req.body.username,
-                                                  req.body.password,
-                                                  req.body.mail,
-                                                  req.body.phone,
-                                                  address,
-                                                  req.body.gender,
+    const newConcert = await concertsService.createConcert(req.body. artist_name,
+                                                  req.body.date,
+                                                  req.body.hour,
+                                                  req.body.door_opening,
+                                                  req.body.location,
+                                                  req.body.ticket_amout,
+                                                  req.body.picture
                                                 )
     res.redirect("/")
 }
 
 const editConcert = async (req, res) => {
-    const address = {
-        number: req.body.address_number,
-        street: req.body.address_street,
-        city: req.body.address_city
-    }
     const updatedConcert = await concertsService.editConcert(req.params.id,
-                                                  req.body.full_name,
-                                                  req.body.username,
-                                                  req.body.password,
-                                                  req.body.mail,
-                                                  req.body.phone,
-                                                  address,
-                                                  req.body.gender,
-                                                  req.body.kind
+                                                  req.body. artist_name,
+                                                  req.body.date,
+                                                  req.body.hour,
+                                                  req.body.door_opening,
+                                                  req.body.location,
+                                                  req.body.ticket_amout,
+                                                  req.body.picture
                                                 )
     res.redirect("/") //redirect every func to rellevat page 
 }

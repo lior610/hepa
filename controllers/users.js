@@ -1,4 +1,4 @@
-const usersService = require("../services/users")
+const concertsService = require("../services/users")
 
 const showAllUsers = async (req, res) => {
     users = await usersService.getUsers();

@@ -38,7 +38,7 @@ const editUser = async (req, res) => {
                                                   req.body.gender,
                                                   req.body.kind
                                                 )
-    res.redirect("/")
+    res.redirect("/") //redirect every func to rellevat page 
 }
 
 async function getUser(req, res) {

@@ -1,0 +1,80 @@
+body {
+    font-family: assistant, Arial, Helvetica, sans-serif;
+}
+
+#nav-logo {
+    height: 5rem;
+    margin-right: 10px;
+}
+
+nav {
+    background-color: #405389;
+    border-radius: 0 0 10px 10px;
+}
+
+.nav-item {
+    font-size: large;
+    margin: 7px;
+    font-weight: 200;
+}
+
+.active {
+    font-weight: 700;
+}
+
+.search-bar {
+    height: 30vh;
+}
+
+#search-button {
+    background-color: #405389;
+}
+
+.large-rounded {
+    border-radius: 30px; /* Adjust the size for larger rounded corners */
+}
+
+#carouselExampleCaptions {
+    width: 40%;
+    margin: -40px auto; /* Center the carousel horizontally */
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.card {
+    height: 100%; /* Fixed height for all cards */
+}
+
+.card-body {
+    background-color: #405389;
+    color: white;
+    height: 100%;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.card-title {
+    font-weight: 800;
+    font-size: x-large;
+}
+
+.card-text {
+    font-weight: 300;
+}
+
+small {
+    color: #e7e7df;
+}
+
+.recommended-picture {
+    width: 300px; /* Fixed width for the image column */
+    height: 100%;
+    overflow: hidden;
+}
+
+.img-fluid {
+    height: 250px;
+    object-fit: cover; /* Ensures the image covers the fixed space */
+    width: 100%;
+}

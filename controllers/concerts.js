@@ -11,7 +11,7 @@ const createConcert = async (req, res) => {
                                                   req.body.hour,
                                                   req.body.door_opening,
                                                   req.body.location,
-                                                  req.body.ticket_amout,
+                                                  req.body.ticket_amount,
                                                   req.body.picture
                                                 )
     res.redirect("/")
@@ -24,7 +24,7 @@ const editConcert = async (req, res) => {
                                                   req.body.hour,
                                                   req.body.door_opening,
                                                   req.body.location,
-                                                  req.body.ticket_amout,
+                                                  req.body.ticket_amount,
                                                   req.body.picture
                                                 )
     res.redirect("/") //redirect every func to rellevat page 

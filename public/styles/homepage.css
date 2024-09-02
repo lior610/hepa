@@ -35,7 +35,7 @@ nav {
 }
 
 #carouselExampleCaptions {
-    width: 40%;
+    width: 50%;
     margin: -40px auto; /* Center the carousel horizontally */
 }
 
@@ -47,7 +47,7 @@ nav {
     height: 100%; /* Fixed height for all cards */
 }
 
-.card-body {
+.carousel-card-body {
     background-color: #405389;
     color: white;
     height: 100%;
@@ -72,7 +72,56 @@ small {
 }
 
 .img-fluid {
-    height: 250px;
-    object-fit: cover; /* Ensures the image covers the fixed space */
+    height: 300px;
+    object-fit: cover;
     width: 100%;
+}
+
+.regular-card {
+    width: 18rem;
+    height: 30rem;
+    margin: 0 auto;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.regular-card-body {
+    padding: 1rem;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: space-between; 
+    height: 100%;
+}
+
+.regular-card-title {
+    margin-bottom: 0.5em; 
+    font-weight: bold;
+    font-size: 1.2rem; 
+}
+
+.regular-text {
+    margin-bottom: 0.3em; 
+    font-size: 0.95rem; 
+    text-align: center;
+}
+
+.regular-btn {
+    margin-top: auto; 
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #405389;
+}
+
+.card-img-top {
+    max-height: 200px;
+    width: 100%; 
+    object-fit: cover;
+    border-bottom: 2px solid #e7e7df;
+}
+
+.regular-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+    transform: translateY(-5px);
 }

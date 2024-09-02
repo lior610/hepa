@@ -91,12 +91,17 @@ concerts = [
     }
 ]
 
-function recommendedSection() {
-    const recommendedConcerts = concerts.filter(e => e.recommended);
-    console.log(recommendedConcerts)
-    for (let i = 0; i < recommendedConcerts.length; i++ ) {
-        let concert = recommendedConcerts[i]
-        let template = document.getElementById("carousel-template").innerHTML
+function plant(recommended, templateId, parentId) {
+    let filterdConcerts;
+    if (recommended) {
+        filterdConcerts = concerts.filter(e => e.recommended);
+    } else {
+        filterdConcerts = concerts.filter(e => !e.recommended);
+    }
+    console.log(filterdConcerts)
+    for (let i = 0; i < filterdConcerts.length; i++ ) {
+        let concert = filterdConcerts[i]
+        let template = document.getElementById(templateId).innerHTML
         for (const key in concert) {
             let data = "";
             if (typeof(concert[key]) == "object") {
@@ -109,9 +114,12 @@ function recommendedSection() {
             }
             template = template.replace("{" + key + "}", data)
         }
-        document.getElementById("carousel-data").innerHTML += template;
+        document.getElementById(parentId).innerHTML += template;
     }
-    document.getElementsByClassName("carousel-item")[0].classList.add("active")
+    if (recommended) {
+        document.getElementsByClassName("carousel-item")[0].classList.add("active")
+    }
 }
 
-recommendedSection();
+plant(true, "carousel-template", "carousel-data")
+plant(false, "card-template", "card-row")

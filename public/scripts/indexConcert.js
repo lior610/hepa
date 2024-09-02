@@ -23,14 +23,14 @@ async function getConcerts(){
     }
 
 }
-async function deleteUser(id) {
+async function deleteConcert(id) {
     await fetch(`/api/concert/${id}`, {
         method: "DELETE",
     })
     window.location.href = "/"
 }
 
-async function editUser(id) {
+async function editConcert(id) {
     window.location.href = `/editconcert.html?id=${id}`
 }
-getUsers()
+getConcerts()

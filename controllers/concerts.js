@@ -6,14 +6,15 @@ const showAllConcerts = async (req, res) => {
 }
 
 const createConcert = async (req, res) => {
-    const newConcert = await concertsService.createConcert(req.body. artist_name,
-                                                  req.body.date,
-                                                  req.body.hour,
-                                                  req.body.door_opening,
-                                                  req.body.location,
-                                                  req.body.ticket_amount,
-                                                  req.body.picture
-                                                )
+    const newConcert = await concertsService.createConcert({
+        artist_name: req.body.artist_name,
+        date: req.body.date,
+        hour: req.body.hour,
+        door_opening: req.body.door_opening,
+        location: req.body.location,
+        ticket_amount: req.body.ticket_amount,
+        picture: fs.readFileSync(path.join(__dirname, '../uploads/', req.file.filename)) // Read the uploaded image file
+        })
     res.redirect("/")
 }
 

@@ -63,6 +63,10 @@ nav {
     font-weight: 300;
 }
 
+.btn-primary {
+    background-color: #405389;
+}
+
 small {
     color: #e7e7df;
 }
@@ -124,4 +128,28 @@ small {
 .regular-card:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
     transform: translateY(-5px);
+}
+
+.filter-section {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.filter-options {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+}
+
+.filter-button {
+    margin-right: 1rem;
+}
+
+footer {
+    background-color: #405389;
+    color: white;
+}
+
+.nav-link {
+    color: white;
 }

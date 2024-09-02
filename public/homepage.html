@@ -38,8 +38,8 @@
       </nav>
       <div class="d-flex justify-content-center align-items-center search-bar">
         <div class="input-group mb-3 w-50" id="search">
-          <input type="text" class="form-control form-control-lg large-rounded" placeholder="Search..." aria-label="Search">
-          <button class="btn btn-lg text-white large-rounded" id="search-button" type="button">Search</button>
+          <input type="text" id="search-input" class="form-control form-control-lg large-rounded" placeholder="Search..." aria-label="Search">
+          <button class="btn btn-lg text-white large-rounded" id="search-button" type="button" onclick="searchByName()">Search</button>
         </div>
       </div>
       <div id="carouselExampleCaptions" class="carousel slide mb-5" data-bs-ride="false">
@@ -59,10 +59,73 @@
           <span class="visually-hidden">Next</span>
         </button>
       </div>
+      <div class="container">
+        <div class="filter-section">
+            <div class="d-flex justify-content-center mb-3">
+                <button class="btn btn-primary filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions">
+                    Filter Concerts
+                </button>
+                <button type="button" class="btn btn-primary" onclick="clearFilters()">Show All!</button>
+            </div>
+            <div class="collapse" id="filterOptions">
+                <div class="filter-options mt-3">
+                    <form id="filterForm">
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City:</label>
+                            <select id="city" name="city" class="form-select">
+                                <option value="">Select a city</option>
+                                <option value="Haifa">Haifa</option>
+                                <option value="Jerusalem">Jerusalem</option>
+                                <option value="Tel Aviv">Tel Aviv</option>
+                                <option value="Rishon Lezion">Rishon Lezion</option>
+                                <option value="Eilat">Eilat</option>
+                                <option value="Beer Sheva">Beer Sheva</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="minPrice" class="form-label">Price Range:</label>
+                            <div class="d-flex">
+                                <input type="number" id="minPrice" name="minPrice" class="form-control me-2" placeholder="Min" />
+                                <input type="number" id="maxPrice" name="maxPrice" class="form-control" placeholder="Max" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="startDate" class="form-label">Date Range:</label>
+                            <div class="d-flex">
+                                <input type="date" id="startDate" name="startDate" class="form-control me-2" />
+                                <input type="date" id="endDate" name="endDate" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mb-3">
+                            <button type="button" class="btn btn-primary" onclick="applyFilters()">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
       <div class="container my-5">
         <div class="row justify-content-center" id="card-row">
         </div>
     </div>
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© 2024 Company, Inc</p>
+    
+        <h4 class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          Hepa Inc
+        </h4>
+    
+        <ul class="nav col-md-4 justify-content-end">
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">My Profile</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Contact Us</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Our Places</a></li>
+        </ul>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          </ul>
+      </footer> 
     <script type="text/html" id="carousel-template">
         <div class="carousel-item">
             <div class="card mb-3">
@@ -93,7 +156,7 @@
                     <p class="card-text regular-text">Door Opening: {time}</p>
                     <p class="card-text regular-text">Hepa {city}</p>
                     <p class="card-title regular-card-title">Only {price} Shekel</p>
-                    <button type="button" class="btn btn-primary my-2 regular-btn" onclick="editUser('{id}')">BUY NOW</button>
+                    <button type="button" class="btn btn-primary my-2 regular-btn" onclick="buyNow('{id}')">BUY NOW</button>
                 </div>
             </div>
         </div>

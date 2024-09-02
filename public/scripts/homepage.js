@@ -91,12 +91,9 @@ concerts = [
     }
 ]
 
-function plant(recommended, templateId, parentId) {
-    let filterdConcerts;
-    if (recommended) {
-        filterdConcerts = concerts.filter(e => e.recommended);
-    } else {
-        filterdConcerts = concerts.filter(e => !e.recommended);
+function deploy(recommended, templateId, parentId, filterdConcerts) {
+    if (!recommended) {
+        document.getElementById(parentId).innerHTML = "";
     }
     console.log(filterdConcerts)
     for (let i = 0; i < filterdConcerts.length; i++ ) {
@@ -121,5 +118,40 @@ function plant(recommended, templateId, parentId) {
     }
 }
 
-plant(true, "carousel-template", "carousel-data")
-plant(false, "card-template", "card-row")
+function applyFilters() {
+    const city = document.getElementById('city').value;
+    const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+    const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+
+    let filtered_concerts = concerts.filter(e => {
+        const concertDate = new Date(e.date);
+        const cityMatch = city === "" || e.city === city;
+        const priceMatch = (e.price >= minPrice) && (e.price <= maxPrice);
+        const startDateMatch = startDate == "" || new Date(startDate) <= concertDate;
+        const endDateMatch = endDate === "" || concertDate <= new Date(endDate);
+        return cityMatch && priceMatch && startDateMatch && endDateMatch;
+    })
+    deploy(false, "card-template", "card-row", filtered_concerts)
+}
+
+function clearFilters() {
+    deploy(false, "card-template", "card-row", concerts.filter(e => !e.recommended))    
+}
+
+function searchByName() {
+    const searchBar = document.getElementById("search-input");
+    const searchQuery = searchBar.value;
+    console.log(searchQuery);
+    const filteredResults = concerts.filter(e => {
+        const lowerCase = searchQuery.toLowerCase();
+        return e.artist.toLowerCase().includes(lowerCase);
+    })
+
+    deploy(false, "card-template", "card-row", filteredResults);
+}
+
+deploy(true, "carousel-template", "carousel-data", concerts.filter(e => e.recommended))
+deploy(false, "card-template", "card-row", concerts.filter(e => !e.recommended))

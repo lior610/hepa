@@ -1,4 +1,12 @@
 const Concert = require("../models/concerts")
+// services/spotifyService.js
+const axios = require('axios');
+const qs = require('qs');
+
+const showAllConcerts = async (req, res) => {
+    concerts = await concertsService.getConcerts();
+    return res.json(concerts);
+}
 
 const createConcert = async (full_name, username, password,
     mail, phone, address, gender) => {
@@ -38,5 +46,5 @@ module.exports = {
     getConcerts,
     deleteConcert,
     editConcert,
-    getConcert
+    getConcert,
 };

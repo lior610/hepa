@@ -7,5 +7,6 @@ router.route("/concert/:id").delete(concertsController.deleteConcert).post(conce
 router.route("/addconcert").post((req, res) => {
     concertsController.createConcert(req, res)
 })
+router.route("/artist/:artistName/latest-album").get(concertsController.showLatestAlbum);
 
 module.exports = router;

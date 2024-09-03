@@ -1,9 +1,28 @@
 const concertsService = require("../services/concerts")
+const latestAlbumView = require('../public/scripts/latestAlbumView');
+const { getArtistLatestAlbum } = require('../services/spotifyService');
 
 const showAllConcerts = async (req, res) => {
     concerts = await concertsService.getConcerts();
     return res.json(concerts);
 }
+
+const showLatestAlbum = async (req, res) => {
+    try {
+        const artistName = req.body.artist_name || req.params.artistName;
+        const latestAlbum = await getArtistLatestAlbum(artistName);
+
+        if (!latestAlbum) {
+            return res.status(404).send('No album found for this artist.');
+        }
+
+        // Render the HTML using the view
+        const albumHtml = latestAlbumView(latestAlbum);
+        res.send(albumHtml);
+    } catch (error) {
+        res.status(500).send('Error retrieving latest album.');
+    }
+};
 
 const createConcert = async (req, res) => {
     const newConcert = await concertsService.createConcert({
@@ -47,4 +66,5 @@ async function deleteConcert(req, res) {
         res.status(500).send("Error deleting concert: " + error.message);
     }
 }
-module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert}
+
+module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum}

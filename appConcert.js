@@ -11,5 +11,5 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static("public"))  //use files in public folder
 server.use('/api', concerts) // for (x,y) - when you get x, do y
-
+server.use('/', concerts);
 server.listen(8080)

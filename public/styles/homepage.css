@@ -3,7 +3,8 @@ body {
 }
 
 #nav-logo {
-    height: 5rem;
+    height: 7rem;
+    margin-bottom: -0.5rem;
     margin-right: 10px;
 }
 
@@ -152,4 +153,10 @@ footer {
 
 .nav-link {
     color: white;
+}
+
+.form-card {
+    width: 40%;
+    margin: 30px auto; /* Centers the card and adds vertical space */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }

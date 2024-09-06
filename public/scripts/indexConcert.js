@@ -2,7 +2,6 @@ async function getConcerts(){
     const url = "/api/"
     const res = await fetch(url)
     const results = await res.json()
-    console.log(results)
     for (let i = 0; i < results.length; i++ ) {
         let result = results[i]
         let concert = document.getElementById("tablerow").innerHTML;

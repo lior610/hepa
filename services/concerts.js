@@ -1,14 +1,13 @@
 const Concert = require("../models/concerts")
 
-const createConcert = async (full_name, username, password,
-    mail, phone, address, gender) => {
+const createConcert = async (artist_name, date, hour,
+    door_opening, location, ticket_amount, picture) => {
         const concert = new Concert({
-            id, artist_name, date, hour, door_opening, location, ticket_amount, picture
+            artist_name, date, hour, door_opening, location, ticket_amount, picture
         });
 
         let concertCreated = await concert.save();
-        fs.unlinkSync(path.join(__dirname, '../uploads/', req.file.filename)); // Delete the temporary file
-        res.send('Concert created and picture uploaded successfully');
+        //fs.unlinkSync(path.join(__dirname, '../uploads/', req.file.filename)); // Delete the temporary file
         return concertCreated;
 }
 

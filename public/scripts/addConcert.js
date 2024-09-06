@@ -1,4 +1,7 @@
-document.getElementById('registrationForm').onsubmit = function() {
+document.getElementById('addConcert').onsubmit = function() {
+
+//new validations - are they needed? the form blocks most if not all of them. check 
+
     var email = document.getElementById('mail').value;
     var phone = document.getElementById('phone').value;
     

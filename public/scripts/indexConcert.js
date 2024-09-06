@@ -33,4 +33,8 @@ async function deleteConcert(id) {
 async function editConcert(id) {
     window.location.href = `/editconcert.html?id=${id}`
 }
+
+async function addConcert(id) {
+    window.location.href = `/addconcert.html`
+}
 getConcerts()

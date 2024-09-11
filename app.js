@@ -1,5 +1,6 @@
 const express = require("express");
 const users = require("./routes/users");  // create route for every model
+const concerts = require("./routes/concerts");  // create route for every model
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser")
 
@@ -11,5 +12,6 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static("public"))  //use files in public folder
 server.use('/api', users) // for (x,y) - when you get x, do y
+server.use('/concerts', concerts);
 
 server.listen(80)

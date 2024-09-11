@@ -2,7 +2,6 @@ async function getConcert() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const Id = urlParams.get("id");
-
     try {
         const res = await fetch(`/api/concert/${Id}`, {
             method: "GET"
@@ -21,7 +20,7 @@ async function getConcert() {
 }
 
 async function putData() {
-    const data = await getConcert(); 
+    const data = await getConcert();
     document.getElementById("editConcertForm").action = `/api/concert/${data._id}`
     document.getElementById("artist_name").value = data.artist_name;
     document.getElementById("date").value = data.date;
@@ -29,7 +28,6 @@ async function putData() {
     document.getElementById("door_opening").value = data.door_opening;
     document.getElementById("location").value = data.location;
     document.getElementById("ticket_amount").value = data.ticket_amount;
-    document.getElementById("picture").value = data.picture;
 }
 
 async function submit() {

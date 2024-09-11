@@ -10,7 +10,7 @@
 
 <div class="container">
     <h2>Edit Concert Form</h2>
-    <form id="editConcertForm" action="/api/concert/{_id}" method="post">
+    <form id="editConcertForm" action="/api/concert/{_id}" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="artist_name">Artist Name:</label>
             <input type="text" id="artist_name" name="artist_name" required>

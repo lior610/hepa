@@ -35,11 +35,10 @@
         <td>{door_opening}</td>
         <td>{location}</td>
         <td>{ticket_amount}</td>
-        <td>{picture}</td>
+        <td><img src="data:image/png;base64,{picture}" width="100" /></td>
         <td><button id="deleteConcertButton" onclick="deleteConcert('{_id}')">Delete Concert</button></td>
         <td><button id="editConcertButton" onclick="editConcert('{_id}')">Edit Concert</button></td>
     </tr>
-    
 </script>
 <script src="scripts/indexConcert.js"></script>
 </body>

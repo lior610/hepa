@@ -15,7 +15,7 @@
   "main": "app.js",
   "scripts": {
     "test": "SET NODE_ENV=test && nodemon app.js",
-    "start": "SET NODE_ENV=local && nodemon appConcert.js"
+    "start": "SET NODE_ENV=local && nodemon app.js"
   },
   "repository": {
     "type": "git",

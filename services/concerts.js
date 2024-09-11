@@ -1,9 +1,9 @@
 const Concert = require("../models/concerts")
 
 const createConcert = async (artist_name, date, hour,
-    door_opening, location, ticket_amount, picture) => {
+    door_opening, location, ticket_amount, tickets_available, picture) => {
         const concert = new Concert({
-            artist_name, date, hour, door_opening, location, ticket_amount, picture
+            artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, picture
         });
 
         let concertCreated = await concert.save();

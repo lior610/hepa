@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles/styleConcert.css" rel="stylesheet" type="text/css">
-    <title>Edit Concert Form</title>
+    <title>Add A Concert</title>
 </head>
 <body>
 
 <div class="container">
-    <h2>Edit Concert Form</h2>
-    <form id="editConcertForm" action="/api/concert/{_id}" method="post" enctype="multipart/form-data">
+    <h2>Add A Concert Form</h2>
+    <form id="addConcert" action="/api_concerts/addconcert" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="artist_name">Artist Name:</label>
             <input type="text" id="artist_name" name="artist_name" required>
@@ -47,13 +47,12 @@
             <input type="file" id="picture" name="picture" accept="image/*" required>
         </div>
         <div class="form-group">
-            <input type="submit" value="edit" onsubmit= >
+            <input type="submit" value="submit" onsubmit= >
         </div>
     </form>
 </div>
 
-<script src="scripts/addConcert.js"></script>
-<script src="scripts/editConcert.js"></script>
+<script src="scripts/test_addConcert.js"></script>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-async function getUsers(){
+async function getOrders(){
     const url = "/api" //the url that provides me the data
     const raw_data = await fetch(url)  //the actual data from the db
     const orders = await raw_data.json() //convert the raw data to json -> new obj called orders 
@@ -33,4 +33,4 @@ async function deleteOrder(id) {
 async function editOrder(id) {
     window.location.href = `/edit_order.html?id=${id}`
 }
-getUsers()
+getOrders()

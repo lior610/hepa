@@ -8,5 +8,6 @@ router.route("/order/:id").delete(ordersController.deleteOrder).post(ordersContr
 router.route("/addorder").post((req, res) => {
     ordersController.createOrder(req, res)
 })
+router.route("/orders/by-owner").get(ordersController.getUserOrders)
 
 module.exports = router;

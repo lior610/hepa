@@ -1,9 +1,159 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    font-family: assistant, Arial, Helvetica, sans-serif;
 }
+
+#nav-logo {
+    height: 5rem;
+    margin-right: 10px;
+}
+
+nav {
+    background-color: #405389;
+    border-radius: 0 0 10px 10px;
+}
+
+.nav-item {
+    font-size: large;
+    margin: 7px;
+    font-weight: 200;
+}
+
+.active {
+    font-weight: 700;
+}
+
+.search-bar {
+    height: 30vh;
+}
+
+#search-button {
+    background-color: #405389;
+}
+
+.large-rounded {
+    border-radius: 30px; /* Adjust the size for larger rounded corners */
+}
+
+#carouselExampleCaptions {
+    width: 50%;
+    margin: -40px auto; /* Center the carousel horizontally */
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.card {
+    height: 100%; /* Fixed height for all cards */
+}
+
+.carousel-card-body {
+    background-color: #405389;
+    color: white;
+    height: 100%;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.card-title {
+    font-weight: 800;
+    font-size: x-large;
+}
+
+.card-text {
+    font-weight: 300;
+}
+
+.btn-primary {
+    background-color: #405389;
+}
+
+small {
+    color: #e7e7df;
+}
+
+.col-md-4 {
+    overflow: hidden;
+}
+
+.img-fluid {
+    height: 300px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.regular-card {
+    width: 18rem;
+    height: 30rem;
+    margin: 0 auto;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.regular-card-body {
+    padding: 1rem;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: space-between; 
+    height: 100%;
+}
+
+.regular-card-title {
+    margin-bottom: 0.5em; 
+    font-weight: bold;
+    font-size: 1.2rem; 
+}
+
+.regular-text {
+    margin-bottom: 0.3em; 
+    font-size: 0.95rem; 
+    text-align: center;
+}
+
+.regular-btn {
+    margin-top: auto; 
+    font-weight: bold;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #405389;
+}
+
+.card-img-top {
+    max-height: 200px;
+    width: 100%; 
+    object-fit: cover;
+    border-bottom: 2px solid #e7e7df;
+}
+
+.regular-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+    transform: translateY(-5px);
+}
+
+.filter-section {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.filter-options {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+}
+
+.filter-button {
+    margin-right: 1rem;
+}
+
+footer {
+    background-color: #405389;
+    color: white;
+}
+
+.nav-link {
+    color: white;
+}
+
 
 .container {
     display: flex;
@@ -23,7 +173,15 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 25%;
+    width: 25%;    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#payButton {
+    align-self: flex-end;
+    margin-top: auto; /* Ensures the button stays at the bottom */
+    background-color:#405389;
 }
 /* Add colors to inner divs in right section */
 .right-section div {
@@ -56,3 +214,4 @@ hr {
     background-color: #6d6b6b;
     margin: 10px 0;
 }
+

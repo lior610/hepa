@@ -9,11 +9,9 @@ const createOrder = async (req, res) => {
     const newOrder = await ordersService.createOrder(req.body.owner,
                                                   req.body.concert,
                                                   req.body.ticket_number,
-                                                  req.body.status,
-                                                  req.body.date,
                                                   req.body.payment,
                                                 )
-    res.redirect("/")
+    res.redirect("/orders.html")
 }
 
 const editOrder = async (req, res) => {
@@ -34,6 +32,13 @@ async function getOrder(req, res) {
     return res.json(order);
 }
 
+async function getUserOrders(req, res) {
+    const owner = req.query.owner  //export the owner from the parameters of the request
+    console.log("the user is ", owner)
+    const orders = await ordersService.getUserOrders(owner);
+    return res.json(orders);
+}
+
 async function deleteOrder(req, res) {
     const orderId = req.params.id //export the id from the parameters of the request
 
@@ -44,4 +49,4 @@ async function deleteOrder(req, res) {
         res.status(500).send("Error deleting order: " + error.message);
     }
 }
-module.exports = {showAllOrders, createOrder, deleteOrder, editOrder, getOrder}
+module.exports = {showAllOrders, createOrder, deleteOrder, editOrder, getOrder, getUserOrders}

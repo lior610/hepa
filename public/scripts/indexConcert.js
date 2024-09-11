@@ -1,5 +1,5 @@
 async function getConcerts(){
-    const url = "/api/"
+    const url = "/concerts/"
     const res = await fetch(url)
     const results = await res.json()
     console.log(results)
@@ -24,7 +24,7 @@ async function getConcerts(){
 
 }
 async function deleteConcert(id) {
-    await fetch(`/api/concert/${id}`, {
+    await fetch(`/concerts/concert/${id}`, {
         method: "DELETE",
     })
     window.location.href = "/"

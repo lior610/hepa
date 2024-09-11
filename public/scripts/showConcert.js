@@ -5,7 +5,7 @@ async function getConcert() {
     const id = urlParams.get("id");
 
     try {
-        const response = await fetch(`/api/concert/${id}`, {
+        const response = await fetch(`/concerts/concert/${id}`, {
             method: "GET"
         });
 
@@ -24,7 +24,7 @@ async function getConcert() {
 // Function to fetch the latest album based on the artist name
 async function getLatestAlbum(artistName) {
     try {
-        const response = await fetch(`/artist/${artistName}/latest-album`, {
+        const response = await fetch(`/concerts/artist/${artistName}/latest-album`, {
             method: "GET"
         });
 

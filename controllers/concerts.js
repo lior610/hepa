@@ -1,5 +1,4 @@
 const concertsService = require("../services/concerts")
-const latestAlbumView = require('../public/scripts/latestAlbumView');
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 
 const showAllConcerts = async (req, res) => {

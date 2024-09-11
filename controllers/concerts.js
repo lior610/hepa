@@ -13,16 +13,16 @@ const showLatestAlbum = async (req, res) => {
         const latestAlbum = await getArtistLatestAlbum(artistName);
 
         if (!latestAlbum) {
-            return res.status(404).send('No album found for this artist.');
+            return res.status(404).json({ message: 'No album found for this artist.' });
         }
 
-        // Render the HTML using the view
-        const albumHtml = latestAlbumView(latestAlbum);
-        res.send(albumHtml);
+        // Send JSON response with album details
+        res.json(latestAlbum);
     } catch (error) {
-        res.status(500).send('Error retrieving latest album.');
+        res.status(500).json({ message: 'Error retrieving latest album.' });
     }
 };
+
 
 const createConcert = async (req, res) => {
     const newConcert = await concertsService.createConcert({

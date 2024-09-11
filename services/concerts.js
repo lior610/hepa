@@ -37,7 +37,6 @@ const editConcert = async (id, artist_name, date, hour, door_opening,
 
 const getConcert = async(id) => {
     let concerts = await Concert.find({"_id": id})
-    // res.send(concert[0].picture); // Send the picture buffer
     return concerts;
 }
 

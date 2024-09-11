@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concerts List</title>
-    <link href="styles/styleConcert.css" rel="stylesheet" type="text/css">
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -28,7 +28,7 @@
 </div>
 <script type="text/html" id="tablerow">
     <tr>
-        <td>{artist_name}</td>
+        <td><a href="#" onclick="showConcert('{_id}')">{artist_name}</a></td>
         <td>{date}</td>
         <td>{hour}</td>
         <td>{door_opening}</td>

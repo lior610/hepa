@@ -33,4 +33,9 @@ async function deleteConcert(id) {
 async function editConcert(id) {
     window.location.href = `/editconcert.html?id=${id}`
 }
+
+async function showConcert(id) {
+    window.location.href = `/showConcert.html?id=${id}`
+}
+
 getConcerts()

@@ -28,4 +28,6 @@ router.route("/concert/:id/picture").get(async (req, res) => {
     }
 });
 
+router.route("/artist/:artistName/latest-album").get(concertsController.showLatestAlbum);
+
 module.exports = router;

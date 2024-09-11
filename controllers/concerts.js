@@ -1,9 +1,11 @@
 const concertsService = require("../services/concerts")
+const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer
 const upload = multer({ storage: storage });
+
 
 const showAllConcerts = async (req, res) => {
     let concerts = await concertsService.getConcerts();
@@ -18,6 +20,23 @@ const showAllConcerts = async (req, res) => {
 
     return res.json(concerts);
 };
+
+const showLatestAlbum = async (req, res) => {
+    try {
+        const artistName = req.body.artist_name || req.params.artistName;
+        const latestAlbum = await getArtistLatestAlbum(artistName);
+
+        if (!latestAlbum) {
+            return res.status(404).json({ message: 'No album found for this artist.' });
+        }
+
+        // Send JSON response with album details
+        res.json(latestAlbum);
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving latest album.' });
+    }
+};
+
 
 const createConcert = async (req, res) => {
     const picture = req.file ? req.file.buffer : null; // Access the uploaded file buffer
@@ -67,4 +86,4 @@ async function deleteConcert(req, res) {
     }
 }
 
-module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert}
+module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum}

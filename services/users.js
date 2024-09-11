@@ -1,39 +1,53 @@
 const User = require("../models/users")
 
-const createUser = async (full_name, username, password,
-    mail, phone, address, gender) => {
-        const user = new User({
-            full_name, username, password, mail, phone, 
-            address, gender
-        });
-        user.kind = "regular"
-
-        return await user.save();
-}
-
 const getUsers = async () => {
     let users = await User.find({})
     return users;
 }
 
-const deleteUser = async (userId) => {
-    return await User.deleteOne({"_id": userId});
-}
+const deleteUser = async (username) => {
+    try {
+        const result = await User.deleteOne({ "_id": username });
+        if (result.deletedCount === 0) {
+            return null;
+        }
+        console.log(result);
+        return result;
+    } catch (error) {
+        throw new Error(`Failed to delete user: ${error.message}`);
+    }
+};
 
-const editUser = async (userId, full_name, username, password,
-    mail, phone, address, gender, kind) => {
-    const data = {full_name, username, password,
-        mail, phone, address, gender, kind}
-    return await User.updateOne({"_id": userId}, data)
-}
+const editUser = async (currentUsername, newUsername, password, mail, phone, address, gender, kind) => {
+    const data = { username: newUsername, password, mail, phone, address, gender, kind };
 
-const getUser = async(userId) => {
-    let users = await User.find({"_id": userId})
-    return users;
+    try {
+        // Find the existing user document
+        const existingUser = await User.findOne({ "_id": currentUsername });
+        if (!existingUser) {
+            return null
+        }
+
+        // Create a new document with the new username
+        const newUser = new User({ ...data });
+        await newUser.save();
+
+        // Delete the old user document
+        await User.deleteOne({ "_id": currentUsername });
+
+        return newUser;
+    } catch (error) {
+        throw new Error(`Failed to edit user: ${error.message}`);
+    }
+};
+
+
+const getUser = async(username) => {
+    let users = await User.find({"_id": username})
+    return users[0];
 }
 
 module.exports = {
-    createUser,
     getUsers,
     deleteUser,
     editUser,

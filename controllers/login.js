@@ -9,7 +9,7 @@ function isLoggedIn(req, res, next) {
 
 async function isAdmin(req, res, next) {
     const isAdmin = await loginService.isAdmin(req.session.username);
-    return isAdmin;
+    return res.json({"Admin": isAdmin});
 }
 
 function logout(req, res) {
@@ -37,9 +37,10 @@ async function register(req, res) {
         street: req.body.address_street,
         city: req.body.address_city
     }
+    console.log(req.body);
     try {
         if (await userService.getUser(req.body.username)) {
-            return res.redirect("/register?error=1")
+            return res.redirect("/register.html?error=1")
         }
     
         const newUser = await loginService.register(req.body.username,

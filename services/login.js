@@ -17,7 +17,7 @@ async function register(username, full_name, password,
 }
 
 async function isAdmin(username) {
-    const user = await User.findById(username);
+    const user = await User.findOne({_id: username});
     try {
         type = user.kind; 
     } catch (error) {

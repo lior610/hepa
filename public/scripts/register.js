@@ -47,9 +47,6 @@ function confirmPassword () {
 
 function submitButton() {
     const submit = document.getElementById("submit-button")
-    console.log("password " + passwordValid)
-    console.log("phone " + phoneValid)
-    console.log("mail " + emailValid)
     if (passwordValid && emailValid && phoneValid) {
         submit.classList.remove("disabled")
     } else {
@@ -74,3 +71,16 @@ document.getElementById('confirm').addEventListener('input', () => {
     confirmPassword();
     submitButton();
 });
+
+function usernameValidation() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const error = urlParams.get("error") 
+    if(error) {
+        if(error == 1) {
+            document.getElementById("usernameValidation").textContent = "Username already Exist, Please choose another one."
+        }
+    }
+}
+
+usernameValidation();

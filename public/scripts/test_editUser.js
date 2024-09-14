@@ -4,7 +4,7 @@ async function getUser() {
     const Id = urlParams.get("id");
 
     try {
-        const res = await fetch(`/api/user/${Id}`, {
+        const res = await fetch(`/api_orders/user/${Id}`, {
             method: "GET"
         });
 
@@ -22,7 +22,7 @@ async function getUser() {
 
 async function putData() {
     const data = await getUser(); 
-    document.getElementById("registrationForm").action = `/api/user/${data._id}`
+    document.getElementById("registrationForm").action = `/api_users/user/${data._id}`
     document.getElementById("full_name").value = data.full_name;
     document.getElementById("username").value = data.username;
     document.getElementById("password").value = data.password;
@@ -40,7 +40,7 @@ async function submit() {
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get("id");
 
-    res = await fetch(`/api/user/${id}`, {
+    res = await fetch(`/api_users/user/${id}`, {
         method: "POST"
     })
 

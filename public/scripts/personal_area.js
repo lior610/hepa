@@ -56,7 +56,7 @@ async function loadOrders() {
 
 // Function to fetch orders data from API
 async function fetchOrders() {    
-        const url = "/api" //the url that provides me the data
+        const url = "/api_orders" //the url that provides me the data
         const raw_data = await fetch(url)  //the actual data from the db        
         const orders = await raw_data.json() //convert the raw data to json -> new obj called orders
         const userOrders = [];
@@ -69,7 +69,7 @@ async function fetchOrders() {
         return userOrders
     }
 async function fetchUserOrders() {    
-        const url = `/api/orders/by-owner?owner=${encodeURIComponent(userData.fullName)}` //the url that provides me the data
+        const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.fullName)}` //the url that provides me the data
         const raw_data = await fetch(url)  //the actual data from the db        
         const orders = await raw_data.json() //convert the raw data to json -> new obj called orders      
         console.log(orders)
@@ -79,7 +79,7 @@ async function fetchUserOrders() {
 
 loadUserData();
 loadOrders();
-fetchUsersOrders()
+fetchUserOrders()
 
 //listeners
 document.addEventListener("DOMContentLoaded", () => {
@@ -117,7 +117,7 @@ async function handlePayment(){
             order.status = "close" //close the order
             console.log(order._id)  
                   
-            const url = `/api/order/${order._id}`
+            const url = `/_orders/order/${order._id}`
             
             fetch(url, {
                 method: 'POST', // Specify the request method so it will use Edit function
@@ -133,7 +133,7 @@ async function handlePayment(){
 }
 
 async function deleteOrder(id) {
-    await fetch(`/api/order/${id}`, {
+    await fetch(`/api_orders/order/${id}`, {
         method: "DELETE",
     })
     

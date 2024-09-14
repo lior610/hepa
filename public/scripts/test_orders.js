@@ -1,5 +1,5 @@
 async function getOrders(){
-    const url = "/api" //the url that provides me the data
+    const url = "/api_orders" //the url that provides me the data
     const raw_data = await fetch(url)  //the actual data from the db
     const orders = await raw_data.json() //convert the raw data to json -> new obj called orders 
     console.log(orders)                //help me see the orders in console 
@@ -24,7 +24,7 @@ async function getOrders(){
 
 }
 async function deleteOrder(id) {
-    await fetch(`/api/order/${id}`, {
+    await fetch(`/api_orders/order/${id}`, {
         method: "DELETE",
     })
     window.location.href = "/orders.html"

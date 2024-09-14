@@ -11,7 +11,7 @@ const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static("public"))  //use files in public folder
-//server.use('/api', users) // for (x,y) - when you get x, do y
-server.use('/api', orders)
+server.use('/api_users', users) // for (x,y) - when you get x, do y
+server.use('/api_orders', orders)
 
 server.listen(80)

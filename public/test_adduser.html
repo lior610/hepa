@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="styles/style.css" rel="stylesheet" type="text/css">
+    <link href="styles/test_style.css" rel="stylesheet" type="text/css">
     <title>Registration Form</title>
 </head>
 <body>
 
 <div class="container">
     <h2>Registration Form</h2>
-    <form id="registrationForm" action="/api/user/{_id}" method="post">
+    <form id="registrationForm" action="/api_users/adduser" method="post">
         <div class="form-group">
             <label for="full_name">Full Name:</label>
             <input type="text" id="full_name" name="full_name" required>
@@ -52,20 +52,12 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="kind">kind:</label>
-            <select id="kind" name="kind" required>
-                <option value="Admin">Admin</option>
-                <option value="Regular">Regular</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="edit" onsubmit="submit()">
+            <input type="submit" value="Register">
         </div>
     </form>
 </div>
 
-<script src="scripts/script.js"></script>
-<script src="scripts/editUser.js"></script>
+<script src="scripts/test_script.js"></script>
 
 </body>
 </html>

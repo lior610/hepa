@@ -5,7 +5,7 @@ async function getOrder() {
     const id = urlParams.get("id");
 
     try {
-        const res = await fetch(`/api/order/${id}`, {
+        const res = await fetch(`/api_orders/order/${id}`, {
             method: "GET"
         });
 
@@ -24,7 +24,7 @@ async function getOrder() {
 async function populateForm() {
     const data = await getOrder(); 
     if (data) {
-        document.getElementById("editOrderForm").action = `/api/order/${data._id}`;
+        document.getElementById("editOrderForm").action = `/api_orders/order/${data._id}`;
         document.getElementById("owner").value = data.owner;
         document.getElementById("concert").value = data.concert;
         document.getElementById("ticket_number").value = data.ticket_number;
@@ -40,7 +40,7 @@ async function submit() {
     const id = urlParams.get("id");
     console.log("the id is ", id)
 
-    res = await fetch(`/api/order/${id}`, {
+    res = await fetch(`/api_orders/order/${id}`, {
         method: "POST"
     })
 

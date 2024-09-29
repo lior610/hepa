@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+    <title>add order form</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>add order Form</h2>
+    <form id="registrationForm" action="/api_orders/addorder" method="post">
+        <div class="form-group">
+            <label for="owner">Owner:</label>
+            <input type="text" id="owner" name="owner" required>
+        </div>
+        <div class="form-group">
+            <label for="concert">Concert:</label>
+            <input type="text" id="concert" name="concert" required>
+        </div>
+        <div class="form-group">
+            <label for="ticket_number">Ticket Number:</label>
+            <input type="number" id="ticket_number" name="ticket_number" required>
+        </div>        
+        <div class="form-group">
+            <label for="payment">Payment:</label>
+            <input type="number" id="payment" name="payment" required>
+        </div>
+        <div class="form-group">
+        <div class="form-group">
+            <input type="submit" value="Register">
+        </div>
+    </form>
+</div>
+
+<script src="scripts/test_script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders List</title>
+    <link href="styles/test_style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Orders List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>owner</th>
+                <th>concert</th>
+                <th>ticket_number</th>
+                <th>status</th>
+                <th>date</th>
+                <th>payment</th>                
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody id="tablebody">
+        </tbody>
+    </table>
+</div>
+<script type="text/html" id="tablerow">
+    <tr>
+        <td>{owner}</td>
+        <td>{concert}</td>
+        <td>{ticket_number}</td>
+        <td>{status}</td>
+        <td>{date}</td>
+        <td>{payment}</td>
+        <td><button id="deleteOrderButton" onclick="deleteOrder('{_id}')">delete Order</button></td>
+        <td><button id="editOrderButton" onclick="editOrder('{_id}')">edit Order</button></td>
+    </tr>
+</script>
+<script src="scripts/test_orders.js"></script>
+</body>
+</html>

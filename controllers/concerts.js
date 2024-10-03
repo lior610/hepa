@@ -51,7 +51,8 @@ const createConcert = async (req, res) => {
                                                            req.body.ticket_amount, // Create the tickets_available from the ticket_amount
                                                            picture
     );
-    res.redirect("/test_indexConcert.html");
+    // here 
+    res.redirect("/admin.html");
 }
 
 const editConcert = async (req, res) => {
@@ -65,7 +66,7 @@ const editConcert = async (req, res) => {
                                                              req.body.ticket_amount,
                                                              pictureBuffer // Pass the updated image buffer
     );
-    res.redirect("/test_indexConcert.html");
+    res.redirect("/admin.html");
 }
 
 async function getConcert(req, res) {

@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+//require the other models for validations
+const User = require('./users.js');
+const Concert = require('./concerts.js');
 
 const orderSchema = new Schema({
     owner: { type: String, required: true },
@@ -10,4 +13,26 @@ const orderSchema = new Schema({
     payment: { type: String, required: true }
 });
 
+//     Validations using the db
+// Check if owner exists
+async function ownerExists(ownerName) {
+    return await User.findOne({ 
+        full_name: ownerName });
+}
+// Check if concert exists
+async function concertExists(concertName) {
+    return await Concert.findOne({ 
+        artist_name: concertName });
+}
+// Check if enough tickets are available
+async function checkTicketAvailability(concertName, requestedTickets) {
+    const concert = await Concert.findOne({ artist_name: concertName });
+    return concert && concert.tickets_available >= requestedTickets;
+}
+
 module.exports = mongoose.model('Order', orderSchema);
+module.exports = {
+    ownerExists,
+    concertExists,
+    checkTicketAvailability
+};

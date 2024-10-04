@@ -51,7 +51,7 @@ const createConcert = async (req, res) => {
                                                            req.body.ticket_amount, // Create the tickets_available from the ticket_amount
                                                            picture
     );
-    // here 
+    // here the relation to the facebook service should be added
     res.redirect("/admin.html");
 }
 

@@ -1,16 +1,3 @@
-//permenet varibles
-const cartList = document.getElementById("shoppingCart");
-
-// Mock user data (replace with actual API call)
-const userData = {
-    fullName: "Maya Shuhman",
-    username: "amit_y",
-    email: "amit.yahalom@example.com",
-    phone: "0555555555",
-    
-};
-
-
 // Function to load FUTURE concerts 
 async function loadConcerts() {
     const concertsContainer = document.getElementById("concertList");
@@ -75,10 +62,6 @@ async function loadConcerts() {
     });
     
 }
-
-// Function to fetch orders data from API
-
-
 loadConcerts();
 
 async function fetchConcerts() {

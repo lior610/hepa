@@ -1,0 +1,106 @@
+body {
+    font-family: assistant, Arial, Helvetica, sans-serif;
+}
+
+#nav-logo {
+    height: 5rem;
+    margin-right: 10px;
+}
+
+nav {
+    background-color: #405389;
+    border-radius: 0 0 10px 10px;
+}
+
+.nav-item {
+    font-size: large;
+    margin: 7px;
+    font-weight: 200;
+}
+
+/* Container */
+.container {
+    width: 50%;
+    margin: 50px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #405389;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="file"],
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input[type="submit"] {
+    background-color: #405389;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #2e4b7d;
+}
+
+/* Footer */
+footer {
+    background-color: #405389;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer h4 {
+    font-size: 1.5rem;
+}
+
+footer p, .nav-link.px-2 {
+    color: #e7e7df;
+}
+
+/* Form Button */
+input[type="submit"]:hover {
+    background-color: #344e73;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+}

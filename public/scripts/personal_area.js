@@ -67,14 +67,14 @@ async function fetchOrders() {
         }) 
         console.log(userOrders)
         return userOrders
-    }
+}
+
 async function fetchUserOrders() {    
         const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.fullName)}` //the url that provides me the data
         const raw_data = await fetch(url)  //the actual data from the db        
         const orders = await raw_data.json() //convert the raw data to json -> new obj called orders      
-        console.log(orders)
         return orders
-    }
+}
 
 
 loadUserData();
@@ -105,30 +105,22 @@ cartList.addEventListener('click', (event) => {
 
 
 async function handlePayment(){
-    //when press pay, change all user's orders to "closed"
+    console.log("start orders payment ")
+    //when press pay:
+    //      1. change all user's orders to "closed"
+    // 2
     const allOrders = await fetchUserOrders() //get all orders
     console.log(allOrders)
     //go over all user's ordeers
     for(let i=0; i<allOrders.length; i++){
         const order = allOrders[i]
-        if(order.status == "open"){            
-            console.log(order.concert)            
-            console.log(order.status)            
-            order.status = "close" //close the order
-            console.log(order._id)  
-                  
-            const url = `/_orders/order/${order._id}`
-            
-            fetch(url, {
-                method: 'POST', // Specify the request method so it will use Edit function
-                headers: {
-                    'Content-Type': 'application/json' // Set the content type to JSON
-                },
-                body: JSON.stringify(order) // Convert the object into a JSON string
-            })
-            window.location.href = "/personal_area.html"
-
-        }
+        if(order.status == "open"){ 
+            //console.log("start order pay for: ", order.concert)
+            //updateOrderPayd(order)
+            console.log("start tickets update for: ", order.concert)
+            updateTickets(order)  
+            //window.location.href = "/personal_area.html"
+        }        
     }
 }
 
@@ -138,4 +130,48 @@ async function deleteOrder(id) {
     })
     
     window.location.href = "/personal_area.html"
+}
+async function updateOrderPayd(order){
+    // change to closed          
+    order.status = "close" //close the order   
+    // update order date
+    const today = new Date(); // Get today's date
+    const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    order.date = formattedDate; // Update the date property            
+    console.log(order._id)
+    fetch(`/api_orders/order/${order._id}`, {
+        method: 'POST', // Specify the request method so it will use Edit function
+        headers: {
+            'Content-Type': 'application/json' // Set the content type to JSON
+        },
+        body: JSON.stringify(order) // Convert the object into a JSON string
+    })
+}
+// update tickets avilable after payment
+async function updateTickets(order){
+    const concertID = order.concert_id
+    console.log('given concert id: ',concertID)
+    //get concert tickets
+    const concert = fetchConcert(concertID)
+    console.log(concert)
+    prevNum = concert.tickets_available
+    concert.tickets_available = prevNum - order.tickets_number
+    console.log('now need to update tickets for concert: ', concert._id)
+    //fetch(`/api_concerts/concert/tickets/${concert._id}`, {
+    //    method: 'POST', // Specify the request method so it will use Edit function
+    //    headers: {
+    //        'Content-Type': 'application/json' // Set the content type to JSON
+    //    },
+    //    body: JSON.stringify(concert) // Convert the object into a JSON string
+    //})
+}
+
+async function fetchConcert(concertId) {
+    const url = `/api_concerts/concert/${concertId}}` //the url that provides me the data
+    const concert = await fetch(url, {
+        method: "GET"
+    });       
+    //const concert = await raw_data.json() //convert the raw data to json -> new obj called orders      
+    console.log(concert)
+    return concert
 }

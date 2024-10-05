@@ -142,7 +142,7 @@ function clearFilters() {
 }
 
 function searchByName() {
-    const searchBar = document.getElementById("search-input");
+    const searchBar = document.getElementById("search-input"); 
     const searchQuery = searchBar.value;
     console.log(searchQuery);
     const filteredResults = concerts.filter(e => {

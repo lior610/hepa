@@ -15,6 +15,9 @@ router.route("/concert/:id")
     .post(upload.single('picture'), concertsController.editConcert) // Handle image upload
     .get(concertsController.getConcert)
 
+router.route("/concert/tickets/:id")
+    .post(concertsController.editTicketsForConcert) // edit available tickets
+
 router.route("/addconcert").post(upload.single('picture'), (req, res) => {
     concertsController.createConcert(req, res)});
 

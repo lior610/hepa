@@ -86,5 +86,9 @@ async function deleteConcert(req, res) {
         res.status(500).send("Error deleting concert: " + error.message);
     }
 }
+const editTicketsForConcert = async (req, res) => {
+    const updatedTickets = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
+    res.redirect("/personal_area.html");
+}
 
-module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum}
+module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum, editTicketsForConcert}

@@ -1,8 +1,17 @@
 // Function to load FUTURE concerts 
 async function loadConcerts() {
     const concertsContainer = document.getElementById("concertList");
+    
     //const cartList = document.getElementById("shoppingCart");
     allConcerts = await fetchConcerts() //get all concerts
+
+    //check if there is search filter
+    const searchBar = document.getElementById("search-input"); //take the input user typed in search 
+    const searchQuery = searchBar.value.trim();
+    if(searchQuery !== ""){
+        concertList.innerHTML = ""; // Clear the loaded list
+        allConcerts = searchByName(allConcerts, searchQuery); //if there is a search, do the filter 
+    }
     
     allConcerts.forEach(concert => {
         
@@ -69,22 +78,20 @@ async function fetchConcerts() {
     //in the next line, insert the correct url 
     //const url = `/api/orders/by-owner?owner=${encodeURIComponent(userData.fullName)}` //the url that provides me the data
     const raw_data = await fetch(url)  //the actual data from the db        
-    const orders = await raw_data.json() //convert the raw data to json -> new obj called orders      
-    console.log(orders)
-    return orders
+    const concerts = await raw_data.json() //convert the raw data to json -> new obj called orders   
+    return concerts
 }
-
 
 async function removeConcert(concertId) {
     // Example of removing a concert by its ID
     try {
-        const response = await fetch(`/api_concerts/concerts/${concertId}`, {
+        const response = await fetch(`/api_concerts/concert/${concertId}`, {
             method: 'DELETE',
         });
         if (response.ok) {
             alert("Concert removed successfully.");
-            // Optionally, remove the card from the DOM
-            document.querySelector(`#concert-${concertId}`).remove();
+            window.location.href = `/admin.html`
+
         } else {
             alert("Failed to remove concert.");
         }
@@ -99,13 +106,20 @@ async function editConcert(id) {
     window.location.href = `/edit_concert.html?id=${id}`
 }
 
-// working with graph
+// working with graph #1
 async function renderChart() {
     const chartData = await fetchConcerts();
-    
+    // Get today's date
+    const today = new Date();
+    // Filter and sort concerts based on date, and select the next 10 concerts
+    const upcomingConcerts = chartData
+        .filter(concert => new Date(concert.date) >= today) // Keep only concerts in the future
+        .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date ascending
+        .slice(0, 10); // Select only the next 10 concerts
+
     // Extract labels (concert names) and calculate tickets sold percentage
-    const labels = chartData.map(concert => concert.artist_name); // Concert names (artist names)
-    const ticketsSoldPercentage = chartData.map(concert => 
+    const labels = upcomingConcerts.map(concert => `${concert.artist_name} (${concert.date})`); // Combine artist name and date
+    const ticketsSoldPercentage = upcomingConcerts.map(concert => 
         ((concert.ticket_amount - concert.tickets_available) / concert.ticket_amount) * 100 // Calculate percentage of tickets sold
     );
 
@@ -140,4 +154,37 @@ async function renderChart() {
 
 renderChart();
 
+//filter function , gets an arr of concerts , return filtered arr
+function searchByName(concerts, searchQuery) {
+    console.log(searchQuery);
+    const filteredResults = concerts.filter(e => {
+        const lowerCase = searchQuery.toLowerCase();
+        return e.artist_name.toLowerCase().includes(lowerCase);
+    })
 
+    return filteredResults
+}
+
+// Function to validate the form inputs
+function validateForm(event) {
+    event.preventDefault(); // Prevents form submission
+
+    // Get the form values
+    const doorOpening = document.getElementById('doorOpening').value;
+    const concertHour = document.getElementById('concertHour').value;
+    const concertDate = document.getElementById('concertDate').value;
+
+    //check open hour < start hour
+    if (!concertName || !concertDate || !ticketAmount) {
+        alert('Please fill in all fields.');
+        return false; // Validation failed
+    }
+
+    // More validations can go here (e.g., check date format, ticket number validity, etc.)
+
+    alert('Form is valid!');
+    document.getElementById('concertForm').submit(); // Submit the form after validation
+}
+
+// Attach the validation function to the form submit event
+//document.getElementById('concertForm').addEventListener('submit', validateForm);

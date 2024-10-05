@@ -1,6 +1,7 @@
 const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
+const facebookService = require('../services/facebookService.js');
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer
@@ -51,8 +52,11 @@ const createConcert = async (req, res) => {
                                                            req.body.ticket_amount, // Create the tickets_available from the ticket_amount
                                                            picture
     );
-    // here the relation to the facebook service should be added
-    res.redirect("/admin.html");
+     // Post the concert details to Facebook
+     if (req.body.publish_on_facebook) {
+        await facebookService.postToFacebook(newConcert);
+     }
+        res.redirect("/admin.html");
 }
 
 const editConcert = async (req, res) => {
@@ -86,5 +90,6 @@ async function deleteConcert(req, res) {
         res.status(500).send("Error deleting concert: " + error.message);
     }
 }
+
 
 module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum}

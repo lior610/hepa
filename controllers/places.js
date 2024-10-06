@@ -1,4 +1,4 @@
-const placesService = require("../services/places.js")
+const placesService = require("../services/places")
 const Place = require('../models/places');
 
 const showAllPlaces = async (req, res) => {

@@ -1,7 +1,7 @@
 const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
-const facebookService = require('../services/facebookService.js');
+const facebookService = require('../services/facebookService');
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer

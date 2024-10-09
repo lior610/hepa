@@ -3,7 +3,7 @@ const cartList = document.getElementById("shoppingCart");
 
 // Mock user data (replace with actual API call)
 const userData = {
-    fullName: "Maya Shuhman",
+    fullName: "Amit Yahalom",
     username: "amit_y",
     email: "amit.yahalom@example.com",
     phone: "0555555555",
@@ -24,26 +24,31 @@ function loadUserData() {
 // Function to load paid orders
 async function loadOrders() {
     const ordersDiv = document.getElementById("paidOrders");
-    //const cartList = document.getElementById("shoppingCart");
+    const cartList = document.getElementById("shoppingCart");
     allOrders = await fetchUserOrders() //get all orders
+    // count open\close orders
+    let openOrders = 0 
+    let closeOrders = 0 
     // filer by status- close
     allOrders.forEach(order => {
         //add to my orders
         if(order.status == "close")
-        {
-        const orderDiv = document.createElement("div");
-        orderDiv.innerHTML = `
-            <p><strong>Concert:</strong> ${order.concert}</p>
-            <p><strong>Quantity:</strong> ${order.ticket_number}</p>
-            <p><strong>Payment:</strong> $${order.payment}</p>
-            <p><strong>Date:</strong> ${order.date}</p>
-            <p><strong>Status: Paid</strong> ${order.status}</p>
-            <hr>
-        `;
-        ordersDiv.appendChild(orderDiv);
+        {   
+            closeOrders ++;
+            const orderDiv = document.createElement("div");
+            orderDiv.innerHTML = `
+                <p><strong>Concert:</strong> ${order.concert}</p>
+                <p><strong>Quantity:</strong> ${order.ticket_number}</p>
+                <p><strong>Payment:</strong> $${order.payment}</p>
+                <p><strong>Date:</strong> ${order.date}</p>
+                <p><strong>Status: Paid</strong> ${order.status}</p>
+                <hr>
+            `;
+            ordersDiv.appendChild(orderDiv);
         }
         //add to chart
         else{
+            openOrders ++;
             const li = document.createElement("li");
             li.innerHTML = `<p>${order.concert} - Quantity: ${order.ticket_number}, Price: $${order.payment}</p>
                         <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> remove</button>
@@ -52,6 +57,17 @@ async function loadOrders() {
             cartList.appendChild(li);
         }
     });
+    console.log('openOrders ', openOrders)
+    // if there are no open\close orders, write it to user
+    if (closeOrders == 0){
+        ordersDiv.innerHTML = "<p>No upcoming events </p>";
+    }
+    console.log('closeOrders ', closeOrders)
+    if (openOrders == 0){
+        cartList.innerHTML = "<p>Your cart is currently empty </p>";
+    }
+    
+    
 }
 
 // Function to fetch orders data from API
@@ -114,12 +130,10 @@ async function handlePayment(){
     //go over all user's ordeers
     for(let i=0; i<allOrders.length; i++){
         const order = allOrders[i]
-        if(order.status == "open"){ 
-            //console.log("start order pay for: ", order.concert)
-            //updateOrderPayd(order)
-            console.log("start tickets update for: ", order.concert)
+        if(order.status == "open"){  
+            updateOrderPayd(order)
             updateTickets(order)  
-            //window.location.href = "/personal_area.html"
+            window.location.href = "/personal_area.html"
         }        
     }
 }
@@ -152,26 +166,27 @@ async function updateTickets(order){
     const concertID = order.concert_id
     console.log('given concert id: ',concertID)
     //get concert tickets
-    const concert = fetchConcert(concertID)
-    console.log(concert)
+    const concert = await fetchConcert(concertID)
     prevNum = concert.tickets_available
     concert.tickets_available = prevNum - order.tickets_number
-    console.log('now need to update tickets for concert: ', concert._id)
-    //fetch(`/api_concerts/concert/tickets/${concert._id}`, {
-    //    method: 'POST', // Specify the request method so it will use Edit function
-    //    headers: {
-    //        'Content-Type': 'application/json' // Set the content type to JSON
-    //    },
-    //    body: JSON.stringify(concert) // Convert the object into a JSON string
-    //})
+    console.log('now need to update tickets for concert: ', concertID)
+    console.log('new available num should be ', concert.tickets_available)
+    fetch(`/api_concerts/concert/tickets/${concert._id}`, {
+        method: 'POST', // Specify the request method so it will use Edit function
+        headers: {
+            'Content-Type': 'application/json' // Set the content type to JSON
+        },
+        body: JSON.stringify(concert) // Convert the object into a JSON string
+    })
 }
 
 async function fetchConcert(concertId) {
-    const url = `/api_concerts/concert/${concertId}}` //the url that provides me the data
-    const concert = await fetch(url, {
+    const url = `/api_concerts/concert/${concertId}` //the url that provides me the data
+    const response = await fetch(url, {
         method: "GET"
     });       
-    //const concert = await raw_data.json() //convert the raw data to json -> new obj called orders      
-    console.log(concert)
-    return concert
+    const concert = await response.json() //convert the raw data to json -> new obj called concert        
+    console.log(concert[0])
+    return concert[0]
+    
 }

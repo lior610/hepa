@@ -38,7 +38,7 @@ const getConcert = async(id) => {
     return concerts;
 }
 const editTicketsForConcert = async (id,tickets_available) => {
-    return await Concert.updateOne({"_id": id}, tickets_available)
+    return await Concert.updateOne({"_id": id} ,  {$set: { tickets_available }})
 }
 
 module.exports = {

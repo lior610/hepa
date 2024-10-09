@@ -6,11 +6,11 @@ const multer = require("multer");
 // Set up multer to store file in memory as a buffer
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
+ 
 router.route("/")
     .get(concertsController.showAllConcerts);
 
-router.route("/concert/:id")
+router.route("/concert/:id") 
     .delete(concertsController.deleteConcert)
     .post(upload.single('picture'), concertsController.editConcert) // Handle image upload
     .get(concertsController.getConcert)

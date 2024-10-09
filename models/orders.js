@@ -15,7 +15,7 @@ const orderSchema = new Schema({
         enum: ['open', 'close'], // Adjust based on requirements
         required: true,
       },  
-    date: { type: Date, required: false }, //if not payd? there is a date?
+    date: { type: String, required: false }, //if not payd? there is a date?
     payment: { type: Number, required: true }
 });
 

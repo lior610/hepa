@@ -21,7 +21,8 @@ async function loadOrders() {
         // Loop through the orders and create table rows
         orders.forEach(order => {
             const row = document.createElement('tr');
-
+            console.log(typeof order.date); 
+            console.log(order.date);
             // Create table data cells for each order attribute
             row.innerHTML = `
                 <td>${order.owner}</td>

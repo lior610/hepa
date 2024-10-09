@@ -1,6 +1,7 @@
 const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
+const mongoose = require('mongoose'); //for needed type convert 
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer
@@ -70,7 +71,11 @@ const editConcert = async (req, res) => {
 }
 
 async function getConcert(req, res) {
-    const concertId = req.params.id
+    let concertId = req.params.id// concertId may be a string or objectID type
+    if (typeof concertId === 'string') {
+        //if it was a string, converting to objectID
+        concertId = new mongoose.Types.ObjectId(concertId);
+      }
     concert = await concertsService.getConcert(concertId);
     return res.json(concert);
 }
@@ -88,7 +93,7 @@ async function deleteConcert(req, res) {
 }
 const editTicketsForConcert = async (req, res) => {
     const updatedTickets = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
-    res.redirect("/personal_area.html");
+    //res.redirect("/personal_area.html");
 }
 
 module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum, editTicketsForConcert}

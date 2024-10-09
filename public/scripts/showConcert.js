@@ -3,9 +3,9 @@ async function getConcert() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get("id");
-
+    console.log(id);
     try {
-        const response = await fetch(`/concerts/concert/${id}`, {
+        const response = await fetch(`/api_concerts/concert/${id}`, {
             method: "GET"
         });
 
@@ -24,7 +24,7 @@ async function getConcert() {
 // Function to fetch the latest album based on the artist name
 async function getLatestAlbum(artistName) {
     try {
-        const response = await fetch(`/concerts/artist/${artistName}/latest-album`, {
+        const response = await fetch(`/api_concerts/artist/${artistName}/latest-album`, {
             method: "GET"
         });
 

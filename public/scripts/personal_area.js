@@ -131,6 +131,7 @@ async function handlePayment(){
     for(let i=0; i<allOrders.length; i++){
         const order = allOrders[i]
         if(order.status == "open"){  
+            
             updateOrderPayd(order)
             updateTickets(order)  
             window.location.href = "/personal_area.html"

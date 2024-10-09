@@ -6,6 +6,7 @@ const concerts = require("./routes/concerts");  // create route for every model
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser")
 const session = require("express-session")
+const pages = require("./routes/pages")
 
 require('custom-env').env(process.env.NODE_ENV, "./config") //take the env varible 
 mongoose.connect(process.env.CONNECTION_STRING); //connect to mongo using the given env varible
@@ -19,10 +20,15 @@ server.use(session({
 
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
-server.use(express.static("public"))  //use files in public folder
+
+// apis
 server.use('/api_users', users) // for (x,y) - when you get x, do y
 server.use('/api_login', login)
 server.use('/api_orders', orders)
-server.use('/api_concerts', concerts) 
+server.use('/api_concerts', concerts)
+
+// HTML files
+server.use('/', pages);
+server.use(express.static("public"))  //use files in public folder
 server.listen(80)
 

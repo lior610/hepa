@@ -1,22 +1,26 @@
 //permenet varibles
 const cartList = document.getElementById("shoppingCart");
+let userData;
 
 // Mock user data (replace with actual API call)
-const userData = {
-    fullName: "Maya Shuhman",
-    username: "amit_y",
-    email: "amit.yahalom@example.com",
-    phone: "0555555555",
-    
-};
+async function getUserData() {
+    const res = await fetch("/api_login/username");
+    const resObject = await res.json();
+    const username = resObject["username"];
+
+    const userDetailsRes = await fetch(`/api_users/user/${username}`);
+    const userDetails = await userDetailsRes.json();
+
+    return userDetails;
+}
 
 // Function to load user data
 function loadUserData() {
     const userDetailsDiv = document.getElementById("userDetails");
     userDetailsDiv.innerHTML = `
-        <p><strong>Full Name:</strong> ${userData.fullName}</p>
-        <p><strong>Username:</strong> ${userData.username}</p>
-        <p><strong>Email:</strong> ${userData.email}</p>
+        <p><strong>Full Name:</strong> ${userData.full_name}</p>
+        <p><strong>Username:</strong> ${userData._id}</p>
+        <p><strong>Email:</strong> ${userData.mail}</p>
         <p><strong>Phone:</strong> ${userData.phone}</p>
     `;
 }
@@ -27,6 +31,7 @@ async function loadOrders() {
     //const cartList = document.getElementById("shoppingCart");
     allOrders = await fetchUserOrders() //get all orders
     // filer by status- close
+    console.log(allOrders);
     allOrders.forEach(order => {
         //add to my orders
         if(order.status == "close")
@@ -34,7 +39,7 @@ async function loadOrders() {
         const orderDiv = document.createElement("div");
         orderDiv.innerHTML = `
             <p><strong>Concert:</strong> ${order.concert}</p>
-            <p><strong>Quantity:</strong> ${order.ticket_number}</p>
+            <p><strong>Quantity:</strong> ${order.tickets_number}</p>
             <p><strong>Payment:</strong> $${order.payment}</p>
             <p><strong>Date:</strong> ${order.date}</p>
             <p><strong>Status: Paid</strong> ${order.status}</p>
@@ -45,7 +50,7 @@ async function loadOrders() {
         //add to chart
         else{
             const li = document.createElement("li");
-            li.innerHTML = `<p>${order.concert} - Quantity: ${order.ticket_number}, Price: $${order.payment}</p>
+            li.innerHTML = `<p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
                         <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> remove</button>
                         <hr>
                         `;
@@ -65,21 +70,22 @@ async function fetchOrders() {
                 userOrders.push(order)
             }
         }) 
-        console.log(userOrders)
         return userOrders
-    }
+}
 async function fetchUserOrders() {    
-        const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.fullName)}` //the url that provides me the data
+        const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.full_name)}` //the url that provides me the data
         const raw_data = await fetch(url)  //the actual data from the db        
         const orders = await raw_data.json() //convert the raw data to json -> new obj called orders      
-        console.log(orders)
         return orders
     }
 
+getUserData().then(data => {
+    userData = data;
+    loadUserData();
+    loadOrders();
+    fetchUserOrders()
+});
 
-loadUserData();
-loadOrders();
-fetchUserOrders()
 
 //listeners
 document.addEventListener("DOMContentLoaded", () => {

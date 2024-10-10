@@ -69,8 +69,8 @@ async function checkTicketAmount(ticket_amount) {
     return (ticket_amount >= 1);
 }
 
-async function checkPrice(ticket_amount) {
-    return (ticket_amount >= 1);
+async function checkPrice(price) {
+    return (price >= 1);
 }
 
 async function checkExisitingConcertArtist(artist_name, date) {

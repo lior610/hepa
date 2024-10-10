@@ -94,7 +94,6 @@ async function checkExisitingConcertLocation(hour, date, location) {
     return false;
 }
 
-<<<<<<< HEAD
 const getFutureConcerts = async() => {
     let concerts = await Concert.aggregate([
         {
@@ -110,8 +109,6 @@ const getFutureConcerts = async() => {
     ]);
     return concerts;
 }
-=======
->>>>>>> main
 
 module.exports = {
     createConcert,
@@ -127,11 +124,6 @@ module.exports = {
     checkTicketAmount,
     checkPrice,
     checkExisitingConcertArtist,
-<<<<<<< HEAD
     checkExisitingConcertLocation,
     getFutureConcerts
 };
-=======
-    checkExisitingConcertLocation
-};
->>>>>>> main

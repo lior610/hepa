@@ -36,6 +36,9 @@ const getConcert = async(id) => {
     let concerts = await Concert.find({"_id": id})
     return concerts;
 }
+const editTicketsForConcert = async (id,tickets_available) => {
+    return await Concert.updateOne({"_id": id} ,  {$set: { tickets_available }})
+}
 
 const getConcertByartistAndDate = async(artist_name, date) => {
     let concerts = await Concert.find({"artist_name": artist_name, "date": date})
@@ -98,6 +101,7 @@ module.exports = {
     deleteConcert,
     editConcert,
     getConcert,
+    editTicketsForConcert,
     getConcertByartistAndDate,
     getConcertByLocationDateTime,
     checkOpeningDoors,

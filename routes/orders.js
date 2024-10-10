@@ -9,5 +9,6 @@ router.route("/addorder").post((req, res) => {
     ordersController.createOrder(req, res)
 })
 router.route("/orders/by-owner").get(ordersController.getUserOrders)
+router.route("/orders/closed").get(ordersController.getClosedOrders)
 
 module.exports = router;

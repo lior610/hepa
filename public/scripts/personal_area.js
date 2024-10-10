@@ -1,83 +1,75 @@
 //permenet varibles
-const cartList = document.getElementById("shoppingCart");
+const cartList = $("#shoppingCart");
 let userData;
 
 // Mock user data (replace with actual API call)
 async function getUserData() {
-    const res = await fetch("/api_login/username");
-    const resObject = await res.json();
-    const username = resObject["username"];
+    const res = await $.get("/api_login/username");
+    const username = res.username;
 
-    const userDetailsRes = await fetch(`/api_users/user/${username}`);
-    const userDetails = await userDetailsRes.json();
-
-    return userDetails;
+    const userDetailsRes = await $.get(`/api_users/user/${username}`);
+    return userDetailsRes;
 }
 
 // Function to load user data
 function loadUserData() {
-    const userDetailsDiv = document.getElementById("userDetails");
-    userDetailsDiv.innerHTML = `
+    const userDetailsDiv = $("#userDetails");
+    userDetailsDiv.html(`
         <p><strong>Full Name:</strong> ${userData.full_name}</p>
         <p><strong>Username:</strong> ${userData._id}</p>
         <p><strong>Email:</strong> ${userData.mail}</p>
         <p><strong>Phone:</strong> ${userData.phone}</p>
-    `;
+    `);
 }
 
 // Function to load paid orders
 async function loadOrders() {
-    const ordersDiv = document.getElementById("paidOrders");
-    //const cartList = document.getElementById("shoppingCart");
-    allOrders = await fetchUserOrders() //get all orders
-    // filer by status- close
+    const ordersDiv = $("#paidOrders");
+    const allOrders = await fetchUserOrders(); // Get all orders
     console.log(allOrders);
+    
     allOrders.forEach(order => {
-        //add to my orders
-        if(order.status == "close")
-        {
-        const orderDiv = document.createElement("div");
-        orderDiv.innerHTML = `
-            <p><strong>Concert:</strong> ${order.concert}</p>
-            <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-            <p><strong>Payment:</strong> $${order.payment}</p>
-            <p><strong>Date:</strong> ${order.date}</p>
-            <p><strong>Status: Paid</strong> ${order.status}</p>
-            <hr>
-        `;
-        ordersDiv.appendChild(orderDiv);
+        // Add to my orders
+        if (order.status === "close") {
+            const orderDiv = $(`
+                <div>
+                    <p><strong>Concert:</strong> ${order.concert}</p>
+                    <p><strong>Quantity:</strong> ${order.tickets_number}</p>
+                    <p><strong>Payment:</strong> $${order.payment}</p>
+                    <p><strong>Date:</strong> ${order.date}</p>
+                    <p><strong>Status: Paid</strong> ${order.status}</p>
+                    <hr>
+                </div>
+            `);
+            ordersDiv.append(orderDiv);
         }
-        //add to chart
-        else{
-            const li = document.createElement("li");
-            li.innerHTML = `<p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
-                        <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> remove</button>
-                        <hr>
-                        `;
-            cartList.appendChild(li);
+        // Add to cart
+        else {
+            const li = $(`
+                <li>
+                    <p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
+                    <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}"> remove</button>
+                    <hr>
+                </li>
+            `);
+            cartList.append(li);
         }
     });
 }
 
 // Function to fetch orders data from API
-async function fetchOrders() {    
-        const url = "/api_orders" //the url that provides me the data
-        const raw_data = await fetch(url)  //the actual data from the db        
-        const orders = await raw_data.json() //convert the raw data to json -> new obj called orders
-        const userOrders = [];
-        orders.forEach(order => {
-            if (order.owner == userData.fullName){
-                userOrders.push(order)
-            }
-        }) 
-        return userOrders
+async function fetchOrders() {
+    const url = "/api_orders"; // The URL that provides me the data
+    const orders = await $.get(url); // Get the actual data from the db
+    const userOrders = orders.filter(order => order.owner === userData.full_name);
+    return userOrders;
 }
-async function fetchUserOrders() {    
-        const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.full_name)}` //the url that provides me the data
-        const raw_data = await fetch(url)  //the actual data from the db        
-        const orders = await raw_data.json() //convert the raw data to json -> new obj called orders      
-        return orders
-    }
+
+async function fetchUserOrders() {
+    const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.full_name)}`;
+    const orders = await $.get(url); // Get the actual data from the db
+    return orders;
+}
 
 getUserData().then(data => {
     userData = data;
@@ -87,61 +79,50 @@ getUserData().then(data => {
 });
 
 
-//listeners
-document.addEventListener("DOMContentLoaded", () => {
-    const payButton = document.getElementById('payButton');  
-    payButton.addEventListener('click', handlePayment);// Add click event listener to the Pay button
+// Listeners
+$(document).ready(function() {
+    const payButton = $('#payButton');
+    payButton.on('click', handlePayment); // Add click event listener to the Pay button
 });
 
-cartList.addEventListener('click', (event) => {
-    // Check if the clicked element is a remove button
-    if (event.target.matches('.btn-outline-danger')) {
-        const orderId = event.target.getAttribute('data-id');  //take the Order ID from the clicked button
-        console.log(orderId)
-        
-        // Call deleteOrder function with the specific order ID
-        deleteOrder(orderId);
-        
-        // Remove the specific list item (li)
-        //const listItem = event.target.closest('li');
-        //cartList.removeChild(listItem);
-    }
+// Event delegation for delete button
+cartList.on('click', '.btn-outline-danger', function() {
+    const orderId = $(this).data('id'); // Take the Order ID from the clicked button
+    deleteOrder(orderId); // Call deleteOrder function with the specific order ID
 });
 
+async function handlePayment() {
+    // When press pay, change all user's orders to "closed"
+    const allOrders = await fetchUserOrders(); // Get all orders
+    console.log(allOrders);
+    
+    // Go over all user's orders
+    for (let i = 0; i < allOrders.length; i++) {
+        const order = allOrders[i];
+        if (order.status === "open") {
+            console.log(order.concert);
+            console.log(order.status);
+            order.status = "close"; // Close the order
+            console.log(order._id);
+            const url = `/_orders/order/${order._id}`;
 
-
-async function handlePayment(){
-    //when press pay, change all user's orders to "closed"
-    const allOrders = await fetchUserOrders() //get all orders
-    console.log(allOrders)
-    //go over all user's ordeers
-    for(let i=0; i<allOrders.length; i++){
-        const order = allOrders[i]
-        if(order.status == "open"){            
-            console.log(order.concert)            
-            console.log(order.status)            
-            order.status = "close" //close the order
-            console.log(order._id)  
-                  
-            const url = `/_orders/order/${order._id}`
-            
-            fetch(url, {
-                method: 'POST', // Specify the request method so it will use Edit function
-                headers: {
-                    'Content-Type': 'application/json' // Set the content type to JSON
-                },
-                body: JSON.stringify(order) // Convert the object into a JSON string
-            })
-            window.location.href = "/personal_area.html"
-
+            // Use AJAX to update the order status
+            await $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(order), // Convert the object into a JSON string
+            });
         }
     }
+    window.location.href = "/personal_area.html"; // Redirect after processing
 }
 
 async function deleteOrder(id) {
-    await fetch(`/api_orders/order/${id}`, {
-        method: "DELETE",
-    })
+    await $.ajax({
+        url: `/api_orders/order/${id}`,
+        type: "DELETE",
+    });
     
-    window.location.href = "/personal_area.html"
+    window.location.href = "/personal_area.html"; // Redirect after deletion
 }

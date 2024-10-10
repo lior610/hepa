@@ -1,0 +1,76 @@
+<!-- Add Concert Section -->
+<section class="mt-5">
+    <h2>Add Concert</h2>
+    <div class="container"> <!-- Change to container class -->
+        <div class="box p-4 mb-4">
+            <form id="addConcertForm" action="/api_concerts/addconcert" method="post" enctype="multipart/form-data">
+                <!-- Row 1: Artist, Location, Tickets -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="artistName" class="form-label">Artist Name</label>
+                        <input type="text" class="form-control" id="artistName" name="artist_name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="location" class="form-label">Location</label>
+                        <select class="form-select" id="location" name="location" required>
+                            <option selected>Haifa</option>
+                            <option>Tel Aviv</option>
+                            <option>Beer Sheva</option>
+                            <option>Jerusalem</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ticketAmount" class="form-label">Total Tickets</label>
+                        <input type="number" class="form-control" id="ticketAmount" name="ticket_amount" required>
+                    </div>
+                </div>
+                <!-- Row for Ticket Price -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="price" class="form-label">Ticket Price</label>
+                        <input type="number" class="form-control" id="price" name="price" required>
+                    </div>
+                </div>
+                <!-- Row 2: Date, Hour, Door Opening -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="concertDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="concertDate" name="date" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="concertHour" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="concertHour" name="hour" value="20:30" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="doorOpening" class="form-label">Door Opening</label>
+                        <input type="time" class="form-control" id="doorOpening" name="door_opening" value="19:30" required>
+                    </div>
+                </div>
+                <!-- Row 3: Image Upload -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="concertImage" class="form-label">Concert Image</label>
+                        <input type="file" class="form-control" id="concertImage" name="picture" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Concert</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Graph Section -->
+<canvas id="Chart" width="400" height="200"></canvas>
+
+<!-- Edit/Remove Concert Section -->
+<section class="mt-5">
+    <h2>Edit/Remove Concert</h2>
+    <!-- Search Option -->
+    <div class="input-group mb-3 w-50" id="search">
+        <input type="text" id="search-input" class="form-control form-control-lg large-rounded" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-lg text-white large-rounded" id="search-button" type="button" onclick="loadConcerts()">Search</button>
+    </div>
+    <div id="concertList">
+        <!-- Loaded concerts will appear here -->
+    </div>
+</section>

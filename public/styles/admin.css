@@ -1,5 +1,7 @@
 body {
     font-family: assistant, Arial, Helvetica, sans-serif;
+    height: 100%; /* Ensure the body takes the full height */
+    margin: 0; /* Remove default margin */
 }
 
 #nav-logo {
@@ -10,6 +12,7 @@ body {
 nav {
     background-color: #405389;
     border-radius: 0 0 10px 10px;
+    z-index: 1;
 }
 
 .nav-item {
@@ -35,13 +38,6 @@ h2 {
     font-weight: 700;
 }
 
-footer {
-    background-color: #405389;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
-
 .nav-link {
     color: white;
 }
@@ -50,6 +46,7 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Aligns items to the left */
+    min-height: 100vh; /* Minimum height of the container to fill the viewport */
     gap: 20px;
     margin: 20px;
 }
@@ -229,3 +226,64 @@ thead th {
 .btn-edit:hover, .btn-delete:hover {
     opacity: 0.8;
 }
+
+.container {
+    display: flex;
+}
+
+#sidebar {
+    width: 200px;
+    background-color: #f0f0f0; /* Light background for contrast */
+    padding: 20px; /* Increased padding for better spacing */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    position: fixed; /* Fixed sidebar */
+    top: 12%; /* Start  nearly from the top */
+    left: 0; /* Stick to the left */
+    height: 100%; /* Full height */
+    overflow-y: auto; /* Allow scrolling */
+    font-family: 'Arial', sans-serif; /* Use a professional font */
+    font-size: 1.1rem; /* Slightly larger font size */
+    color: #333; /* Dark text color for readability */
+}
+
+/* Style for sidebar links */
+#sidebar a {
+    display: block;
+    margin-bottom: 15px; /* Add space between links */
+    text-decoration: none; /* Remove underline */
+    color: #333; /* Dark text color */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for hover effects */
+    padding: 10px; /* Padding around the links for better click area */
+    border-radius: 5px; /* Rounded corners for links */
+}
+
+/* Hover effect for links */
+#sidebar a:hover {
+    background-color: #405389; /* Background color on hover */
+    color: white; /* Change text color on hover */
+}
+
+
+#main-content {
+    margin-left: 200px; /* Creates space for the sidebar */
+    padding: 20px;
+    flex-grow: 1; /* Takes up the rest of the space */
+    background-color: #fff; /* Optional: Background color for content area */
+}
+
+a {
+    display: block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #000;
+}
+
+footer {
+    background-color: #405389;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    text-align: center;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+

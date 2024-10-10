@@ -1,15 +1,17 @@
 {
   "dependencies": {
     "axios": "^1.7.7",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
     "custom-env": "^2.0.6",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "express-session": "^1.18.0",
     "hepa": "file:",
     "mongoose": "^8.5.3",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.15",
     "nodemon": "^3.1.4",
     "path": "^0.12.7",
     "qs": "^6.13.0",
@@ -32,5 +34,6 @@
   "bugs": {
     "url": "https://github.com/lior610/hepa/issues"
   },
-  "homepage": "https://github.com/lior610/hepa#readme"
+  "homepage": "https://github.com/lior610/hepa#readme",
+  "keywords": []
 }

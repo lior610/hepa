@@ -3,13 +3,15 @@ function initMap() {
     const map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 31.0461, lng: 34.8516 }, // Centered on Israel
         zoom: 8,
-        mapId: 'a6fb15e491a008ad', 
+        mapId: 'a6fb15e491a008ad',
     });
 
-    // Fetch place locations (city + address) from the server
-    fetch('http://localhost/api_places/concert-locations')
-        .then(response => response.json())
-        .then(data => {
+    // fetch place locations (city + address) from the server
+    $.ajax({
+        url: 'http://localhost/api_places/concert-locations',
+        method: 'GET',
+        dataType: 'json', // Expecting a JSON response
+        success: function(data) {
             // Create an InfoWindow for displaying address
             const infoWindow = new google.maps.InfoWindow();
 
@@ -25,7 +27,7 @@ function initMap() {
                         const marker = new google.maps.Marker({
                             position: results[0].geometry.location,
                             map: map,
-                            title: fullAddress, 
+                            title: fullAddress,
                         });
 
                         // Add a click listener to show the address in the InfoWindow
@@ -38,8 +40,11 @@ function initMap() {
                     }
                 });
             });
-        })
-        .catch(error => console.error('Error fetching place locations:', error));
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching place locations:', textStatus, errorThrown);
+        }
+    });
 }
 
 window.initMap = initMap;

@@ -4,9 +4,9 @@ const axios = require('axios');
 const qs = require('qs');
 
 const createConcert = async (artist_name, date, hour,
-    door_opening, location, ticket_amount, tickets_available, picture) => {
+    door_opening, location, ticket_amount, tickets_available, price, picture) => {
         const concert = new Concert({
-            artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, picture
+            artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, price, picture
         });
 
         let concertCreated = await concert.save();
@@ -94,6 +94,7 @@ async function checkExisitingConcertLocation(hour, date, location) {
     return false;
 }
 
+<<<<<<< HEAD
 const getFutureConcerts = async() => {
     let concerts = await Concert.aggregate([
         {
@@ -109,6 +110,8 @@ const getFutureConcerts = async() => {
     ]);
     return concerts;
 }
+=======
+>>>>>>> main
 
 module.exports = {
     createConcert,
@@ -124,6 +127,11 @@ module.exports = {
     checkTicketAmount,
     checkPrice,
     checkExisitingConcertArtist,
+<<<<<<< HEAD
     checkExisitingConcertLocation,
     getFutureConcerts
 };
+=======
+    checkExisitingConcertLocation
+};
+>>>>>>> main

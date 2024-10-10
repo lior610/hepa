@@ -3,6 +3,7 @@ const users = require("./routes/users")  // create route for every model
 const login = require("./routes/login")
 const orders = require("./routes/orders");
 const concerts = require("./routes/concerts");  // create route for every model
+const places = require("./routes/places");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser")
 const session = require("express-session")
@@ -17,13 +18,19 @@ server.use(session({
     resave: false
 }))
 
+// Increase the limit for JSON payloads
+server.use(express.json({ limit: '1000mb' })); 
+
+// Increase the limit for URL-encoded payloads
+server.use(express.urlencoded({ limit: '1000mb', extended: true }));
+
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static("public"))  //use files in public folder
 server.use('/api_users', users) // for (x,y) - when you get x, do y
 server.use('/api_login', login)
 server.use('/api_orders', orders)
-server.use('/api_concerts', concerts)
-
+server.use('/api_concerts', concerts) 
+server.use('/api_places', places);
 server.listen(80)
 

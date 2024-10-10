@@ -2,6 +2,8 @@ const concerts = require("../models/concerts");
 const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
+const mongoose = require('mongoose'); //for needed type convert 
+const facebookService = require('../services/facebookService');
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer
@@ -40,38 +42,116 @@ const showLatestAlbum = async (req, res) => {
 
 
 const createConcert = async (req, res) => {
-    const picture = req.file ? req.file.buffer : null; // Access the uploaded file buffer
-    console.log("picture from form: " + picture)
 
-    const newConcert = await concertsService.createConcert(req.body.artist_name,
-                                                           req.body.date,
-                                                           req.body.hour,
-                                                           req.body.door_opening,
-                                                           req.body.location,
-                                                           req.body.ticket_amount,
-                                                           req.body.ticket_amount, // Create the tickets_available from the ticket_amount
-                                                           picture
-    );
-    // here the relation to the facebook service should be added
-    res.redirect("/admin.html");
+    const picture = req.file ? req.file.buffer : null; // Access the uploaded file buffer
+
+    const { door_opening, hour, ticket_amount, date, artist_name, location, price } = req.body;
+    try {
+         // Validate door opening hour
+         const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
+         if (!openDoorsValid) {
+            return res.status(400).json({ message: 'The Door opening hour cannot be after the concert begins.' });
+         }
+
+          // Validate the concert's date
+          const dateValid = await concertsService.checkConcertDate(date);
+          if (!dateValid) {
+             return res.status(400).json({ message: 'You can only add concerts starting from tomorrow' });
+          }
+          
+          // Validate the ticket amount
+          const ticketAmountValid = await concertsService.checkTicketAmount(ticket_amount);
+          if (!ticketAmountValid) {
+             return res.status(400).json({ message: 'The minimum of the ticket amount is 1.' });
+          }
+
+          // Validate the price
+          const priceValid = await concertsService.checkPrice(price);
+          if (!priceValid) {
+             return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
+          }
+
+          // Validate whether there is another concert by the same artist in this date
+          const ExisitingConcertArtistValid = await concertsService.checkExisitingConcertArtist(artist_name, date);
+          if (!ExisitingConcertArtistValid) {
+             return res.status(400).json({ message: 'There is another concert by this artist in this date.' });
+          }
+
+          // Validate whether there is another concert in the same location, date and hour
+          const ExisitingConcertLocationValid = await concertsService.checkExisitingConcertLocation(hour, date, location);
+          if (!ExisitingConcertLocationValid) {
+             return res.status(400).json({ message: 'There is another concert in the same location, date and hour.' });
+          }
+
+
+        const newConcert = await concertsService.createConcert(req.body.artist_name,
+                                                               req.body.date,
+                                                               req.body.hour,
+                                                               req.body.door_opening,
+                                                               req.body.location,
+                                                               req.body.ticket_amount,
+                                                               req.body.ticket_amount, // Create the tickets_available from the ticket_amount
+                                                               req.body.price,
+                                                               picture
+        );
+        res.redirect("/admin.html");
+    }
+    catch(error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
 }
 
 const editConcert = async (req, res) => {
-    const pictureBuffer = req.file ? req.file.buffer : null;
-    const updatedConcert = await concertsService.editConcert(req.params.id,
-                                                             req.body.artist_name,
-                                                             req.body.date,
-                                                             req.body.hour,
-                                                             req.body.door_opening,
-                                                             req.body.location,
-                                                             req.body.ticket_amount,
-                                                             pictureBuffer // Pass the updated image buffer
-    );
-    res.redirect("/admin.html");
+    const { door_opening, hour, ticket_amount , date, artist_name, location, price} = req.body;
+    const pictureBuffer = req.file ? req.file.buffer : null
+    try {
+         // Validate door opening hour
+         const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
+         if (!openDoorsValid) {
+            return res.status(400).json({ message: 'The Door opening hour cannot be after the concert begins.' });
+         }
+
+          // Validate the concert's date
+          const dateValid = await concertsService.checkConcertDate(date);
+          if (!dateValid) {
+             return res.status(400).json({ message: 'You can only add concerts starting from tomorrow.' });
+          }
+
+          // Validate the ticket amount
+          const ticketAmountValid = await concertsService.checkTicketAmount(ticket_amount);
+          if (!ticketAmountValid) {
+             return res.status(400).json({ message: 'The minimum of the ticket amount is 1.' });
+          }
+
+          // Validate the price
+          const priceValid = await concertsService.checkPrice(price);
+          if (!priceValid) {
+             return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
+          }
+
+        const updatedConcert = await concertsService.editConcert(req.params.id,
+                                                                 req.body.artist_name,
+                                                                 req.body.date,
+                                                                 req.body.hour,
+                                                                 req.body.door_opening,
+                                                                 req.body.location,
+                                                                 req.body.ticket_amount,
+                                                                 req.body.price,
+                                                                 pictureBuffer // Pass the updated image buffer
+        );
+        res.redirect("/admin.html");
+    }
+    catch(error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
 }
 
 async function getConcert(req, res) {
-    const concertId = req.params.id
+    let concertId = req.params.id// concertId may be a string or objectID type
+    if (typeof concertId === 'string') {
+        //if it was a string, converting to objectID
+        concertId = new mongoose.Types.ObjectId(concertId);
+      }
     concert = await concertsService.getConcert(concertId);
     return res.json(concert);
 }

@@ -8,7 +8,8 @@ const showAllOrders = async (req, res) => {
 const createOrder = async (req, res) => {
     const newOrder = await ordersService.createOrder(req.body.owner,
                                                   req.body.concert,
-                                                  req.body.ticket_number,
+                                                  req.body.concert_id,
+                                                  req.body.tickets_number,
                                                   req.body.payment,
                                                 )
     res.redirect("/orders.html")
@@ -18,7 +19,8 @@ const editOrder = async (req, res) => {
     const updatedOrder = await ordersService.editOrder(req.params.id,
                                                     req.body.owner,
                                                     req.body.concert,
-                                                    req.body.ticket_number,
+                                                    req.body.concert_id, 
+                                                    req.body.tickets_number,
                                                     req.body.status,
                                                     req.body.date,
                                                     req.body.payment,
@@ -39,6 +41,11 @@ async function getUserOrders(req, res) {
     return res.json(orders);
 }
 
+async function getClosedOrders(req, res) {
+    orders = await ordersService.getClosedOrders();
+    return res.json(orders); //use 'json' function of res, enter 'orders' inside to get all of the orders
+}
+
 async function deleteOrder(req, res) {
     const orderId = req.params.id //export the id from the parameters of the request
 
@@ -49,4 +56,4 @@ async function deleteOrder(req, res) {
         res.status(500).send("Error deleting order: " + error.message);
     }
 }
-module.exports = {showAllOrders, createOrder, deleteOrder, editOrder, getOrder, getUserOrders}
+module.exports = {showAllOrders, createOrder, deleteOrder, editOrder, getOrder, getUserOrders, getClosedOrders}

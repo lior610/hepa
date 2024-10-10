@@ -1,5 +1,5 @@
 const path = require('path'); 
-require('dotenv').config({ path: path.join(__dirname, '../config/.env.local') });
+require('custom-env').env(process.env.NODE_ENV, "./config") //take the env varible 
 const axios = require('axios');
 const qs = require('qs');
 

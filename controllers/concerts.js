@@ -99,12 +99,9 @@ async function getFutureConcerts(req, res) {
     return res.json(concerts);
 }
 
-module.exports = {
-    showAllConcerts, 
-    createConcert, 
-    deleteConcert, 
-    editConcert, 
-    getConcert, 
-    showLatestAlbum,
-    getFutureConcerts
+const editTicketsForConcert = async (req, res) => {
+    const updatedTickets = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
+    
 }
+
+module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum, editTicketsForConcert, getFutureConcerts}

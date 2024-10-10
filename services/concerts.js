@@ -66,7 +66,7 @@ async function checkConcertDate(date) {
 }
 
 async function checkTicketAmount(ticket_amount) {
-    return (ticket_amount > 1);
+    return (ticket_amount >= 1);
 }
 
 async function checkPrice(ticket_amount) {

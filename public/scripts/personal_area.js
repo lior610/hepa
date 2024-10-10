@@ -124,7 +124,7 @@ async function handlePayment(){
     console.log("start orders payment ")
     //when press pay:
     //      1. change all user's orders to "closed"
-    // 2
+    //      2. update tickets number
     const allOrders = await fetchUserOrders() //get all orders
     console.log(allOrders)
     //go over all user's ordeers
@@ -174,9 +174,9 @@ async function updateTickets(order){
     console.log('now need to update tickets for concert: ', concertID)
     console.log('new available num should be ', concert.tickets_available)
     fetch(`/api_concerts/concert/tickets/${concert._id}`, {
-        method: 'POST', // Specify the request method so it will use Edit function
+        method: 'POST', 
         headers: {
-            'Content-Type': 'application/json' // Set the content type to JSON
+            'Content-Type': 'application/json' // Set content type to JSON
         },
         body: JSON.stringify(concert) // Convert the object into a JSON string
     })

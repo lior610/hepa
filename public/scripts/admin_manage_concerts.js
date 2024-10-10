@@ -117,8 +117,7 @@ function removeConcert(concertId) {
 
 
 
-async function editConcert(id) {    
-    console.log("edit ", id)
+async function editConcert(id) {   
     window.location.href = `/edit_concert.html?id=${id}`
 }
 
@@ -178,7 +177,6 @@ renderChart();
 
 //filter function , gets an arr of concerts , return filtered arr
 function searchByName(concerts, searchQuery) {
-    console.log(searchQuery);
     const filteredResults = concerts.filter(e => {
         const lowerCase = searchQuery.toLowerCase();
         return e.artist_name.toLowerCase().includes(lowerCase);
@@ -186,27 +184,3 @@ function searchByName(concerts, searchQuery) {
 
     return filteredResults
 }
-
-// Function to validate the form inputs
-function validateForm(event) {
-    event.preventDefault(); // Prevents form submission
-
-    // Get the form values
-    const doorOpening = document.getElementById('doorOpening').value;
-    const concertHour = document.getElementById('concertHour').value;
-    const concertDate = document.getElementById('concertDate').value;
-
-    //check open hour < start hour
-    if (!concertName || !concertDate || !ticketAmount) {
-        alert('Please fill in all fields.');
-        return false; // Validation failed
-    }
-
-    // More validations can go here (e.g., check date format, ticket number validity, etc.)
-
-    alert('Form is valid!');
-    document.getElementById('concertForm').submit(); // Submit the form after validation
-}
-
-// Attach the validation function to the form submit event
-//document.getElementById('concertForm').addEventListener('submit', validateForm);

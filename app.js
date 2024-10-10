@@ -33,6 +33,7 @@ server.use('/api_users', users) // for (x,y) - when you get x, do y
 server.use('/api_login', login)
 server.use('/api_orders', orders)
 server.use('/api_concerts', concerts)
+server.use('/api_places', places);
 
 // HTML files
 server.use('/', pages);

@@ -32,7 +32,8 @@ function loadConcerts() {
 
 // Function to create the concert card
 function createConcertCard(concert) {
-    const card = $('<div>').addClass('concert-card');
+    const card = $('<div>').addClass('concert-card')
+                           .attr('data-concert-id', concert._id); // Attach the concert ID to the card
     
     // Create image element
     const imgContainer = $('<div>').addClass('concert-image');
@@ -48,6 +49,7 @@ function createConcertCard(concert) {
                                   <p>Time: ${concert.hour}</p>
                                   <p>Doors Open: ${concert.door_opening}</p>
                                   <p>Location: ${concert.location}</p>
+                                  <p>Ticket Price: ${concert.price}</p>
                                   <p>Tickets Available: ${concert.tickets_available} / ${concert.ticket_amount}</p>
                               `);
 
@@ -56,8 +58,8 @@ function createConcertCard(concert) {
     
     // Create Edit button
     const editButton = $('<a>').addClass('btn btn-outline-primary btn-edit')
-                                .text('Edit')
-                                .data('concert-id', concert._id); // Store concert ID in the button's data attribute
+                               .text('Edit')
+                               .data('concert-id', concert._id); // Store concert ID in the button's data attribute
     
     // Create Remove button
     const removeButton = $('<button>').addClass('btn btn-outline-danger bi bi-trash3')
@@ -96,9 +98,15 @@ function removeConcert(concertId) {
         success: function(response) {
             // Successfully removed the concert
             alert("Concert removed successfully.");
-
-            // Remove the concert card from the UI
-            $(`.concert-card[data-concert-id='${concertId}']`).remove(); 
+            
+            // Use a more robust selector to ensure the card is removed
+            const concertCard = $(`.concert-card[data-concert-id='${concertId}']`);
+            
+            if (concertCard.length) {
+                concertCard.remove(); // Remove the concert card from the UI
+            } else {
+                console.warn(`Concert card with ID ${concertId} not found.`);
+            }
         },
         error: function(xhr, status, error) {
             // Handle error if removal was not successful
@@ -106,6 +114,7 @@ function removeConcert(concertId) {
         }
     });
 }
+
 
 
 async function editConcert(id) {    

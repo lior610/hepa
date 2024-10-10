@@ -32,7 +32,7 @@ footer {
     color: white;
     padding: 1rem;
     text-align: center;
-    margin-top: auto; /* Pushes footer to bottom of page */
+    margin-top: auto;
 }
 
 .nav-link {
@@ -44,12 +44,12 @@ footer {
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex; /* Flexbox for layout */
-    align-items: center; /* Center align vertically */
-    justify-content: center; /* Center all items horizontally */
-    width: 90%; /* Set to 90% to make it wider */
-    max-width: 700px; /* Increase max width to 700px */
-    margin: 0 auto; /* Center the card horizontally */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 700px;
+    margin: 0 auto;
 }
 
 .regular-card-body {
@@ -57,7 +57,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    align-items: center; /* Center align fields */
+    align-items: center;
 }
 
 .regular-card-title {
@@ -77,72 +77,67 @@ footer {
     border-bottom: 2px solid #e7e7df;
 }
 
-/* Ensure concert details and album info are in a row */
 #concertDetails {
-    display: flex; /* Flex container for concert details and album info */
-    align-items: flex-start; /* Align items to the start */
-    gap: 20px; /* Space between concert fields and album info */
-    justify-content: center; /* Center all items */
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    justify-content: center;
 }
 
 .album-heading {
-    font-size: 16px; /* Adjust font size for visibility */
-    text-align: center; /* Center align the text */
-    margin-bottom: 5px; /* Space below the heading */
-    color: #333; /* Dark gray for visibility */
-    font-weight: bold; /* Make text bold */
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
 }
 
 #album-info {
-    display: flex; /* Flex display to align items neatly */
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center align both elements */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-
 .album-cover {
-    width: 250px; /* Adjust width as needed */
-    height: 250px; /* Fixed height for square appearance */
-    object-fit: cover; /* Ensures the image covers the area without distortion */
-    margin-top: 5px; /* Space between heading and image */
-    border-radius: 8px; /* Optional: rounded corners for aesthetics */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Optional: slight shadow for depth */
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    margin-top: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .concert-buttons {
-    display: flex; /* Use flexbox for alignment */
-    gap: 10px; /* Space between the buttons */
-    margin-top: 15px; /* Add space above the buttons */
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
 
 .concert-buttons .btn {
-    padding: 10px 20px; /* Increase button padding for a larger touch area */
-    border-radius: 5px; /* Slightly round the button corners */
-    font-weight: bold; /* Make button text bold */
-    transition: background-color 0.3s ease, transform 0.2s; /* Smooth transition for hover effect */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s;
 }
 
-/* Primary button styling */
 .concert-buttons .btn-primary {
-    background-color: #007bff; /* Primary color */
-    border: none; /* Remove default border */
-    color: white; /* White text */
+    background-color: #007bff;
+    border: none;
+    color: white;
 }
 
 .concert-buttons .btn-primary:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-    transform: translateY(-2px); /* Slight lift effect on hover */
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
-/* Success button styling */
 .concert-buttons .btn-success {
-    background-color: #212388; /* Success color */
-    border: none; /* Remove default border */
-    color: white; /* White text */
+    background-color: #212388;
+    border: none;
+    color: white;
 }
 
 .concert-buttons .btn-success:hover {
-    background-color: #212388; /* Darker shade on hover */
-    transform: translateY(-2px); /* Slight lift effect on hover */
+    background-color: #212388;
+    transform: translateY(-2px);
 }
-

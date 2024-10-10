@@ -1,14 +1,15 @@
 const axios = require('axios');
+require('custom-env').env(process.env.NODE_ENV, "./config") //take the env varible 
 
 // Facebook Page Access Token
-const PAGE_ACCESS_TOKEN = 'EAAUwwfkxdwEBOwatBncdOrvwM0zlb2xt8FB5PyWIcHikF5GvpkRMl75ZAjFcSzk8JwuAm8DbcFWbvrq6ySWiSa8F16OhVVfz0Khklw3Uox8kybmvX8oyKLd0QNiNZAtENxBKo5RAVZApZA2b4iPyJYmThVRPQjmw6Oi1ZCzvdtceKjctG2LNn3j3ijb454j3C';
-const PAGE_ID = '475819745603692';  // The actual Page ID
+const page_at = process.env.PAGE_ACCESS_TOKEN;
+const page_id = process.env.PAGE_ID;
 
 // Function to post a concert to Facebook
 const postToFacebook = async (concert) => {
     try {
         // Facebook Graph API URL for posting to page's feed
-        const url = `https://graph.facebook.com/${PAGE_ID}/feed?access_token=${PAGE_ACCESS_TOKEN}`;
+        const url = `https://graph.facebook.com/${page_id}/feed?access_token=${page_at}`;
 
         // Prepare the Facebook post message
         const message = `

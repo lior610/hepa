@@ -2,7 +2,7 @@
 function getConcert() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get("concertId");
+    const id = urlParams.get("id");
 
     return $.ajax({
         url: `/api_concerts/concert/${id}`,
@@ -38,6 +38,9 @@ function showConcert() {
             document.getElementById("hour").textContent = concertData.hour;
             document.getElementById("door_opening").textContent = concertData.door_opening;
             document.getElementById("location").textContent = concertData.location;
+            document.getElementById("location").textContent = concertData.location;
+            document.getElementById("price").textContent = concertData.location;
+
 
             // Fetch the latest album using the artist name
             getLatestAlbum(concertData.artist_name).then(albumData => {

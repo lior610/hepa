@@ -67,4 +67,6 @@ function displayAlbumInfo(album) {
 }
 
 // Execute the showConcert function when the page loads
-showConcert();
+$(document).ready(function() {
+    showConcert();
+});

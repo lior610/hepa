@@ -38,10 +38,27 @@ const getConcert = async(id) => {
     return concerts;
 }
 
+const getFutureConcerts = async() => {
+    let concerts = await Concert.aggregate([
+        {
+            $addFields: {
+                dateObj: { $dateFromString: { dateString: "$date" } }
+            }
+        },
+        {
+            $match: {
+                dateObj: { $gte: new Date() }
+            }
+        }
+    ]);
+    return concerts;
+}
+
 module.exports = {
     createConcert,
     getConcerts,
     deleteConcert,
     editConcert,
     getConcert,
+    getFutureConcerts
 };

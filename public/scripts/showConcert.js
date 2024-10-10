@@ -5,7 +5,7 @@ async function getConcert() {
     const id = urlParams.get("id");
 
     try {
-        const response = await fetch(`/concerts/concert/${id}`, {
+        const response = await fetch(`/api_concerts/concert/${id}`, {
             method: "GET"
         });
 

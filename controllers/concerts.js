@@ -1,3 +1,4 @@
+const concerts = require("../models/concerts");
 const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
@@ -87,4 +88,23 @@ async function deleteConcert(req, res) {
     }
 }
 
-module.exports = {showAllConcerts, createConcert, deleteConcert, editConcert, getConcert, showLatestAlbum}
+async function getFutureConcerts(req, res) {
+    let concerts = await concertsService.getFutureConcerts();
+    concerts = concerts.map(concert => {
+        return {
+            ...concert,
+            picture: concert.picture ? concert.picture.toString('base64') : null // Handle missing images
+        };
+    });
+    return res.json(concerts);
+}
+
+module.exports = {
+    showAllConcerts, 
+    createConcert, 
+    deleteConcert, 
+    editConcert, 
+    getConcert, 
+    showLatestAlbum,
+    getFutureConcerts
+}

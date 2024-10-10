@@ -24,10 +24,6 @@ server.use('/api_users', users) // for (x,y) - when you get x, do y
 server.use('/api_login', login)
 server.use('/api_orders', orders)
 server.use('/api_concerts', concerts)
-// Increase the limit for JSON payloads
-server.use(express.json({ limit: '1000mb' })); // Adjust the size as needed
 
-// Increase the limit for URL-encoded payloads
-server.use(express.urlencoded({ limit: '1000mb', extended: true }));
 server.listen(80)
 

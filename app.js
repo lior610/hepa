@@ -18,7 +18,7 @@ server.use(session({
 }))
 
 // Increase the limit for JSON payloads
-server.use(express.json({ limit: '1000mb' })); // Adjust the size as needed
+server.use(express.json({ limit: '1000mb' })); 
 
 // Increase the limit for URL-encoded payloads
 server.use(express.urlencoded({ limit: '1000mb', extended: true }));

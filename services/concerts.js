@@ -94,6 +94,14 @@ async function checkExisitingConcertLocation(hour, date, location) {
     return false;
 }
 
+async function checkAvailableTickets(id, ticket_amount) {
+    let concert = await Concert.find({"_id": id})
+    console.log(concert)
+    console.log(concert.tickets_available)
+    let soldTickets = concert.ticket_amount - concert.tickets_available
+    return soldTickets <= ticket_amount;
+}
+
 const getFutureConcerts = async() => {
     let concerts = await Concert.aggregate([
         {
@@ -125,5 +133,6 @@ module.exports = {
     checkPrice,
     checkExisitingConcertArtist,
     checkExisitingConcertLocation,
+    checkAvailableTickets,
     getFutureConcerts
 };

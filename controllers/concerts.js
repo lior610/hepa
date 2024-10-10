@@ -102,7 +102,8 @@ const createConcert = async (req, res) => {
 }
 
 const editConcert = async (req, res) => {
-    const { door_opening, hour, ticket_amount , date, artist_name, location, price} = req.body;
+    const { door_opening, hour, ticket_amount , date, id, price} = req.body;
+    console.log(id);
     const pictureBuffer = req.file ? req.file.buffer : null
     try {
          // Validate door opening hour
@@ -127,6 +128,12 @@ const editConcert = async (req, res) => {
           const priceValid = await concertsService.checkPrice(price);
           if (!priceValid) {
              return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
+          }
+
+          // Validate - if new ticket total is smaller than sold tickets, stop the edit
+          const TicketAmountValid = await concertsService.checkAvailableTickets(id, ticket_amount);
+          if (!TicketAmountValid) {
+             return res.status(400).json({ message: 'New Ticket amount is smaller than the number of sold tickets.' });
           }
 
         const updatedConcert = await concertsService.editConcert(req.params.id,

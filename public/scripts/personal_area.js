@@ -133,6 +133,7 @@ async function handlePayment(){
         if(order.status == "open"){  
             
             updateOrderPayd(order)
+            console.log("now update sold tickets")
             updateTickets(order)  
             window.location.href = "/personal_area.html"
         }        

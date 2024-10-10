@@ -17,6 +17,12 @@ server.use(session({
     resave: false
 }))
 
+// Increase the limit for JSON payloads
+server.use(express.json({ limit: '1000mb' })); // Adjust the size as needed
+
+// Increase the limit for URL-encoded payloads
+server.use(express.urlencoded({ limit: '1000mb', extended: true }));
+
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.static("public"))  //use files in public folder

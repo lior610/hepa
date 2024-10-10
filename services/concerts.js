@@ -94,6 +94,21 @@ async function checkExisitingConcertLocation(hour, date, location) {
     return false;
 }
 
+const getFutureConcerts = async() => {
+    let concerts = await Concert.aggregate([
+        {
+            $addFields: {
+                dateObj: { $dateFromString: { dateString: "$date" } }
+            }
+        },
+        {
+            $match: {
+                dateObj: { $gte: new Date() }
+            }
+        }
+    ]);
+    return concerts;
+}
 
 module.exports = {
     createConcert,
@@ -109,5 +124,6 @@ module.exports = {
     checkTicketAmount,
     checkPrice,
     checkExisitingConcertArtist,
-    checkExisitingConcertLocation
+    checkExisitingConcertLocation,
+    getFutureConcerts
 };

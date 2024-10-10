@@ -2,6 +2,7 @@ const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const multer = require("multer");
 const mongoose = require('mongoose'); //for needed type convert 
+const facebookService = require('../services/facebookService');
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer
@@ -42,6 +43,7 @@ const showLatestAlbum = async (req, res) => {
 const createConcert = async (req, res) => {
 
     const picture = req.file ? req.file.buffer : null; // Access the uploaded file buffer
+
     const { door_opening, hour, ticket_amount, date, artist_name, location, price } = req.body;
     try {
          // Validate door opening hour

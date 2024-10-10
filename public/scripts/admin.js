@@ -6,9 +6,9 @@ $(document).ready(function() {
    $('#load-orders').on('click', function(event) {
     event.preventDefault();     // Prevent the default action of the link
     // load the html
-    $('#main-content').load('manage_orders.html'); // Load content into the main content area
+    $('#main-content').load('./admin/manage_orders.html'); // Load content into the main content area
     // load its related js
-    $.getScript('../scripts/admin_manage_orders.js', function() {
+    $.getScript('./scripts/admin_manage_orders.js', function() {
     console.log("orders JS loaded and executed.");})
     });
 
@@ -16,9 +16,9 @@ $(document).ready(function() {
     $('#load-concerts').on('click', function(event) {
         event.preventDefault();     // Prevent the default action of the link
         // load the html
-        $('#main-content').load('manage_concerts.html'); // Load content into the main content area
+        $('#main-content').load('./admin/manage_concerts.html'); // Load content into the main content area
         // load its related js
-        $.getScript('../scripts/admin_manage_concerts.js', function() {
+        $.getScript('./scripts/admin_manage_concerts.js', function() {
         console.log("Concerts JS loaded and executed.");})
     });
 
@@ -26,9 +26,9 @@ $(document).ready(function() {
     $('#load-places').on('click', function(event) {
         event.preventDefault();     // Prevent the default action of the link
         // load the html
-        $('#main-content').load('manage_places.html'); // Load content into the main content area
+        $('#main-content').load('./admin/manage_places.html'); // Load content into the main content area
         // load its related js
-        $.getScript('../scripts/admin_manage_places.js', function() {
+        $.getScript('./scripts/admin_manage_places.js', function() {
         console.log("places JS loaded and executed.");})
     });
 
@@ -36,9 +36,9 @@ $(document).ready(function() {
     $('#load-users').on('click', function(event) {
         event.preventDefault();     // Prevent the default action of the link
         // load the html
-        $('#main-content').load('manage_users.html'); // Load content into the main content area
+        $('#main-content').load('./admin/manage_users.html'); // Load content into the main content area
         // load its related js
-        $.getScript('../scripts/admin_manage_users.js', function() {
+        $.getScript('./scripts/admin_manage_users.js', function() {
         console.log("users JS loaded and executed.");})
     });
 })

@@ -91,7 +91,7 @@ const createConcert = async (req, res) => {
                                                                req.body.price,
                                                                picture
         );
-        res.redirect("/admin/admin.html");
+        res.redirect("/admin.html");
     }
     catch(error) {
         res.status(500).json({ message: 'Server error', error });
@@ -136,7 +136,7 @@ const editConcert = async (req, res) => {
                                                                  req.body.price,
                                                                  pictureBuffer // Pass the updated image buffer
         );
-        res.redirect("/admin/admin.html");
+        res.redirect("/admin.html");
     }
     catch(error) {
         res.status(500).json({ message: 'Server error', error });

@@ -12,10 +12,10 @@ const orderSchema = new Schema({
     tickets_number: { type: Number, required: true },
     status: {
         type: String,
-        enum: ['open', 'close'], // Adjust based on requirements
+        enum: ['open', 'close'], 
         required: true,
       },  
-    date: { type: String, required: false }, //if not payd? there is a date?
+    date: { type: String, required: false }, 
     payment: { type: Number, required: true }
 });
 

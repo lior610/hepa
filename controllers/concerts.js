@@ -41,7 +41,7 @@ const showLatestAlbum = async (req, res) => {
 const createConcert = async (req, res) => {
 
     const picture = req.file ? req.file.buffer : null; // Access the uploaded file buffer
-    const { door_opening, hour, ticket_amount, date, artist_name, location } = req.body;
+    const { door_opening, hour, ticket_amount, date, artist_name, location, price } = req.body;
     try {
          // Validate door opening hour
          const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
@@ -59,6 +59,12 @@ const createConcert = async (req, res) => {
           const ticketAmountValid = await concertsService.checkTicketAmount(ticket_amount);
           if (!ticketAmountValid) {
              return res.status(400).json({ message: 'The minimum of the ticket amount is 1.' });
+          }
+
+          // Validate the price
+          const priceValid = await concertsService.checkPrice(price);
+          if (!priceValid) {
+             return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
           }
 
           // Validate whether there is another concert by the same artist in this date
@@ -81,9 +87,9 @@ const createConcert = async (req, res) => {
                                                                req.body.location,
                                                                req.body.ticket_amount,
                                                                req.body.ticket_amount, // Create the tickets_available from the ticket_amount
+                                                               req.body.price,
                                                                picture
         );
-        // here's the relation to the facebook service should be added
         res.redirect("/admin.html");
     }
     catch(error) {
@@ -92,8 +98,8 @@ const createConcert = async (req, res) => {
 }
 
 const editConcert = async (req, res) => {
-    const { door_opening, hour, ticket_amount , date, artist_name, location} = req.body;
-    const pictureBuffer = req.file ? req.file.buffer : null;
+    const { door_opening, hour, ticket_amount , date, artist_name, location, price} = req.body;
+    const pictureBuffer = req.file ? req.file.buffer : null
     try {
          // Validate door opening hour
          const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
@@ -112,19 +118,13 @@ const editConcert = async (req, res) => {
           if (!ticketAmountValid) {
              return res.status(400).json({ message: 'The minimum of the ticket amount is 1.' });
           }
-          // add here another validation of tickets available and ticket amount
 
-          // Validate whether there is another concert by the same artist in this date
-          const ExisitingConcertValid = await concertsService.checkExisitingConcertArtistEdit(artist_name, date);
-          if (!ExisitingConcertValid) {
-             return res.status(400).json({ message: 'There is another concert by this artist in this date.' });
+          // Validate the price
+          const priceValid = await concertsService.checkPrice(price);
+          if (!priceValid) {
+             return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
           }
 
-          // Validate whether there is another concert in the same location, date and hour
-          const ExisitingConcertLocationValid = await concertsService.checkExisitingConcertLocationEdit(hour, date, location);
-          if (!ExisitingConcertLocationValid) {
-             return res.status(400).json({ message: 'There is another concert in the same location, date and hour.' });
-          }
         const updatedConcert = await concertsService.editConcert(req.params.id,
                                                                  req.body.artist_name,
                                                                  req.body.date,
@@ -132,6 +132,7 @@ const editConcert = async (req, res) => {
                                                                  req.body.door_opening,
                                                                  req.body.location,
                                                                  req.body.ticket_amount,
+                                                                 req.body.price,
                                                                  pictureBuffer // Pass the updated image buffer
         );
         res.redirect("/admin.html");

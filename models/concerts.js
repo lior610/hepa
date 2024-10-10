@@ -9,6 +9,7 @@ const concertSchema = new Schema({
     location: { type: String, required: true },
     ticket_amount: { type: Number, required: true },
     tickets_available: { type: Number, required: true },
+    price: { type: Number, required: true },
     picture: { type: Buffer, required: true } // Storing image as binary data (Buffer)
 });
 

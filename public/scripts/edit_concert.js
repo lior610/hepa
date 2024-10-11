@@ -82,5 +82,47 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!changePicture) {
             pictureInput.value = null; // Send null if the picture is not changing
         }
+
+        // Perform form validations
+        if (!validateForm()) {
+            event.preventDefault(); // Prevent form submission if validations fail
+        }
     });
 });
+
+// Validation function
+function validateForm() {
+    const doorOpening = document.getElementById('door_opening').value;
+    const hour = document.getElementById('hour').value;
+    const ticketAmount = parseInt(document.getElementById('ticket_amount').value);
+    const date = new Date(document.getElementById('date').value);
+    const price = parseInt(document.getElementById('price').value);
+
+    // door_opening can't be after "hour"
+    if (doorOpening >= hour) {
+        alert("Door opening cannot be after or at the concert time.");
+        return false;
+    }
+
+    // ticket_amount can't be 0 or minus, minimum 1
+    if (ticketAmount < 1) {
+        alert("Ticket amount must be at least 1.");
+        return false;
+    }
+
+    // date has to be tomorrow or further
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Remove time portion
+    if (date <= today) {
+        alert("The concert date must be tomorrow or later.");
+        return false;
+    }
+
+    // price can't be 0 or below, minimum 1
+    if (price < 1) {
+        alert("Price must be greater than 0.");
+        return false;
+    }
+
+    return true; // Return true if all validations pass
+}

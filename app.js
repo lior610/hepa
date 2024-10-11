@@ -35,7 +35,7 @@ server.use('/api_orders', orders)
 server.use('/api_concerts', concerts)
 server.use('/api_places', places);
 
-// HTML files
+// HTML files - pages first so it checks it before.
 server.use('/', pages);
 server.use(express.static("public"))  //use files in public folder
 

@@ -12,7 +12,7 @@ const orderSchema = new Schema({
     tickets_number: { type: Number, required: true },
     status: {
         type: String,
-        enum: ['open', 'close'], 
+        enum: ['open', 'close', 'cancelled'], 
         required: true,
       },  
     date: { type: String, required: false }, 

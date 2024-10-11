@@ -1,4 +1,8 @@
 const Order = require("../models/orders")
+//require the other models for validations
+const User = require('../models/users.js');
+const Concert = require('../models/concerts.js');
+const mongoose = require('mongoose');
 
 //what user action causes order creation?
 const createOrder = async (owner, concert, concert_id, tickets_number,
@@ -42,6 +46,40 @@ const getClosedOrders = async () => {
     return orders;
 } 
 
+//     Validations using the db
+// Check if owner exists
+async function ownerExists(ownerUsername) {
+    return await User.findOne({ 
+        "_id": ownerUsername });
+}
+// Check if concert exists
+async function concertExists(concert_artist, concert_id) {
+    if(mongoose.Types.ObjectId.isValid(concert_id)){
+        const concert_object = await Concert.findOne({ 
+            "_id": concert_id });
+        return (concert_object.artist_name == concert_artist)
+    }
+    else return false
+    
+}
+// Check if enough tickets are available
+async function checkTicketAvailability(concert_id, requestedTickets) {
+    if(mongoose.Types.ObjectId.isValid(concert_id)){
+        const concert = await Concert.findOne({ "_id": concert_id });
+        return concert && concert.tickets_available >= requestedTickets;
+    }
+    else return false
+}
+// Validate date is in the future
+async function checkConcertDate(concert_id, date){
+    if(mongoose.Types.ObjectId.isValid(concert_id)){
+        const concert = await Concert.findOne({ "_id": concert_id });
+        const today = new Date();
+        const concertDate = today.toISOString().slice(0, 10);
+        return (concertDate == date)
+    }
+    else return false
+}
 
 module.exports = {
     createOrder,
@@ -50,5 +88,9 @@ module.exports = {
     editOrder,
     getOrder,
     getUserOrders,
-    getClosedOrders
+    getClosedOrders,
+    ownerExists,
+    concertExists,
+    checkTicketAvailability,
+    checkConcertDate
 };

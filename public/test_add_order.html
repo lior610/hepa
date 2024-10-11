@@ -10,7 +10,7 @@
 
 <div class="container">
     <h2>add order Form</h2>
-    <form id="registrationForm" action="/api_orders/addorder" method="post">
+    <form id="registrationForm" action="/api_orders/add_order" method="post">
         <div class="form-group">
             <label for="owner">Owner:</label>
             <input type="text" id="owner" name="owner" required>
@@ -20,8 +20,12 @@
             <input type="text" id="concert" name="concert" required>
         </div>
         <div class="form-group">
+            <label for="concert">ConcertID:</label>
+            <input type="text" id="concert_id" name="concert_id" required>
+        </div>
+        <div class="form-group">
             <label for="ticket_number">Ticket Number:</label>
-            <input type="number" id="ticket_number" name="ticket_number" required>
+            <input type="number" id="tickets_number" name="tickets_number" required>
         </div>        
         <div class="form-group">
             <label for="payment">Payment:</label>
@@ -33,8 +37,6 @@
         </div>
     </form>
 </div>
-
-<script src="scripts/test_script.js"></script>
 
 </body>
 </html>

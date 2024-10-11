@@ -3,9 +3,8 @@ const router = express.Router()
 const ordersController = require("../controllers/orders")
 
 router.route("/").get(ordersController.showAllOrders)
-//router.route("/order").get()
 router.route("/order/:id").delete(ordersController.deleteOrder).post(ordersController.editOrder).get(ordersController.getOrder)
-router.route("/addorder").post((req, res) => {
+router.route("/add_order").post((req, res) => {
     ordersController.createOrder(req, res)
 })
 router.route("/orders/by-owner").get(ordersController.getUserOrders)

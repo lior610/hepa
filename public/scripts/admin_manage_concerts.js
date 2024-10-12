@@ -237,4 +237,4 @@ function setupValidation() {
     });
 
     console.log("Validation setup complete");
-}
+}   

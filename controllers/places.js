@@ -12,7 +12,7 @@ const createPlace = async (req, res) => {
                                                       req.body.address,
                                                       req.body.type
     );
-        res.redirect("/admin.html");
+    res.redirect("/admin.html");
 }
 
 const editPlace = async (req, res) => {
@@ -35,7 +35,7 @@ async function deletePlace(req, res) {
 
     try {
         await placesService.deletePlace(placeId);
-        res.status(200).send("added successfully");
+        res.status(200).send("removed successfully");
 
     } catch (error) {
         res.status(500).send("Error deleting place: " + error.message);

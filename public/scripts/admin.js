@@ -33,6 +33,7 @@ $(document).ready(function() {
             // load its related js after html is loaded
             $.getScript('./scripts/admin_manage_places.js', function() {
                 console.log("Places JS loaded and executed.");
+                // Call the validation setup function after JS is loaded
             });
         });
     });

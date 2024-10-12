@@ -40,7 +40,6 @@ const getOrder = async(orderId) => {
 }
 
 const getUserOrders = async(owner) => {
-    console.log("im in services, the user is ", owner)
     let orders = await Order.find({"owner": owner})
     return orders; //returns an arr of all orders that owname is given user (by full name at the time)
 }

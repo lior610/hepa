@@ -35,4 +35,7 @@ router.route("/future").get(concertsController.getFutureConcerts);
 
 router.route("/artist/:artistName/latest-album").get(concertsController.showLatestAlbum);
 
+// New endpoint for chart data
+router.route('/api_concerts_chart').get(concertsController.getChartData); 
+
 module.exports = router;

@@ -41,6 +41,32 @@ const editUser = async (currentUsername, newUsername, password, mail, phone, add
     }
 };
 
+const editUserDetails = async (username, full_name, password, mail, phone, address, gender, kind) => { 
+    try {
+        // Find and update the user document 
+        const updatedUser = await User.findOneAndUpdate(
+            { "_id": username },  // Find by the username (_id)
+            { 
+                full_name,          
+                password, 
+                mail, 
+                phone, 
+                address, 
+                gender, 
+                kind 
+            },
+            { new: true, runValidators: true }  // Return the updated document and apply validation
+        );
+
+        if (!updatedUser) {
+            return null; // User not found
+        }
+
+        return updatedUser;
+    } catch (error) {
+        throw new Error(`Failed to edit user: ${error.message}`);
+    }
+};
 
 const getUser = async(username) => {
     let users = await User.find({"_id": username})
@@ -51,5 +77,6 @@ module.exports = {
     getUsers,
     deleteUser,
     editUser,
+    editUserDetails,
     getUser
 };

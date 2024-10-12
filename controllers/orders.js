@@ -100,7 +100,6 @@ async function getOrder(req, res) {
 
 async function getUserOrders(req, res) {
     const owner = req.query.owner  //export the owner from the parameters of the request
-    console.log("the user is ", owner)
     const orders = await ordersService.getUserOrders(owner);
     return res.json(orders);
 }

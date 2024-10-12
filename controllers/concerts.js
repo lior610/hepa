@@ -46,41 +46,65 @@ const createConcert = async (req, res) => {
     const { door_opening, hour, ticket_amount, date, artist_name, location, price, publish_on_facebook } = req.body;
 
     try {
-        // Validate door opening hour
-        const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
-        if (!openDoorsValid) {
-            return res.status(400).json({ message: 'The Door opening hour cannot be after the concert begins.' });
-        }
+         // Validate door opening hour
+         const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
+         if (!openDoorsValid) {
+            const errorTitle = "Invalid Door Opening Hour";
+            const errorMessage = "Oops! The Door opening hour cannot be after the concert begins. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+         }
 
-        // Validate the concert's date
-        const dateValid = await concertsService.checkConcertDate(date);
-        if (!dateValid) {
-            return res.status(400).json({ message: 'You can only add concerts starting from tomorrow.' });
-        }
+          // Validate the concert's date
+          const dateValid = await concertsService.checkConcertDate(date);
+          if (!dateValid) {
+            const errorTitle = "Invalid Date";
+            const errorMessage = "Oops! You can only add concerts starting from tomorrow. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+          }
+          
+          // Validate the ticket amount
+          const ticketAmountValid = await concertsService.checkTicketAmount(ticket_amount);
+          if (!ticketAmountValid) {
+            const errorTitle = "Invalid Ticket Amount";
+            const errorMessage = "Oops! The minimum of the ticket amount is 1. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+          }
 
-        // Validate the ticket amount
-        const ticketAmountValid = await concertsService.checkTicketAmount(ticket_amount);
-        if (!ticketAmountValid) {
-            return res.status(400).json({ message: 'The minimum of the ticket amount is 1.' });
-        }
+          // Validate the price
+          const priceValid = await concertsService.checkPrice(price);
+          if (!priceValid) {
+            const errorTitle = "Invalid Price";
+            const errorMessage = "Oops! Minimum price is 1 Shekels. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+          }
 
-        // Validate the price
-        const priceValid = await concertsService.checkPrice(price);
-        if (!priceValid) {
-            return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
-        }
+          // Validate whether there is another concert by the same artist in this date
+          const ExisitingConcertArtistValid = await concertsService.checkExisitingConcertArtist(artist_name, date);
+          if (!ExisitingConcertArtistValid) {
+            const errorTitle = "Invalid Details";
+            const errorMessage = "Oops! There is another concert by this artist in this date. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+          }
 
-        // Validate whether there is another concert by the same artist on this date
-        const ExisitingConcertArtistValid = await concertsService.checkExisitingConcertArtist(artist_name, date);
-        if (!ExisitingConcertArtistValid) {
-            return res.status(400).json({ message: 'There is another concert by this artist on this date.' });
-        }
-
-        // Validate whether there is another concert in the same location, date, and hour
-        const ExisitingConcertLocationValid = await concertsService.checkExisitingConcertLocation(hour, date, location);
-        if (!ExisitingConcertLocationValid) {
-            return res.status(400).json({ message: 'There is another concert in the same location, date, and hour.' });
-        }
+          // Validate whether there is another concert in the same location, date and hour
+          const ExisitingConcertLocationValid = await concertsService.checkExisitingConcertLocation(hour, date, location);
+          if (!ExisitingConcertLocationValid) {
+            const errorTitle = "Invalid Details";
+            const errorMessage = "Oops! There is another concert in the same location, date and hour. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+          }
 
         // Create the concert
         const newConcert = await concertsService.createConcert(
@@ -112,32 +136,61 @@ const createConcert = async (req, res) => {
 
 
 const editConcert = async (req, res) => {
-    const { door_opening, hour, ticket_amount , date, artist_name, location, price} = req.body;
+    const { door_opening, hour, ticket_amount , date, price} = req.body;
+    const id = req.params.id;
     const pictureBuffer = req.file ? req.file.buffer : null
     try {
          // Validate door opening hour
          const openDoorsValid = await concertsService.checkOpeningDoors(door_opening, hour);
          if (!openDoorsValid) {
-            return res.status(400).json({ message: 'The Door opening hour cannot be after the concert begins.' });
+            const errorTitle = "Invalid Door Opening Hour";
+            const errorMessage = "Oops! The Door opening hour cannot be after the concert begins. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
          }
 
           // Validate the concert's date
           const dateValid = await concertsService.checkConcertDate(date);
           if (!dateValid) {
-             return res.status(400).json({ message: 'You can only add concerts starting from tomorrow.' });
+            const errorTitle = "Invalid Date";
+            const errorMessage = "Oops! You can only add concerts starting from tomorrow. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
           }
 
           // Validate the ticket amount
           const ticketAmountValid = await concertsService.checkTicketAmount(ticket_amount);
           if (!ticketAmountValid) {
-             return res.status(400).json({ message: 'The minimum of the ticket amount is 1.' });
+            const errorTitle = "Invalid Ticket Amount";
+            const errorMessage = "Oops! The minimum of the ticket amount is 1. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
           }
 
           // Validate the price
           const priceValid = await concertsService.checkPrice(price);
           if (!priceValid) {
-             return res.status(400).json({ message: 'Minimum price is 1 Shekels.' });
+            const errorTitle = "Invalid Price";
+            const errorMessage = "Oops! Minimum price is 1 Shekels. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
           }
+
+          // Validate - if new ticket total is smaller than sold tickets, stop the edit
+          const result = await concertsService.checkAvailableTickets(id, ticket_amount)
+          const TicketAmountValid = result[0];
+          if (!TicketAmountValid) {
+            const errorTitle = "Invalid Ticket Amount";
+            const errorMessage = "Oops! The new ticket amount is smaller than the number of sold tickets. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+          }
+          const tickets_available = result[1];
 
         const updatedConcert = await concertsService.editConcert(req.params.id,
                                                                  req.body.artist_name,
@@ -146,6 +199,7 @@ const editConcert = async (req, res) => {
                                                                  req.body.door_opening,
                                                                  req.body.location,
                                                                  req.body.ticket_amount,
+                                                                 tickets_available,
                                                                  req.body.price,
                                                                  pictureBuffer // Pass the updated image buffer
         );

@@ -26,7 +26,7 @@ server.use(express.json({ limit: '1000mb' }));
 server.use(express.urlencoded({ limit: '1000mb', extended: true }));
 
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: false }));
+server.use(bodyParser.urlencoded({ extended: true }));
 
 // apis
 server.use('/api_users', users) // for (x,y) - when you get x, do y

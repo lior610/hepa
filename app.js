@@ -26,7 +26,7 @@ server.use(express.json({ limit: '1000mb' }));
 server.use(express.urlencoded({ limit: '1000mb', extended: true }));
 
 server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: false }));
+server.use(bodyParser.urlencoded({ extended: true }));
 
 // apis
 server.use('/api_users', users) // for (x,y) - when you get x, do y
@@ -35,7 +35,7 @@ server.use('/api_orders', orders)
 server.use('/api_concerts', concerts)
 server.use('/api_places', places);
 
-// HTML files
+// HTML files - pages first so it checks it before.
 server.use('/', pages);
 server.use(express.static("public"))  //use files in public folder
 

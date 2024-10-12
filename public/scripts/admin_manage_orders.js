@@ -38,6 +38,7 @@ function loadOrders() {
 // Example Edit and Remove button functionality (stub)
 function editOrder(orderId) {
     console.log('Edit order', orderId);
+    window.location.href = `/edit_order.html?id=${orderId}`
     
 }
 

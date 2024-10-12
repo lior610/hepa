@@ -1,23 +1,22 @@
-async function getConcert() {
+function getConcert() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const Id = urlParams.get("id");
-    try {
-        const res = await fetch(`/api_concerts/concert/${Id}`, {
-            method: "GET"
-        });
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+    return $.ajax({
+        url: `/api_concerts/concert/${Id}`,
+        method: "GET",
+        dataType: "json",  // Expect a JSON response
+        success: function(data) {
+            return data[0];
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching concert:", error);
+            return null;
         }
-
-        const data = await res.json();
-        return data[0];
-    } catch (error) {
-        console.error("Error fetching concert:", error);
-        return null;
-    }
+    });
 }
+
 
 async function putData() {
     const queryString = window.location.search;
@@ -31,27 +30,20 @@ async function putData() {
         return;
     }
 
-    try {
-        const res = await fetch(`/api_concerts/concert/${Id}`, {
-            method: "GET"
-        });
-
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+    getConcert().done(function(data) {
+        if (data) {
+            $('#editConcertForm').attr('action', `/api_concerts/concert/${data._id}`);
+            $('#artist_name').val(data.artist_name);
+            $('#date').val(data.date);
+            $('#hour').val(data.hour);
+            $('#door_opening').val(data.door_opening);
+            $('#location').val(data.location);
+            $('#ticket_amount').val(data.ticket_amount);
+            $('#price').val(data.price);
         }
-
-        const data = await getConcert();
-        document.getElementById("editConcertForm").action = `/api_concerts/concert/${data._id}`;
-        document.getElementById("artist_name").value = data.artist_name;
-        document.getElementById("date").value = data.date;
-        document.getElementById("hour").value = data.hour;
-        document.getElementById("door_opening").value = data.door_opening;
-        document.getElementById("location").value = data.location;
-        document.getElementById("ticket_amount").value = data.ticket_amount;
-        document.getElementById("price").value = data.price;
-    } catch (error) {
+    }).fail(function(xhr, status, error) {
         console.error("Error fetching concert:", error);
-    }
+    });
 }
 
 putData();

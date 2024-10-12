@@ -12,7 +12,7 @@ const createOrder = async (req, res) => {
                                                   req.body.tickets_number,
                                                   req.body.payment,
                                                 )
-    res.redirect("/orders.html")
+    //res.redirect("/admin.html")
 }
 
 const editOrder = async (req, res) => {
@@ -25,7 +25,7 @@ const editOrder = async (req, res) => {
                                                     req.body.date,
                                                     req.body.payment,
                                                 )
-    res.redirect("/orders.html") //redirect every func to rellevat page 
+    res.redirect("/admin.html")//redirect every func to rellevat page 
 }
 
 async function getOrder(req, res) {

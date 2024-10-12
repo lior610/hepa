@@ -115,6 +115,44 @@ const getFutureConcerts = async() => {
     return concerts;
 }
 
+const getTicketSoldPercentage= async () => {
+        const result = await Concert.aggregate([
+            {
+                $group: {
+                    _id: "$artist_name", // Group by artist name
+                    totalTicketsSold: {
+                        $sum: { 
+                            $subtract: ["$ticket_amount", "$tickets_available"] // Calculate tickets sold
+                        }
+                    },
+                    totalTicketsAmount: { $sum: "$ticket_amount" } // Calculate total tickets
+                }
+            },
+            {
+                $project: {
+                    artist_name: "$_id", // Rename _id to artist_name
+                    _id: 0, // Exclude _id from the result
+                    ticketSoldPercentage: {
+                        $multiply: [
+                            { $divide: ["$totalTicketsSold", "$totalTicketsAmount"] },
+                            100
+                        ]
+                    }
+                }
+            },
+            {
+                $sort: { ticketSoldPercentage: -1 } // Sort by tickets sold percentage in descending order
+            },
+            {
+                $limit: 10 // Limit to top 10 artists
+            }
+        ]);
+    
+        return result;
+    };
+    
+
+
 module.exports = {
     createConcert,
     getConcerts,
@@ -131,5 +169,6 @@ module.exports = {
     checkExisitingConcertArtist,
     checkExisitingConcertLocation,
     checkAvailableTickets,
-    getFutureConcerts
+    getFutureConcerts,
+    getTicketSoldPercentage
 };

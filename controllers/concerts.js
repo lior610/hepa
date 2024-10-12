@@ -244,9 +244,21 @@ async function getFutureConcerts(req, res) {
 }
 
 const editTicketsForConcert = async (req, res) => {
-    const updatedTickets = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
-    
+    try {
+        const result = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
+        
+        // Check if the update was successful
+        if (result.nModified === 1) {
+            res.status(200).json({ message: 'Tickets updated successfully' });
+        } else {
+            res.status(400).json({ message: 'Failed to update tickets or no changes made' });
+        }
+    } catch (error) {
+        console.error('Error updating concert tickets:', error);
+        res.status(500).json({ message: 'Server error while updating tickets' });
+    }
 }
+
 const getChartData = async (req, res) => {
     try {
         const chartData = await concertsService.getTicketSoldPercentage();

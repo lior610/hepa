@@ -26,8 +26,11 @@ const deleteOrder = async (orderId) => {
 
 const editOrder = async (orderId, owner, concert, concert_id, tickets_number,
     status, date, payment) => {  
+    //change the date to be today, edit day
+    const today = new Date();
+    const changeDate = today.toISOString().slice(0, 10);
     const data = {owner, concert, concert_id, tickets_number,
-        status, date, payment}
+        status, changeDate, payment}
     return await Order.updateOne({"_id": orderId}, data)
 }
 

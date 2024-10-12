@@ -6,7 +6,7 @@ const showAllOrders = async (req, res) => {
 }
 
 const createOrder = async (req, res) => {
-    const { owner, concert, concert_id, tickets_number, date } = req.body; //short way for casting each part of body
+    const { owner, concert, concert_id, tickets_number } = req.body; //short way for casting each part of body
     try {
         // Validate owner
         const ownerValid = await ordersService.ownerExists(owner);
@@ -26,7 +26,7 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ message: 'Not enough tickets available.' });
         }
         // Validate date is in the future
-        const concertDateValid = await ordersService.checkConcertDate(concert_id, date);
+        const concertDateValid = await ordersService.checkConcertDate(concert_id);
         if (!concertDateValid) {
             return res.status(400).json({ message: 'Concert is in the past' });
         }

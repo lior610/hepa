@@ -4,7 +4,7 @@ const qs = require('qs');
 
 const createPlace = async (city, address, type) => {
         const place = new Place({
-            _id: city, address, type
+            city, address, type
         });
 
         let placeCreated = await place.save();

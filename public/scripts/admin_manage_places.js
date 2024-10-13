@@ -2,11 +2,8 @@ $(document).ready(function () {
     // Load places from the database when the page loads
     loadPlaces();
 
-    // Add event listener to the form for adding a new place
-    //$('#addPlaceForm').on('submit', function (event) {
-    //    event.preventDefault();
-    //    addPlace();
-    //});
+    // Call the setupValidation function
+    setupValidation();
 });
 
 // Fetch all places from the database and display in the table
@@ -18,7 +15,7 @@ function fetchPlaces() {
     });
 }
 
-// Function to fetch orders and populate the table
+// Function to fetch places and populate the table
 function loadPlaces() {
     fetchPlaces().done(function(places) {
         const tableBody = $('#placesTable tbody');
@@ -43,45 +40,9 @@ function loadPlaces() {
     });
 }
 
-// Edit an existing place
-function editPlace(placeId) {
-        $.ajax({
-            url: `/api_places/place/${placeId}`,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(updatedPlace),
-            success: function (data) {
-                loadPlaces(); // Reload the table with updated places
-            },
-            error: function (error) {
-                console.error('Error updating place:', error);
-            }
-        });
-    }
-
-// Remove a place from the database
-function removePlace(placeId) {
-    if (confirm('Are you sure you want to remove this place?')) {
-        $.ajax({
-            url: `/api_places/place/${placeId}`,
-            method: 'DELETE',
-            success: function (data) {
-                alert('Place removed successfully!');
-                loadPlaces(); // Reload the table with updated places
-            },
-            error: function (error) {
-                console.error('Error removing place:', error);
-            }
-        });
-    }
-}
-const form = document.querySelector("form");
-console.log(form)
-
+// Setup form validation and submission
 function setupValidation() {
-    const city = $('#city').val();
-    const address = $('#address').val();
-    const type = $('#type').val();
+    const form = document.querySelector("form");
 
     if (!form) {
         console.log("Form not found!");
@@ -90,18 +51,25 @@ function setupValidation() {
 
     // Attach event listener for form submission
     form.addEventListener("submit", function (event) {
-        event.preventDefault();
+        event.preventDefault();  // Prevent form submission to handle validation
+
+        // Fetch the values of the form fields dynamically when the form is submitted
+        const city = $('#city').val();
+        const address = $('#address').val();
+        const type = $('#type').val();
+
         let errors = [];
-        console.log(form)
-        console.log("type: ", type)
-        console.log("city: ", city)
-        if (!(type == "indoors" || type == "outdoors")) {
-            console.log("type not good")
-            errors.push("type can be only indoors or outdoors.");
+
+        console.log("City:", city);
+        console.log("Address:", address);
+        console.log("Type:", type);
+        // Validate type
+        if (!(type === "indoors" || type === "outdoors")) {
+            errors.push("Type can be only indoors or outdoors.");
         }
 
         if (errors.length > 0) {
-            alert(errors.join("\n"));
+            alert(errors.join("\n"));  // Show errors
         } else {
             // Submit the form if no errors
             form.submit();
@@ -109,4 +77,34 @@ function setupValidation() {
     });
 
     console.log("Validation setup complete");
+}
+
+// Example Edit and Remove button functionality (stub)
+function editPlace(placeId) {
+    console.log('Edit place', placeId);
+    window.location.href = `/edit_place.html?id=${placeId}`
+    
+}
+
+function removePlace(placeId) {
+    // Confirm deletion
+    if (confirm('Are you sure you want to delete this order?')) {
+        $.ajax({
+            url: `/api_places/place/${placeId}`, 
+            type: 'DELETE',
+            success: function() {
+                // Find the row in the table and remove it
+                $(`#placesTable tbody tr`).filter(function() {
+                    return $(this).find('td').first().text() === placeId; // Match based on order ID
+                }).remove();
+
+                // Optionally, you can refresh the orders table by re-fetching all orders
+                loadPlaces();
+            },
+            error: function(error) {
+                console.error('Error deleting place:', error);
+                alert('Failed to delete place. Please try again.');
+            }
+        });
+    }
 }

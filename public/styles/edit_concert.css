@@ -49,11 +49,15 @@ label {
     margin-bottom: 5px;
 }
 
+/* Ensuring consistent styles for all input fields */
 input[type="text"],
 input[type="date"],
 input[type="time"],
 input[type="number"],
 input[type="file"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
 select {
     width: 100%;
     padding: 10px;

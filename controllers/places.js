@@ -7,7 +7,7 @@ const showAllPlaces = async (req, res) => {
 };
 
 
-const createPlace = async (req, res) => {
+const createPlace = async (req, res) => {   
     const newPlace = await placesService.createPlace(req.body.city,
                                                       req.body.address,
                                                       req.body.type

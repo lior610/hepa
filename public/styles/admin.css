@@ -4,6 +4,19 @@ body {
     margin: 0; /* Remove default margin */
 }
 
+#main-content {
+    margin-left: 200px; /* Creates space for the sidebar */
+    padding: 20px;
+    flex-grow: 1; /* Takes up the rest of the space */
+}
+
+#main-title {
+    color: #405389;
+}
+
+#main-end-sentence {
+    color: #405389;
+}
 #nav-logo {
     height: 5rem;
     margin-right: 10px;
@@ -182,7 +195,7 @@ form .form-control {
     border-radius: 10px;
     max-height: 600px; /* Adjust this height as necessary */
     overflow-y: scroll; /* Enable vertical scrolling */
-    width: 90%; /* Set the width to 90% of the viewport width */
+    width: 100%; /* Set the width to 90% of the viewport width */
     max-width: 1200px; /* Optional: set a maximum width */
 }
 

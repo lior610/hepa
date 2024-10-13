@@ -33,6 +33,8 @@ $(document).ready(function() {
             // load its related js after html is loaded
             $.getScript('./scripts/admin_manage_places.js', function() {
                 console.log("Places JS loaded and executed.");
+                // Call the validation setup function after JS is loaded
+                setupValidation();
             });
         });
     });
@@ -42,9 +44,16 @@ $(document).ready(function() {
         event.preventDefault();     // Prevent the default action of the link
         // load the html
         $('#main-content').load('./admin/manage_users.html', function() {
-            // load its related js after html is loaded
+            // load both JS files after HTML is loaded
             $.getScript('./scripts/admin_manage_users.js', function() {
                 console.log("Users JS loaded and executed.");
+                // Load register.js after admin_manage_users.js
+                $.getScript('./scripts/register.js', function() {
+                    console.log("Register JS loaded and executed.");
+                    $.getScript('./scripts/password.js', function() {
+                        console.log("Password JS loaded and executed.");
+                    });
+                });
             });
         });
     });

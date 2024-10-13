@@ -1,102 +1,110 @@
-document.addEventListener('DOMContentLoaded', () => {
+$(document).ready(function () {
     // Load places from the database when the page loads
-    fetchPlaces();
+    loadPlaces();
 
-    // Add event listener to the form for adding a new place
-    const addPlaceForm = document.getElementById('add-place-form');
-    addPlaceForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-        addPlace();
-    });
+    // Call the setupValidation function
+    setupValidation();
 });
 
 // Fetch all places from the database and display in the table
 function fetchPlaces() {
-    fetch('/api/places') // Adjust the endpoint based on your API
-        .then(response => response.json())
-        .then(places => {
-            const placesTableBody = document.getElementById('places-table-body');
-            placesTableBody.innerHTML = ''; // Clear the table body before adding new rows
+    return $.ajax({
+        url: "/api_places",
+        method: "GET",
+        dataType: "json"
+    });
+}
 
-            places.forEach(place => {
-                const row = document.createElement('tr');
+// Function to fetch places and populate the table
+function loadPlaces() {
+    fetchPlaces().done(function(places) {
+        const tableBody = $('#placesTable tbody');
+        tableBody.empty(); // Clear existing rows
 
-                row.innerHTML = `
+        places.forEach(place => {
+            const row = `
+                <tr>
                     <td>${place.city}</td>
-                    <td>${place.type}</td>
                     <td>${place.address}</td>
+                    <td>${place.type}</td>
                     <td>
-                        <button class="btn btn-warning btn-edit" onclick="editPlace('${place._id}')">Edit</button>
-                        <button class="btn btn-danger btn-delete" onclick="removePlace('${place._id}')">Remove</button>
+                        <button class="btn btn-edit" onclick="editPlace('${place._id}')">Edit</button>
+                        <button class="btn btn-remove" onclick="removePlace('${place._id}')">Remove</button>
                     </td>
-                `;
-
-                placesTableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error fetching places:', error));
+                </tr>
+            `;
+            tableBody.append(row);
+        });
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error loading places:', textStatus, errorThrown);
+    });
 }
 
-// Add a new place to the database
-function addPlace() {
-    const city = document.getElementById('city').value;
-    const type = document.getElementById('type').value;
-    const address = document.getElementById('address').value;
+// Setup form validation and submission
+function setupValidation() {
+    const form = document.querySelector("form");
 
-    const placeData = { city, type, address };
-
-    fetch('/api/places', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(placeData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            alert('Place added successfully!');
-            document.getElementById('add-place-form').reset();
-            fetchPlaces(); // Reload the table with the updated places
-        })
-        .catch(error => console.error('Error adding place:', error));
-}
-
-// Edit an existing place
-function editPlace(placeId) {
-    const city = prompt('Enter new city name:');
-    const type = prompt('Enter new place type:');
-    const address = prompt('Enter new address:');
-
-    if (city && type && address) {
-        const updatedPlace = { city, type, address };
-
-        fetch(`/api/places/${placeId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedPlace)
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert('Place updated successfully!');
-                fetchPlaces(); // Reload the table with updated places
-            })
-            .catch(error => console.error('Error updating place:', error));
+    if (!form) {
+        console.log("Form not found!");
+        return;
     }
+
+    // Attach event listener for form submission
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();  // Prevent form submission to handle validation
+
+        // Fetch the values of the form fields dynamically when the form is submitted
+        const city = $('#city').val();
+        const address = $('#address').val();
+        const type = $('#type').val();
+
+        let errors = [];
+
+        console.log("City:", city);
+        console.log("Address:", address);
+        console.log("Type:", type);
+        // Validate type
+        if (!(type === "indoors" || type === "outdoors")) {
+            errors.push("Type can be only indoors or outdoors.");
+        }
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"));  // Show errors
+        } else {
+            // Submit the form if no errors
+            form.submit();
+        }
+    });
+
+    console.log("Validation setup complete");
 }
 
-// Remove a place from the database
+// Example Edit and Remove button functionality (stub)
+function editPlace(placeId) {
+    console.log('Edit place', placeId);
+    window.location.href = `/edit_place.html?id=${placeId}`
+    
+}
+
 function removePlace(placeId) {
-    if (confirm('Are you sure you want to remove this place?')) {
-        fetch(`/api/places/${placeId}`, {
-            method: 'DELETE'
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert('Place removed successfully!');
-                fetchPlaces(); // Reload the table with updated places
-            })
-            .catch(error => console.error('Error removing place:', error));
+    // Confirm deletion
+    if (confirm('Are you sure you want to delete this order?')) {
+        $.ajax({
+            url: `/api_places/place/${placeId}`, 
+            type: 'DELETE',
+            success: function() {
+                // Find the row in the table and remove it
+                $(`#placesTable tbody tr`).filter(function() {
+                    return $(this).find('td').first().text() === placeId; // Match based on order ID
+                }).remove();
+
+                // Optionally, you can refresh the orders table by re-fetching all orders
+                loadPlaces();
+            },
+            error: function(error) {
+                console.error('Error deleting place:', error);
+                alert('Failed to delete place. Please try again.');
+            }
+        });
     }
 }

@@ -1,1 +1,101 @@
-<p>users</p>
+<!-- Add User Section -->
+<section class="mt-5">
+    <h2>Add User</h2>
+    <div class="container">
+        <div class="box p-4 mb-4">
+            <form id="addUserForm" action="/api_login/adminAddUser" method="post" onsubmit="hashPassword(event)">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="full_name">Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+                <div id="usernameValidation" class="text-danger mt-1 small"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" required>
+                    </div>
+                </div>
+                <!-- Row 2 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="confirm">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm" required>
+                        <div id="passwordError" class="text-danger mt-1 small"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="mail">Email</label>
+                <input type="email" class="form-control" id="mail" name="mail" required>
+                <div id="emailError" class="text-danger mt-1 small"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="phone">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{10}" required>
+                <div id="phoneError" class="text-danger mt-1 small"></div>
+                    </div>
+                </div>
+                <!-- Row 3 -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="address_number">Address Number</label>
+                        <input type="number" class="form-control" id="address_number" name="address_number" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="address_street">Street</label>
+                <input type="text" class="form-control" id="address_street" name="address_street" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="address_city">City</label>
+                        <input type="text" class="form-control" id="address_city" name="address_city" required>
+                    </div>
+                </div>
+                <!-- Row 4: Publish on Facebook Checkbox -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="gender">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="kind">Kind</label>
+                        <select class="form-select" id="kind" name="kind" required>
+                            <option selected value="regular">Regular</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add User</button>
+            </form>
+        </div>
+    
+
+    <!-- Users Table Section -->
+    <h2>Manage Users</h2>
+    <div class="table-wrapper">
+        <table id="usersTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Mail</th>
+                    <th>phone</th>
+                    <th>City</th>
+                    <th>Street</th>
+                    <th>House Number</th>
+                    <th>Gender</th>
+                    <th>Kind</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</section>

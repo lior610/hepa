@@ -44,7 +44,7 @@ const editUserDetails = async (req, res) => {
                                                     req.body.password,
                                                     req.body.mail,
                                                     req.body.phone,
-                                                    req.body.address,
+                                                    address,
                                                     req.body.gender,
                                                     req.body.kind
                                                     )
@@ -57,6 +57,41 @@ const editUserDetails = async (req, res) => {
         return res.status(500).send(e.message);
     }
 }
+
+const adminEditUserDetails = async (req, res) => {    
+    console.log("controller edit user details for ", req.params.id);
+
+    // Build the address object
+    const address = {
+        number: req.body.address_number,
+        street: req.body.address_street,
+        city: req.body.address_city
+    };
+
+    try {
+        // If password is empty or null, do not pass it to the service function
+        const password = req.body.password && req.body.password.trim() !== '' ? req.body.password : null;
+
+        const updatedUser = await usersService.adminEditUserDetails(
+            req.params.id,
+            req.body.full_name,
+            password,  // Pass null if password should not be updated
+            req.body.mail,
+            req.body.phone,
+            address,
+            req.body.gender,
+            req.body.kind
+        );
+
+        if (updatedUser) {
+            res.redirect("/admin.html");
+        } else {
+            res.status(404).send(`username ${req.params.id} not found`);
+        }
+    } catch (e) {
+        return res.status(500).send(e.message);
+    }
+};
 
 async function getUser(req, res) {
     const username = req.params.id
@@ -79,4 +114,4 @@ async function deleteUser(req, res) {
     }
 }
 
-module.exports = {showAllUsers, deleteUser, editUser, getUser,editUserDetails}
+module.exports = {showAllUsers, deleteUser, editUser, getUser,editUserDetails, adminEditUserDetails}

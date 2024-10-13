@@ -39,5 +39,5 @@ server.use('/api_places', places);
 server.use('/', pages);
 server.use(express.static("public"))  //use files in public folder
 
-server.listen(8080)
+server.listen(80)
 

@@ -36,7 +36,30 @@ async function isAdmin(username) {
     return user.kind == "Admin";
 }
 
+function validateEmail(email) {
+    // Basic email validation
+    var emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    return emailPattern.test(email)
+}
+
+function validatePhone(phone) {
+    // Basic phone number validation
+    return phone.length === 10 && /^[0-9]{10}$/.test(phone)
+}
+
+function validateFields(data) {
+    for (let [key, value] of Object.entries(data)) {
+        if (value == null || value == "") {
+            return false;
+        }
+    }
+    return true;
+}
+
 module.exports = { login, 
                    register,
                    adminAddUser, 
-                   isAdmin }
+                   isAdmin,
+                   validatePhone,
+                   validateEmail,
+                   validateFields }

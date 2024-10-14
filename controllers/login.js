@@ -2,7 +2,6 @@ const loginService = require("../services/login")
 const userService = require("../services/users")
 
 function isLoggedIn(req, res, next) {
-    console.log(req.session.username)
     if (req.session.username != null) return next();
     else res.redirect("/login.html");
 }
@@ -37,12 +36,32 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
+    if (!loginService.validateEmail(req.body.mail)) {
+        const errorTitle = "Invalid Mail";
+        const errorMessage = "Oops! The e-mail is not on the right format. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+    }
+    if (!loginService.validatePhone(req.body.phone)) {
+        const errorTitle = "Invalid phone number";
+        const errorMessage = "Oops! The phone number is not on the right format. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+    }
+    if (!loginService.validateFields(req.body)) {
+        const errorTitle = "One of the fields is missing";
+        const errorMessage = "Oops! One of the fields is missing. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+    }
     const address = {
         number: req.body.address_number,
         street: req.body.address_street,
         city: req.body.address_city
     }
-    console.log(req.body);
     try {
         if (await userService.getUser(req.body.username.toLowerCase())) {
             return res.redirect("/register.html?error=1")
@@ -63,12 +82,32 @@ async function register(req, res) {
 }
 
 async function adminAddUser(req, res) {
+    if (!loginService.validateEmail(req.body.mail)) {
+        const errorTitle = "Invalid Mail";
+        const errorMessage = "Oops! The e-mail is not on the right format. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+    }
+    if (!loginService.validatePhone(req.body.phone)) {
+        const errorTitle = "Invalid phone number";
+        const errorMessage = "Oops! The phone number is not on the right format. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+    }
+    if (!loginService.validateFields(req.body)) {
+        const errorTitle = "One of the fields is missing";
+        const errorMessage = "Oops! One of the fields is missing. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+    }
     const address = {
         number: req.body.address_number,
         street: req.body.address_street,
         city: req.body.address_city
     }
-    console.log(req.body);
     try {
         if (await userService.getUser(req.body.username.toLowerCase())) {
             return res.redirect("/register.html?error=1")

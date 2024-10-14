@@ -16,6 +16,16 @@ async function register(username, full_name, password,
         await user.save();
 }
 
+async function adminAddUser(username, full_name, password,
+    mail, phone, address, gender, kind) {
+        const user = new User({
+            _id: username, full_name, password, mail, phone, 
+            address, gender, kind
+        });
+
+        await user.save();
+}
+
 async function isAdmin(username) {
     const user = await User.findOne({_id: username});
     try {
@@ -27,5 +37,6 @@ async function isAdmin(username) {
 }
 
 module.exports = { login, 
-                   register, 
+                   register,
+                   adminAddUser, 
                    isAdmin }

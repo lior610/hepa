@@ -62,6 +62,33 @@ async function register(req, res) {
     }
 }
 
+async function adminAddUser(req, res) {
+    const address = {
+        number: req.body.address_number,
+        street: req.body.address_street,
+        city: req.body.address_city
+    }
+    console.log(req.body);
+    try {
+        if (await userService.getUser(req.body.username.toLowerCase())) {
+            return res.redirect("/register.html?error=1")
+        }
+    
+        const newUser = await loginService.adminAddUser(req.body.username.toLowerCase(),
+                                                    req.body.full_name,
+                                                    req.body.password,
+                                                    req.body.mail,
+                                                    req.body.phone,
+                                                    address,
+                                                    req.body.gender,
+                                                    req.body.kind
+                                                    )
+        res.redirect("/admin.html")
+    } catch (e) {
+        res.status(500).send("Error during adding " + e.message);
+    }
+}
+
 async function getUsername(req, res) {
     const isAdmin = await loginService.isAdmin(req.session.username);
     return res.json({ username: req.session.username, "Admin": isAdmin})
@@ -77,6 +104,7 @@ module.exports = {
     logout,
     login,
     register,
+    adminAddUser,
     getUsername,
     getFullName
 }

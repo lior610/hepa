@@ -156,3 +156,18 @@ $startDate.on('change', function() {
     const selectedStartDate = $startDate.val();
     $endDate.attr('min', selectedStartDate);
 });
+
+const $maxPrice = $('#maxPrice');
+const $minPrice = $('#minPrice');
+$minPrice.on('change', () => {
+    if(parseInt($minPrice.val()) < 0) {
+        $minPrice.val(0);
+    }
+    $maxPrice.attr('min', $minPrice.val());
+});
+
+$maxPrice.on('change', () => {
+    if(parseInt($maxPrice.val()) < $minPrice.val()) {
+        $maxPrice.val($minPrice.val());
+    }
+})

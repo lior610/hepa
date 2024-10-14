@@ -27,25 +27,14 @@ async function populateForm() {
         document.getElementById("editOrderForm").action = `/api_orders/order/${data._id}`;
         document.getElementById("owner").value = data.owner;
         document.getElementById("concert").value = data.concert;
-        document.getElementById("ticket_number").value = data.ticket_number;
+        document.getElementById("tickets_number").value = data.tickets_number;
         document.getElementById("status").value = data.status;
         document.getElementById("date").value = data.date;  // Ensure this matches the format used in the input
         document.getElementById("payment").value = data.payment;
+
+        // Set the hidden concert_id field 
+        document.getElementById("concert_id").value = data.concert_id;
     }
 }
 
-async function submit() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const id = urlParams.get("id");
-    console.log("the id is ", id)
-
-    res = await fetch(`/api_orders/order/${id}`, {
-        method: "POST"
-    })
-
-    window.location.href = "/orders.html"
-}
-
-//document.getElementById("editOrderForm").addEventListener("submit", submitForm);
 populateForm();

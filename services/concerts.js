@@ -21,13 +21,11 @@ const deleteConcert = async (id) => {
     return await Concert.deleteOne({"_id": id});
 }
 
-const editConcert = async (id, artist_name, date, hour, door_opening, location, ticket_amount, price, picture) => {
-    let data = { artist_name, date, hour, door_opening, location, ticket_amount, price }; // Default data object
-    
+const editConcert = async (id, artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, price, picture) => {
+    let data = { artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, price };
     if (picture != null) {
         data.picture = picture; // Add picture if available
     }
-
     return await Concert.updateOne({ "_id": id }, data); // Update the concert
 };
 
@@ -86,12 +84,19 @@ async function checkExisitingConcertArtist(artist_name, date) {
 }
 
 async function checkExisitingConcertLocation(hour, date, location) {
-    arr = await getConcertByartistAndDate(hour, date, location);
+    arr = await getConcertByLocationDateTime(hour, date, location);
     if (Array.isArray(arr) && arr.length === 0)
     {
         return true;
     }
     return false;
+}
+
+async function checkAvailableTickets(id, ticket_amount) {
+    let concert = await Concert.find({"_id": id})
+    let soldTickets = (concert[0].ticket_amount - concert[0].tickets_available)
+    let newAvailTickets = concert[0].tickets_available + (ticket_amount - concert[0].ticket_amount)
+    return [soldTickets <= ticket_amount, newAvailTickets];
 }
 
 const getFutureConcerts = async() => {
@@ -110,6 +115,44 @@ const getFutureConcerts = async() => {
     return concerts;
 }
 
+const getTicketSoldPercentage= async () => {
+        const result = await Concert.aggregate([
+            {
+                $group: {
+                    _id: "$artist_name", // Group by artist name
+                    totalTicketsSold: {
+                        $sum: { 
+                            $subtract: ["$ticket_amount", "$tickets_available"] // Calculate tickets sold
+                        }
+                    },
+                    totalTicketsAmount: { $sum: "$ticket_amount" } // Calculate total tickets
+                }
+            },
+            {
+                $project: {
+                    artist_name: "$_id", // Rename _id to artist_name
+                    _id: 0, // Exclude _id from the result
+                    ticketSoldPercentage: {
+                        $multiply: [
+                            { $divide: ["$totalTicketsSold", "$totalTicketsAmount"] },
+                            100
+                        ]
+                    }
+                }
+            },
+            {
+                $sort: { ticketSoldPercentage: -1 } // Sort by tickets sold percentage in descending order
+            },
+            {
+                $limit: 10 // Limit to top 10 artists
+            }
+        ]);
+    
+        return result;
+    };
+    
+
+
 module.exports = {
     createConcert,
     getConcerts,
@@ -125,5 +168,7 @@ module.exports = {
     checkPrice,
     checkExisitingConcertArtist,
     checkExisitingConcertLocation,
-    getFutureConcerts
+    checkAvailableTickets,
+    getFutureConcerts,
+    getTicketSoldPercentage
 };

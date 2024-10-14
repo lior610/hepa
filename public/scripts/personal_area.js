@@ -2,7 +2,7 @@
 const cartList = $("#shoppingCart");
 let userData;
 
-// Mock user data (replace with actual API call)
+// Take the users data
 async function getUserData() {
     const res = await $.get("/api_login/username");
     const username = res.username;
@@ -19,7 +19,85 @@ function loadUserData() {
         <p><strong>Username:</strong> ${userData._id}</p>
         <p><strong>Email:</strong> ${userData.mail}</p>
         <p><strong>Phone:</strong> ${userData.phone}</p>
+        <button id="editButton" class="btn btn-primary">Edit</button>
+        `);
+
+    $("#editButton").on("click", function() {
+        enableEditUserDetails();
+    });    
+}
+
+function enableEditUserDetails() {
+    const userDetailsDiv = $("#userDetails");
+
+    // Replace the static text with input fields
+    userDetailsDiv.html(`
+        <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" class="form-control" value="${userData.full_name}">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="form-control" value="${userData.mail}">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" class="form-control" value="${userData.phone}">
+        </div>
+            <div class="form-group">
+            <label for="addressNumber">House Number:</label>
+            <input type="number" id="addressNumber" class="form-control" value="${userData.address.number}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="addressStreet">Street:</label>
+            <input type="text" id="addressStreet" class="form-control" value="${userData.address.street}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="addressCity">City:</label>
+            <input type="text" id="addressCity" class="form-control" value="${userData.address.city}" required>
+        </div>
+        <button id="saveButton" class="btn btn-success">Save</button>
     `);
+
+    // Add event listener to the Save button
+    $("#saveButton").on("click", function() {
+        saveUserDetails();
+    });
+}
+// save user details
+function saveUserDetails() {
+    let Id= userData._id
+    const updatedUserData = {
+        _id: userData._id,
+        full_name: $("#fullName").val(),
+        password: userData.password,
+        mail: $("#email").val(),
+        phone: $("#phone").val(),
+        address_number: $("#addressNumber").val(),  
+        address_street: $("#addressStreet").val(),  
+        address_city: $("#addressCity").val(),          
+        gender: userData.gender,
+        kind: userData.kind
+
+    };
+
+    // send the updated data to server
+    $.ajax({
+        url: `/api_users/user/edit_details/${Id}`,  
+        method: 'POST',
+        data: updatedUserData,
+        success: function(response) {
+            alert('Your details updated successfully!');
+            getUserData().then(data => {
+                userData = data;
+                loadUserData()});
+        },
+        error: function() {
+            alert('Failed to update user details.');
+        }
+    });
 }
 
 // Function to load paid orders
@@ -39,7 +117,7 @@ async function loadOrders() {
             const orderDiv = document.createElement("div");
             orderDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
-                <p><strong>Quantity:</strong> ${order.ticket_number}</p>
+                <p><strong>Quantity:</strong> ${order.tickets_number}</p>
                 <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Date:</strong> ${order.date}</p>
                 <p><strong>Status: Paid</strong> ${order.status}</p>
@@ -51,7 +129,7 @@ async function loadOrders() {
         else{
             openOrders ++;
             const li = document.createElement("li");
-            li.innerHTML = `<p>${order.concert} - Quantity: ${order.ticket_number}, Price: $${order.payment}</p>
+            li.innerHTML = `<p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
                         <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> remove</button>
                         <hr>
                         `;
@@ -72,7 +150,7 @@ async function loadOrders() {
 }
 
 async function fetchUserOrders() {
-    const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData.full_name)}`;
+    const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData._id)}`;
     const orders = await $.get(url); // Get the actual data from the db
     return orders;
 }
@@ -97,27 +175,6 @@ cartList.on('click', '.btn-outline-danger', function() {
     deleteOrder(orderId); // Call deleteOrder function with the specific order ID
 });
 
-async function handlePayment(){
-    console.log("start orders payment ")
-    //when press pay:
-    //      1. change all user's orders to "closed"
-    //      2. update tickets number
-    const allOrders = await fetchUserOrders() //get all orders
-    console.log(allOrders)
-    //go over all user's ordeers
-    for(let i=0; i<allOrders.length; i++){
-        const order = allOrders[i]
-        if(order.status == "open"){  
-            
-            updateOrderPayd(order)
-            console.log("now update sold tickets")
-            updateTickets(order)  
-            window.location.href = "/personal_area.html"
-        }        
-    }
-    window.location.href = "/personal_area.html"; // Redirect after processing
-}
-
 async function deleteOrder(id) {
     await $.ajax({
         url: `/api_orders/order/${id}`,
@@ -126,6 +183,36 @@ async function deleteOrder(id) {
     
     window.location.href = "/personal_area.html"; // Redirect after deletion
 }
+
+function handlePayment(){
+    console.log("start orders payment ");
+
+    // Step 1: Fetch all user's orders using AJAX
+    $.ajax({
+        url: `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData._id)}`,
+        method: 'GET',
+        success: function(allOrders) {
+            // Step 2: Prepare an array of promises for updating orders and tickets
+            const updatePromises = allOrders.map(order => {
+                if (order.status === "open") {
+                    updateOrderPayd(order)
+                        .then(() => updateTickets(order));
+                }
+            }).filter(Boolean); // Filter out undefined promises
+
+            // Wait for all updates to finish
+            Promise.all(updatePromises).then(() => {
+                window.location.href = "/personal_area.html";
+            }).catch(error => {
+                console.error("Error during payment processing:", error);
+            });
+        },
+        error: function(error) {
+            console.error("Error fetching user orders:", error);
+        }
+    });
+}
+
 async function updateOrderPayd(order){
     // change to closed          
     order.status = "close" //close the order   
@@ -133,32 +220,31 @@ async function updateOrderPayd(order){
     const today = new Date(); // Get today's date
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     order.date = formattedDate; // Update the date property            
-    console.log(order._id)
-    fetch(`/api_orders/order/${order._id}`, {
-        method: 'POST', // Specify the request method so it will use Edit function
-        headers: {
-            'Content-Type': 'application/json' // Set the content type to JSON
-        },
-        body: JSON.stringify(order) // Convert the object into a JSON string
-    })
+    return $.ajax({
+        url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
+        method: 'POST',
+        contentType: 'application/json', // Set the content type to JSON
+        data: JSON.stringify(order) // Convert the object into a JSON string
+    });
 }
 // update tickets avilable after payment
 async function updateTickets(order){
     const concertID = order.concert_id
-    console.log('given concert id: ',concertID)
     //get concert tickets
-    const concert = await fetchConcert(concertID)
-    prevNum = concert.tickets_available
-    concert.tickets_available = prevNum - order.tickets_number
-    console.log('now need to update tickets for concert: ', concertID)
-    console.log('new available num should be ', concert.tickets_available)
-    fetch(`/api_concerts/concert/tickets/${concert._id}`, {
-        method: 'POST', 
-        headers: {
-            'Content-Type': 'application/json' // Set content type to JSON
-        },
-        body: JSON.stringify(concert) // Convert the object into a JSON string
-    })
+    return fetchConcert(concertID) // Call fetchConcert, ensure it returns a promise
+        .then(concert => {
+            const prevNum = concert.tickets_available;
+            concert.tickets_available = prevNum - order.tickets_number;
+            console.log('now need to update tickets for concert: ', concertID);
+            console.log('new available num should be ', concert.tickets_available);
+            
+            return $.ajax({
+                url: `/api_concerts/concert/tickets/${concert._id}`, // Adjust the endpoint as needed
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(concert) // Convert the object into a JSON string
+            });
+        });
 }
 
 async function fetchConcert(concertId) {
@@ -166,8 +252,7 @@ async function fetchConcert(concertId) {
     const response = await fetch(url, {
         method: "GET"
     });       
-    const concert = await response.json() //convert the raw data to json -> new obj called concert        
-    console.log(concert[0])
+    const concert = await response.json() //convert the raw data to json -> new obj called concert       
     return concert[0]
     
 }

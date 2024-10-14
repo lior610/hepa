@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="img/hepa_logo.png" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Edit Concert Form</title>
 </head>
 <body>
@@ -38,55 +37,45 @@
         </div>
     </div>
 </nav>
-<!--edit part-->
-<div class="container">
-    <h2>Edit Concert Form</h2>
-    <form id="editConcertForm" action="/api_concerts/concert/{_id}" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="artist_name">Artist Name:</label>
-            <input type="text" id="artist_name" name="artist_name" required>
-        </div>
-        <div class="form-group">
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
-        <div class="form-group">
-            <label for="hour">Hour:</label>
-            <input type="time" id="hour" name="hour" required>
-        </div>
-        <div class="form-group">
-            <label for="door_opening">Door opening:</label>
-            <input type="time" id="door_opening" name="door_opening" required>
-        </div>
-        <div class="form-group">
-            <label for="location">Location:</label>
-            <select id="location" name="location" required>
-                <option value="Tel Aviv">Tel Aviv</option>
-                <option value="Jerusalem">Jerusalem</option>
-                <option value="Haifa">Haifa</option>
-                <option value="Rishon Lezion">Rishon Lezion</option>
-                <option value="Eilat">Eilat</option>
-                <option value="Beer Sheva">Beer Sheva</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="ticket_amount">Ticket Amount:</label>
-            <input type="number" id="ticket_amount" name="ticket_amount" required>
-        </div>
-        <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" required>
-        </div>
-        <div class="form-group">
-            <label for="picture">Picture:</label>
-            <button type="button" id="togglePicture" class="btn btn-secondary btn-sm">Change Picture</button>
-            <input type="file" id="picture" name="picture" accept="image/*" style="display:none;">
-        </div>
-        <div class="form-group">
-            <input type="submit" value="edit" onsubmit= >
-        </div>
-    </form>
-</div>
+    <!--edit part-->
+    <div class="container">
+        <h2>Edit Order Form</h2>
+        <form id="editOrderForm" action="/api_orders/order/{_id}" method="post">
+            <div class="form-group">
+                <label for="owner">Owner (username):</label>
+                <input type="text" id="owner" name="owner" required>
+            </div>
+            <div class="form-group">
+                <label for="concert">Concert:</label>
+                <input type="text" id="concert" name="concert" required readonly>
+            </div>
+            <input type="hidden" id="concert_id" name="concert_id">
+            <div class="form-group">
+                <label for="tickets_number">Tickets Number:</label>
+                <input type="number" id="tickets_number" name="tickets_number" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="open">Open</option>
+                    <option value="close">Closed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">last status update (read only)</label>
+                <input type="date" id="date" name="date" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="payment">Payment:</label>
+                <input type="number" id="payment" name="payment" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="edit" onsubmit="submit()"> 
+                <!--not suer the "submit()" sould be, wasnt in OG-->
+            </div>
+        </form>
+    </div>
 
 <!-- Footer Section -->
 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
@@ -102,7 +91,7 @@
     </ul>
 </footer>
 
-<script src="scripts/edit_concert.js"></script>
+<script src="scripts/edit_order.js"></script>
 
 </body>
 </html>

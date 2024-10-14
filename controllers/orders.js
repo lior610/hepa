@@ -11,19 +11,41 @@ const createOrder = async (req, res) => {
         // Validate owner
         const ownerValid = await ordersService.ownerExists(owner);
         if (!ownerValid) {
-            return res.status(400).json({ message: 'Owner username does not exist.' });
+            const errorTitle = "Invalid Owner";
+            const errorMessage = "Oops! Owner username does not exist. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
         }
 
         // Validate concert exist and matches id
         const concertValid = await ordersService.concertExists(concert, concert_id);
         if (!concertValid) {
-            return res.status(400).json({ message: 'Concert does not exist with this id' });
+            const errorTitle = "Invalid Request";
+            const errorMessage = "Oops! Concert does not exist with this id. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
         }
 
         // Validate ticket availability
         const ticketsValid = await ordersService.checkTicketAvailability(concert_id, tickets_number);
         if (!ticketsValid) {
-            return res.status(400).json({ message: 'Not enough tickets available.' });
+            const errorTitle = "Invalid Request";
+            const errorMessage = "Oops! Not enough tickets available. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+        }
+
+        // Validate date is in the future
+        const concertDateValid = await ordersService.checkConcertDate(concert_id);
+        if (!concertDateValid) {
+            const errorTitle = "Invalid Request";
+            const errorMessage = "Oops! Concert is in the past. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
         }
 
         // If validation passes, proceed to create the order
@@ -46,21 +68,42 @@ const editOrder = async (req, res) => {
         const ownerValid = await ordersService.ownerExists(owner);
         console.log(owner);
         if (!ownerValid) {
-            return res.status(400).json({ message: 'Owner username does not exist.' });
+            const errorTitle = "Invalid Owner";
+            const errorMessage = "Oops! Owner username does not exist. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
         }
 
         // Validate concert exist and matches id
         const concertValid = await ordersService.concertExists(concert, concert_id);
         if (!concertValid) {
-            return res.status(400).json({ message: 'Concert does not exist with this id' });
+            const errorTitle = "Invalid Request";
+            const errorMessage = "Oops! Concert does not exist with this id. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
         }
 
         // Validate ticket availability
         const ticketsValid = await ordersService.checkTicketAvailability(concert_id, tickets_number);
         if (!ticketsValid) {
-            return res.status(400).json({ message: 'Not enough tickets available.' });
+            const errorTitle = "Invalid Request";
+            const errorMessage = "Oops! Not enough tickets available. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
         }    
 
+        // Validate date is in the future
+        const concertDateValid = await ordersService.checkConcertDate(concert_id);
+        if (!concertDateValid) {
+            const errorTitle = "Invalid Request";
+            const errorMessage = "Oops! Concert is in the past. Please check and try again.";
+            
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+        }
         // If validation passes, proceed to create the order
         const updatedOrder = await ordersService.editOrder(req.params.id,
             req.body.owner,
@@ -86,7 +129,6 @@ async function getOrder(req, res) {
 
 async function getUserOrders(req, res) {
     const owner = req.query.owner  //export the owner from the parameters of the request
-    console.log("the user is ", owner)
     const orders = await ordersService.getUserOrders(owner);
     return res.json(orders);
 }

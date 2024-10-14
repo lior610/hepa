@@ -34,7 +34,6 @@ function loadConcerts() {
             if (currentConcertIndex === 0) {
                 $concertsContainer.empty();
             }
-
             // Get the next batch of concerts based on currentConcertIndex and concertsPerLoad
             const nextConcerts = filteredConcerts.slice(currentConcertIndex, currentConcertIndex + concertsPerLoad);
 
@@ -160,7 +159,9 @@ async function editConcert(id) {
 // working with graph #1
 function renderChart() {
     $.ajax({
+
         url: '/api_concerts/api_concerts_chart', 
+
         method: 'GET',
         success: function(chartData) {
             const labels = chartData.map(concert => concert.artist_name); // Only artist names
@@ -211,3 +212,57 @@ function searchByName(concerts, searchQuery) {
 
     return filteredResults
 }
+
+function setupValidation() {
+    const doorOpening = document.getElementById("doorOpening");
+    const hour = document.getElementById("concertHour");
+    const ticketAmount = document.getElementById("ticketAmount");
+    const concertDate = document.getElementById("concertDate");
+    const price = document.getElementById("price");
+    const form = document.querySelector("form");
+
+    if (!form) {
+        console.log("Form not found!");
+        return;
+    }
+
+    // Attach event listener for form submission
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        let errors = [];
+
+        const openingTime = doorOpening.value;
+        const concertTime = hour.value;
+
+        // Validation logic
+        if (openingTime >= concertTime) {
+            errors.push("Door opening cannot be after or at the concert time.");
+        }
+
+        const ticketValue = parseInt(ticketAmount.value);
+        if (ticketValue < 1) {
+            errors.push("Ticket amount must be at least 1.");
+        }
+
+        const concertDateValue = new Date(concertDate.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to midnight for correct comparison
+        if (concertDateValue <= today) {
+            errors.push("Concert date must be tomorrow or later.");
+        }
+
+        const priceValue = parseFloat(price.value);
+        if (priceValue <= 0) {
+            errors.push("Price must be greater than 0.");
+        }
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+        } else {
+            // Submit the form if no errors
+            form.submit();
+        }
+    });
+
+    console.log("Validation setup complete");
+}   

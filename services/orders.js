@@ -74,12 +74,13 @@ async function checkTicketAvailability(concert_id, requestedTickets) {
     else return false
 }
 // Validate date is in the future
-async function checkConcertDate(concert_id, date){
+async function checkConcertDate(concert_id){
     if(mongoose.Types.ObjectId.isValid(concert_id)){
-        const concert = await Concert.findOne({ "_id": concert_id });
-        const today = new Date();
-        const concertDate = today.toISOString().slice(0, 10);
-        return (concertDate == date)
+        const concert = await Concert.findOne({ "_id": concert_id }); //find the concert object
+        concertDate = new Date(concert.date) //take the date
+        let today = new Date() //take today
+        today.setHours(0, 0, 0, 0);
+        return (concertDate > today )  
     }
     else return false
 }

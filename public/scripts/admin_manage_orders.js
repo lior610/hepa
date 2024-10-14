@@ -1,3 +1,5 @@
+let allOrders = []
+
 function fetchOrders() {
     return $.ajax({
         url: "/api_orders",
@@ -7,30 +9,27 @@ function fetchOrders() {
 }
 
 // Function to fetch orders and populate the table
-function loadOrders() {
-    fetchOrders().done(function(orders) {
-        const tableBody = $('#ordersTable tbody');
-        tableBody.empty(); // Clear existing rows
+function loadOrders(orders) {
+    console.log(orders)
+    const tableBody = $('#ordersTable tbody');
+    tableBody.empty(); // Clear existing rows
 
-        orders.forEach(order => {
-            const row = `
-                <tr>
-                    <td>${order.owner}</td>
-                    <td>${order.concert}</td>
-                    <td>${order.tickets_number}</td>
-                    <td>${order.status}</td>
-                    <td>${order.date}</td>
-                    <td>${order.payment}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="editOrder('${order._id}')">Edit</button>
-                        <button class="btn btn-remove" onclick="removeOrder('${order._id}')">Remove</button>
-                    </td>
-                </tr>
-            `;
-            tableBody.append(row);
-        });
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.error('Error loading orders:', textStatus, errorThrown);
+    orders.forEach(order => {
+        const row = `
+            <tr>
+                <td>${order.owner}</td>
+                <td>${order.concert}</td>
+                <td>${order.tickets_number}</td>
+                <td>${order.status}</td>
+                <td>${order.date}</td>
+                <td>${order.payment}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editOrder('${order._id}')">Edit</button>
+                    <button class="btn btn-remove" onclick="removeOrder('${order._id}')">Remove</button>
+                </td>
+            </tr>
+        `;
+        tableBody.append(row);
     });
 }
 
@@ -135,7 +134,34 @@ function renderClosedOrdersChart() {
     });
 }
 
+function applyFilters() {
+    const status = $('#status').val();
+    const date = $('#date').val();
+    const owner = $('#owner').val().toLowerCase();
+    const show = $('#show').val().toLowerCase();
+
+    let filtered_orders = allOrders.filter(e => {
+        const orderDate = new Date(e.date);
+        console.log(date)
+        const statusMatch = status === "" || e.status === status;
+        const dateMatch = date == "" || date == e.date;
+        const ownerMatch = owner == "" || e.owner.toLowerCase().includes(owner)
+        const showMatch = show == "" || e.concert.toLowerCase().includes(show)
+        return statusMatch && dateMatch && ownerMatch && showMatch;
+    })
+    loadOrders(filtered_orders)
+}
+
+function clearFilters() {
+    loadOrders(allOrders);
+}
+
 $(document).ready(function() {
-    loadOrders();
+    fetchOrders().done((orders) => { 
+        loadOrders(orders);
+        allOrders = orders;
+     }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error loading orders:', textStatus, errorThrown);
+    });
     renderClosedOrdersChart();
 });

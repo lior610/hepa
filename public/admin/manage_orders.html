@@ -1,6 +1,53 @@
 <!-- Orders Table Section -->
 <section id="orders-section" class="container">
     <h2>Manage Orders</h2>
+    <div class="filter-section">
+        <div class="d-flex justify-content-center mb-3">
+            <button class="btn btn-primary filter-button" id="filter-button" type="button" data-bs-toggle="collapse" data-bs-target="#filterOptions" aria-expanded="false" aria-controls="filterOptions">
+                Filter Concerts
+            </button>
+            <button type="button" class="btn btn-primary" id="show-button" onclick="clearFilters()">Show All!</button>
+        </div>
+        <div class="collapse" id="filterOptions">
+            <div class="filter-options mt-3">
+                <form id="filterForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="status" class="form-label">Status:</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="">Select status</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="open">Open</option>
+                                <option value="close">close</option>
+                            </select>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <label for="date" class="form-label">Date:</label>
+                            <input type="date" id="date" name="date" class="form-control" />
+                        </div>
+                    </div>
+        
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="owner" class="form-label">Owner:</label>
+                            <input type="text" id="owner" name="owner" class="form-control" placeholder="Enter owner name" />
+                        </div>
+        
+                        <div class="col-md-6">
+                            <label for="show" class="form-label">Show:</label>
+                            <input type="text" id="show" name="show" class="form-control" placeholder="Enter show" />
+                        </div>
+                    </div>
+        
+                    <div class="d-flex justify-content-center mb-3">
+                        <button type="button" class="btn btn-primary" id="apply-button" onclick="applyFilters()">Apply Filters</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
     <div class="table-wrapper">
     <table id="ordersTable" class="table table-striped">
         <thead>

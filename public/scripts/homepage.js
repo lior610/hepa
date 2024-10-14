@@ -25,7 +25,6 @@ function loadMoreConcerts() {
 }
 
 function loadClosestConcerts(concerts) {
-    console.log(concerts);
     concerts.sort((a, b) => new Date(a.date) - new Date(b.date)); 
     // concerts = concerts.slice(0, 3); 
 
@@ -120,7 +119,6 @@ function clearFilters() {
 
 function searchByName() {
     const searchQuery = $('#search-input').val();
-    console.log(searchQuery);
     const filteredResults = allConcerts.filter(e => {
         const lowerCase = searchQuery.toLowerCase();
         return e.artist_name.toLowerCase().includes(lowerCase);

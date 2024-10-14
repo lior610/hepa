@@ -276,7 +276,6 @@ thead th {
     color: white; /* Change text color on hover */
 }
 
-
 #main-content {
     margin-left: 200px; /* Creates space for the sidebar */
     padding: 20px;
@@ -300,3 +299,21 @@ footer {
     flex-shrink: 0; /* Prevent footer from shrinking */
 }
 
+.filter-section {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.filter-options {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+}
+
+.filter-button {
+    margin-right: 1rem;
+}
+
+#show-button, #apply-button, #filter-button {
+    background-color: #405389;
+}

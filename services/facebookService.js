@@ -29,7 +29,6 @@ const postToFacebook = async (concert) => {
         });
 
         // Log the successful post response
-        console.log("Posted to Facebook:", response.data);
         return response.data;
 
     } catch (error) {

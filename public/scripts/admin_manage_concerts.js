@@ -1,4 +1,19 @@
-// Function to load FUTURE concerts 
+// Initialize variables
+let currentConcertIndex = 0;
+let concertsPerLoad = 8;
+let allConcerts = []; // Store all concerts for loading
+let closestConcerts = [];
+
+// Show/Hide 'Load More' button
+function showLoadMoreButton() {
+    $('#load-more').show();
+}
+
+function hideLoadMoreButton() {
+    $('#load-more').hide();
+}
+
+// Load concerts initially and for "Load More" button
 function loadConcerts() {
     const $concertsContainer = $('#concertList'); // Use jQuery to select the element
     const searchQuery = $('#search-input').val().trim(); // Search bar input
@@ -7,28 +22,49 @@ function loadConcerts() {
     $.ajax({
         url: '/api_concerts',
         method: 'GET',
-        success: function(concerts) {
-            let filteredConcerts = concerts;
+        success: function(allConcerts) {
+            let filteredConcerts = allConcerts;
 
             // Apply search filter
             if (searchQuery !== "") {
-                filteredConcerts = searchByName(concerts, searchQuery);
+                filteredConcerts = searchByName(allConcerts, searchQuery);
             }
 
-            // Clear previous content
-            $concertsContainer.empty();
+            // Clear previous content when starting a new search or loading for the first time
+            if (currentConcertIndex === 0) {
+                $concertsContainer.empty();
+            }
 
-            // Loop through filtered concerts and display them
-            filteredConcerts.forEach(concert => {
+            // Get the next batch of concerts based on currentConcertIndex and concertsPerLoad
+            const nextConcerts = filteredConcerts.slice(currentConcertIndex, currentConcertIndex + concertsPerLoad);
+
+            // Loop through the next batch of concerts and display them
+            nextConcerts.forEach(concert => {
                 const card = createConcertCard(concert); // Function to create the card HTML
                 $concertsContainer.append(card); // Append to the container
             });
+
+            // Update the current concert index for the next load
+            currentConcertIndex += concertsPerLoad;
+
+            // Show or hide "Load More" button based on whether there are more concerts to load
+            if (currentConcertIndex >= filteredConcerts.length) {
+                hideLoadMoreButton();
+            } else {
+                showLoadMoreButton();
+            }
         },
         error: function() {
             alert('Failed to load concerts.');
         }
     });
 }
+
+// Load more concerts when "Load More" button is clicked
+function loadMoreConcerts() {
+    loadConcerts(); // Call loadConcerts to load the next batch
+}
+
 
 // Function to create the concert card
 function createConcertCard(concert) {
@@ -124,21 +160,12 @@ async function editConcert(id) {
 // working with graph #1
 function renderChart() {
     $.ajax({
-        url: '/api_concerts',
+        url: '/api_concerts/api_concerts_chart', 
         method: 'GET',
-        success: function(concerts) {
-            const today = new Date();
-            const upcomingConcerts = concerts
-                .filter(concert => new Date(concert.date) >= today)
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .slice(0, 10);
+        success: function(chartData) {
+            const labels = chartData.map(concert => concert.artist_name); // Only artist names
+            const ticketsSoldPercentage = chartData.map(concert => concert.ticketSoldPercentage);
 
-            const labels = upcomingConcerts.map(concert => `${concert.artist_name} (${concert.date})`);
-            const ticketsSoldPercentage = upcomingConcerts.map(concert => 
-                ((concert.ticket_amount - concert.tickets_available) / concert.ticket_amount) * 100
-            );
-
-            // Render chart
             const ctx = document.getElementById('Chart').getContext('2d');
             const myChart = new Chart(ctx, {
                 type: 'bar',

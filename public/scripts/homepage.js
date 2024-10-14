@@ -52,23 +52,22 @@ function fetchConcerts() {
 }
 
 
-// Assuming you have a buyConcert function defined
 function buyConcert(concertId) {
     // Redirect the user to showConcert.html with the concert ID as a URL parameter
     window.location.href = `showConcert.html?id=${concertId}`;
 }
 
-function deploy(carousel, templateId, parentId, filterdConcerts) {
+function deploy(carousel, templateId, parentId, filteredConcerts) {
     if (!carousel) {
-        $("#" + parentId).empty(); // Clears the parent element
+        $("#" + parentId).empty(); 
     }
 
     // Get the template from the current document
     let template = $("#" + templateId).html();
 
-    filterdConcerts.forEach(concert => {
+    filteredConcerts.forEach(concert => {
         let concertTemplate = template;
-        
+
         // Loop through concert data and replace the placeholders
         for (const key in concert) {
             let data = "";
@@ -82,8 +81,19 @@ function deploy(carousel, templateId, parentId, filterdConcerts) {
             concertTemplate = concertTemplate.replace("{" + key + "}", data);
         }
 
-        // Append the populated template to the parent element
-        $("#" + parentId).append(concertTemplate);
+        let $concertElement = $(concertTemplate);
+
+        // Check if the concert is sold out
+        if (concert.tickets_available === 0) {
+            $concertElement.find('.sold-out').show();  
+            $concertElement.find('.buy-now-btn').hide();  
+        } else {
+            $concertElement.find('.buy-now-btn').attr('onclick', `buyConcert('${concert._id}')`);
+        }
+
+        $concertElement.attr('data-url', `showConcert.html?id=${concert._id}`);
+
+        $("#" + parentId).append($concertElement);
     });
 
     if (carousel) {

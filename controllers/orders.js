@@ -6,7 +6,7 @@ const showAllOrders = async (req, res) => {
 }
 
 const createOrder = async (req, res) => {
-    const { owner, concert, concert_id, tickets_number, date } = req.body; //short way for casting each part of body
+    const { owner, concert, concert_id, tickets_number } = req.body; //short way for casting each part of body
     try {
         // Validate owner
         const ownerValid = await ordersService.ownerExists(owner);
@@ -25,11 +25,6 @@ const createOrder = async (req, res) => {
         if (!ticketsValid) {
             return res.status(400).json({ message: 'Not enough tickets available.' });
         }
-        // Validate date is in the future
-        const concertDateValid = await ordersService.checkConcertDate(concert_id, date);
-        if (!concertDateValid) {
-            return res.status(400).json({ message: 'Concert is in the past' });
-        }
 
         // If validation passes, proceed to create the order
         const newOrder = await ordersService.createOrder(req.body.owner,
@@ -37,10 +32,7 @@ const createOrder = async (req, res) => {
                                                     req.body.concert_id,
                                                     req.body.tickets_number,
                                                     req.body.payment,
-                                                    )     
-        //   --> we need to decide what to do next   
-        //res.status(201).json({ message: 'Order created successfully' });
-        //res.redirect("/personal_area.html")                                     
+                                                    )                                         
     } catch (error) {
         console.log(error)
     }
@@ -48,10 +40,11 @@ const createOrder = async (req, res) => {
 }
 
 const editOrder = async (req, res) => {
-    const { owner, concert, concert_id, tickets_number, status, date } = req.body; //short way for casting each part of body
+    const { owner, concert, concert_id, tickets_number} = req.body; //short way for casting each part of body
     try {
         // Validate owner
         const ownerValid = await ordersService.ownerExists(owner);
+        console.log(owner);
         if (!ownerValid) {
             return res.status(400).json({ message: 'Owner username does not exist.' });
         }
@@ -68,12 +61,6 @@ const editOrder = async (req, res) => {
             return res.status(400).json({ message: 'Not enough tickets available.' });
         }    
 
-        // Validate date is in the future
-        const concertDateValid = await ordersService.checkConcertDate(concert_id, date);
-        if (!concertDateValid) {
-            return res.status(400).json({ message: 'Concert is in the past' });
-        }
-
         // If validation passes, proceed to create the order
         const updatedOrder = await ordersService.editOrder(req.params.id,
             req.body.owner,
@@ -85,7 +72,6 @@ const editOrder = async (req, res) => {
             req.body.payment,
         )
         res.redirect("/admin.html") //redirect every func to rellevat page 
-        //res.status(201).json({ message: 'Order created successfully' }); 
     } catch (error) {
         console.log(error)
     }

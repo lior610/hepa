@@ -264,4 +264,23 @@ function setupValidation() {
     });
 
     console.log("Validation setup complete");
-}   
+}
+
+async function enterCities() {
+    const url = "/api_places/"
+    const res = await fetch(url);
+    const places = await res.json();
+    const locationSelect = document.getElementById("location");
+    places.map(location => location.city).forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        locationSelect.appendChild(option);
+    });
+}
+
+enterCities()
+
+const today = new Date().toISOString().split('T')[0];
+const $date = $('#concertDate');
+$date.attr('min', today);

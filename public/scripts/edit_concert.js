@@ -112,3 +112,18 @@ function validateForm() {
 
     return true; // Return true if all validations pass
 }
+
+async function enterCities() {
+    const url = "/api_places/"
+    const res = await fetch(url);
+    const places = await res.json();
+    const locationSelect = document.getElementById("location");
+    places.map(location => location.city).forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        locationSelect.appendChild(option);
+      });
+}
+
+enterCities()

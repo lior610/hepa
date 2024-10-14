@@ -1,10 +1,4 @@
-$(document).ready(function () {
-    // Load users from the database when the page loads
-    loadUsers();
-
-    // Call the setupValidation function
-    setupValidation();
-});
+let allUsers = []
 
 // Fetch all users from the database and display in the table
 function fetchUsers() {
@@ -16,34 +10,31 @@ function fetchUsers() {
 }
 
 // Function to fetch users and populate the table
-function loadUsers() {
-    fetchUsers().done(function(users) {
-        const tableBody = $('#usersTable tbody');
-        tableBody.empty(); // Clear existing rows
+function loadUsers(users) {
+    const tableBody = $('#usersTable tbody');
+    tableBody.empty(); // Clear existing rows
 
-        users.forEach(user => {
-            const row = `
-                <tr>
-                    <td>${user._id}</td>
-                    <td>${user.full_name}</td>
-                    <td>${user.mail}</td>
-                    <td>${user.phone}</td>
-                    <td>${user.address.number}</td>
-                    <td>${user.address.street}</td>
-                    <td>${user.address.city}</td>
-                    <td>${user.gender}</td>
-                    <td>${user.kind}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="editUser('${user._id}')">Edit</button>
-                        <button class="btn btn-remove" onclick="removeUser('${user._id}')">Remove</button>
-                    </td>
-                </tr>
-            `;
-            tableBody.append(row);
-        });
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.error('Error loading users:', textStatus, errorThrown);
-    });
+    users.forEach(user => {
+        console.log(user);
+        const row = `
+            <tr>
+                <td>${user._id}</td>
+                <td>${user.full_name}</td>
+                <td>${user.mail}</td>
+                <td>${user.phone}</td>
+                <td>${user.address.number}</td>
+                <td>${user.address.street}</td>
+                <td>${user.address.city}</td>
+                <td>${user.gender}</td>
+                <td>${user.kind}</td>
+                <td>
+                    <button class="btn btn-edit" onclick="editUser('${user._id}')">Edit</button>
+                    <button class="btn btn-remove" onclick="removeUser('${user._id}')">Remove</button>
+                </td>
+            </tr>
+        `;
+        tableBody.append(row);
+    })
 }
 
 // Setup form validation and submission
@@ -112,3 +103,32 @@ function removeUser(userId) {
         });
     }
 }
+
+function applyFilters() {
+    const username = $('#name').val().toLowerCase();
+    const city = $('#city').val().toLowerCase();
+    const gender = $('#genderFilter').val();
+    const type = $('#type').val();
+    let filtered_users = allUsers.filter(e => {
+        const usernameMatch = username === "" || e._id.toLowerCase().includes(username) || e.full_name.toLowerCase().includes(username)
+        const cityMatch = city == "" || e.address.city.toLowerCase().includes(city)
+        const genderMatch = gender == "" || gender == e.gender;
+        const typeMatch = type == "" || type == e.kind;
+        return usernameMatch && cityMatch && genderMatch && typeMatch;
+    })
+    loadUsers(filtered_users)
+}
+
+function clearFilters() {
+    loadUsers(allUsers);
+}
+
+$(document).ready(function() {
+    fetchUsers().done((users) => { 
+        loadUsers(users);
+        allUsers = users;
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error loading users:', textStatus, errorThrown);
+    });
+    setupValidation();
+});

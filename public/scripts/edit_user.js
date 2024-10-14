@@ -46,11 +46,11 @@ $(document).ready(function() {
     toggleButton.on('click', function() {
         changePassword = !changePassword;
         if (changePassword) {
-            toggleButton.text("Change Password");
+            toggleButton.text("Don't Change Password");
             passwordInput.show().attr('required', true);
             confirmInput.show().attr('required', true);
         } else {
-            toggleButton.text("Don't Change Password");
+            toggleButton.text("Change Password");
             passwordInput.hide().val("").removeAttr('required');
             confirmInput.hide().val("").removeAttr('required');
         }

@@ -1,5 +1,7 @@
 const usersService = require("../services/users")
 
+const emptyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+
 const showAllUsers = async (req, res) => {
     users = await usersService.getUsers();
     return res.json(users);
@@ -70,8 +72,7 @@ const adminEditUserDetails = async (req, res) => {
 
     try {
         // If password is empty or null, do not pass it to the service function
-        const password = req.body.password && req.body.password.trim() !== '' ? req.body.password : null;
-
+        const password = req.body.password && req.body.password.trim() !== '' && req.body.password.trim() != emptyHash ? req.body.password : null;
         const updatedUser = await usersService.adminEditUserDetails(
             req.params.id,
             req.body.full_name,

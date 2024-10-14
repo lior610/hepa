@@ -129,7 +129,7 @@ function saveUserDetails() {
     };
     // send the updated data to server
     $.ajax({
-        url: `/api_users/user/admin_edit_details/${Id}`,  
+        url: `/api_users/user/${Id}`,  
         method: 'POST',
         data: updatedUserData,
         success: function(response) {

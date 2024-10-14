@@ -15,6 +15,7 @@ async function hashPassword(event) {
     const hiddenInput = document.createElement('input');
     hiddenInput.type = 'hidden';
     hiddenInput.name = 'password';
+    hiddenInput.id = "hashed";
     hiddenInput.value = hashedPassword;
     form.appendChild(hiddenInput);
 

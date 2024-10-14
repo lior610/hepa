@@ -34,7 +34,6 @@ function loadConcerts() {
             if (currentConcertIndex === 0) {
                 $concertsContainer.empty();
             }
-
             // Get the next batch of concerts based on currentConcertIndex and concertsPerLoad
             const nextConcerts = filteredConcerts.slice(currentConcertIndex, currentConcertIndex + concertsPerLoad);
 
@@ -160,7 +159,9 @@ async function editConcert(id) {
 // working with graph #1
 function renderChart() {
     $.ajax({
-        url: '/api_concerts/api_concerts_chart', // Updated URL
+
+        url: '/api_concerts/api_concerts_chart', 
+
         method: 'GET',
         success: function(chartData) {
             const labels = chartData.map(concert => concert.artist_name); // Only artist names

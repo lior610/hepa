@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 //what user action causes order creation?
 const createOrder = async (owner, concert, concert_id, tickets_number,
-    payment) => {
+    payment,) => {
         const order = new Order({ //new user how did it work? - why not found?
             owner, concert, concert_id, tickets_number, payment
         });
@@ -51,8 +51,9 @@ const getClosedOrders = async () => {
 //     Validations using the db
 // Check if owner exists
 async function ownerExists(ownerUsername) {
-    return await User.findOne({ 
+    const user = await User.findOne({ 
         "_id": ownerUsername });
+        return user
 }
 // Check if concert exists
 async function concertExists(concert_artist, concert_id) {
@@ -68,7 +69,7 @@ async function concertExists(concert_artist, concert_id) {
 async function checkTicketAvailability(concert_id, requestedTickets) {
     if(mongoose.Types.ObjectId.isValid(concert_id)){
         const concert = await Concert.findOne({ "_id": concert_id });
-        return concert && concert.tickets_available >= requestedTickets;
+        return concert && (concert.tickets_available >= requestedTickets);
     }
     else return false
 }

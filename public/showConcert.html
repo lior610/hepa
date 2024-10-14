@@ -65,13 +65,20 @@
                     </div>
                     <div class="concert-field regular-text">
                         <label class="regular-card-title">Price:</label>
-                        <span id="price"></span>
+                        <span id="price"></span> Shekels
                     </div>
+                    <div id="error-message" style="display:none; color: red;"></div>
+                    <div id="success-message" style="display: none;"></div>
                     <div class="concert-buttons">
-                        <button class="btn btn-primary me-2" id="addToCartBtn">Add to cart</button>
-                        <button class="btn btn-success" id="buyNowBtn">Buy now</button>
+                        <div>
+                            <input type="number" id="ticketAmount" min="1" value="1" />
+                            <button id="addToCartButton">Add to Cart</button>
+                        </div>
+                        <input type="hidden" id="concertId" value="" /> 
+                        <div id="cart-message" style="margin-top: 10px;"></div>
                     </div>
                 </div>
+
                 <div id="album-info" class="text-center">
                     <h2 id="album-heading" class="album-heading"></h2>
                     <a id="album-link" href="" target="_blank"> 
@@ -83,7 +90,6 @@
                 <a href="homepage.html" class="btn btn-secondary">Back to Homepage</a>
             </div>
         </div>
-        
     </main>
 
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">

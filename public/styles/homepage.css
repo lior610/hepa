@@ -164,3 +164,16 @@ footer {
 .custom-margin-right {
     margin-left: 15px; /* Adjust this value to move the text further right */
 }
+
+.sold-out {
+    color: red; /* or another color to make it stand out */
+    font-weight: bold;
+    display: block; /* Ensure it is displayed correctly */
+    margin-top: 10px; /* Space between the label and button */
+}
+
+
+
+  
+  
+  

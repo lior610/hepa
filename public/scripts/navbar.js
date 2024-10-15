@@ -4,7 +4,11 @@ async function adminArea() {
     const ul = document.getElementById("list-refs")
 
     if (isAdmin["Admin"]) {
-        ul.innerHTML = ul.innerHTML + '<li class="nav-item"><a class="nav-link text-white" href="/admin.html">Admin Area</a></li>'
+        if (window.location.pathname == "/admin.html") {
+            ul.innerHTML = ul.innerHTML + '<li class="nav-item"><a class="nav-link active text-white" aria-current="page" href="/admin.html">Admin Area</a></li>'
+        } else {
+            ul.innerHTML = ul.innerHTML + '<li class="nav-item"><a class="nav-link text-white" href="/admin.html">Admin Area</a></li>'
+        }
     }
 }
 

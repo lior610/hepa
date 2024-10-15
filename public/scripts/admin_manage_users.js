@@ -1,6 +1,10 @@
-if (typeof allOrders === 'undefined') {
-    let allOrders = []; // Declare it if it hasn't been declared
+if (typeof allUsers === 'undefined') {
+    let allUsers = []; // Declare it if it hasn't been declared
+    let partUsers = [];
+    let index;
 }
+
+index = 6;
 
 // Fetch all users from the database and display in the table
 function fetchUsers() {
@@ -13,28 +17,29 @@ function fetchUsers() {
 
 // Function to fetch users and populate the table
 function loadUsers(users) {
-    const tableBody = $('#usersTable tbody');
-    tableBody.empty(); // Clear existing rows
+    const parent = $('#card-row');
+    parent.empty(); // Clear existing rows
 
     users.forEach(user => {
-        const row = `
-            <tr>
-                <td>${user._id}</td>
-                <td>${user.full_name}</td>
-                <td>${user.mail}</td>
-                <td>${user.phone}</td>
-                <td>${user.address.number}</td>
-                <td>${user.address.street}</td>
-                <td>${user.address.city}</td>
-                <td>${user.gender}</td>
-                <td>${user.kind}</td>
-                <td>
-                    <button class="btn btn-edit" onclick="editUser('${user._id}')">Edit</button>
-                    <button class="btn btn-remove" onclick="removeUser('${user._id}')">Remove</button>
-                </td>
-            </tr>
-        `;
-        tableBody.append(row);
+        const card = `
+            <div class="col-lg-4 col-md-6 col-sm-12 col-12 d-flex mb-4">
+                <div class="card regular-card text-center w-100 p-2"> <!-- Reduced padding with p-2 -->
+                    <div class="card-body regular-card-body p-2"> <!-- Reduced padding with p-2 -->
+                        <h5 class="card-title regular-card-title mb-2">${user.full_name}</h5> <!-- Less margin with mb-2 -->
+                        <p class="card-text regular-text mb-1">ID: ${user._id}</p> <!-- Less margin with mb-1 -->
+                        <p class="card-text regular-text mb-1">Mail: ${user.mail}</p>
+                        <p class="card-text regular-text mb-1">Phone: ${user.phone}</p>
+                        <p class="card-text regular-text mb-1">Address: ${user.address.number} ${user.address.street}, ${user.address.city}</p>
+                        <p class="card-text regular-text mb-1">Gender: ${user.gender}</p>
+                        <p class="card-text regular-text mb-1">Type: ${user.kind}</p>
+                        <button type="button" class="btn btn-primary my-1 card-butn" onclick="editUser('${user._id}')">Edit</button> <!-- Small button with btn-sm -->
+                        <button type="button" class="btn btn-primary my-1 card-butn" onclick="removeUser('${user._id}')">Remove</button> <!-- Small button with btn-sm -->
+                    </div>
+                </div>
+            </div>
+`;
+
+        parent.append(card);
     })
 }
 
@@ -118,15 +123,40 @@ function applyFilters() {
         return usernameMatch && cityMatch && genderMatch && typeMatch;
     })
     loadUsers(filtered_users)
+    hideLoadMoreButton();
 }
 
 function clearFilters() {
-    loadUsers(allUsers);
+    loadUsers(partUsers);
+    if (index <= allUsers.length) {
+        showLoadMoreButton();
+    }
+}
+
+function showLoadMoreButton() {
+    $('#load-more').show();
+}
+
+function hideLoadMoreButton() {
+    $('#load-more').hide();
+}
+
+// Load more concerts
+function loadMoreUsers() {
+    index += 6;
+    partUsers = allUsers.slice(0, index);
+    loadUsers(partUsers);
+    if (index >= allUsers.length) {
+        hideLoadMoreButton();
+    } else {
+        showLoadMoreButton();
+    }
 }
 
 $(document).ready(function() {
     fetchUsers().done((users) => { 
-        loadUsers(users);
+        partUsers = users.slice(0, index);
+        loadUsers(partUsers);
         allUsers = users;
     }).fail(function(jqXHR, textStatus, errorThrown) {
         console.error('Error loading users:', textStatus, errorThrown);

@@ -8,6 +8,11 @@ body {
     margin-left: 200px; /* Creates space for the sidebar */
     padding: 20px;
     flex-grow: 1; /* Takes up the rest of the space */
+    width: calc(100% - 200px);
+}
+
+#card-row {
+    width: 100%;
 }
 
 #main-title {
@@ -16,22 +21,6 @@ body {
 
 #main-end-sentence {
     color: #405389;
-}
-#nav-logo {
-    height: 5rem;
-    margin-right: 10px;
-}
-
-nav {
-    background-color: #405389;
-    border-radius: 0 0 10px 10px;
-    z-index: 1;
-}
-
-.nav-item {
-    font-size: large;
-    margin: 7px;
-    font-weight: 200;
 }
 
 /* Styles for the box wrapping the form */
@@ -45,14 +34,6 @@ nav {
 
 h2 {
     margin-top: 0;
-}
-
-.active {
-    font-weight: 700;
-}
-
-.nav-link {
-    color: white;
 }
 
 .container {
@@ -250,7 +231,7 @@ thead th {
     padding: 20px; /* Increased padding for better spacing */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     position: fixed; /* Fixed sidebar */
-    top: 12%; /* Start  nearly from the top */
+    margin-top: -1.25rem;
     left: 0; /* Stick to the left */
     height: 100%; /* Full height */
     overflow-y: auto; /* Allow scrolling */
@@ -276,7 +257,6 @@ thead th {
     color: white; /* Change text color on hover */
 }
 
-
 #main-content {
     margin-left: 200px; /* Creates space for the sidebar */
     padding: 20px;
@@ -284,19 +264,33 @@ thead th {
     background-color: #fff; /* Optional: Background color for content area */
 }
 
-a {
+.sidebar-ref {
     display: block;
     margin-bottom: 10px;
     text-decoration: none;
     color: #000;
 }
 
-footer {
-    background-color: #405389;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    text-align: center;
-    flex-shrink: 0; /* Prevent footer from shrinking */
+.filter-section {
+    width: 60%;
+    margin: 0 auto;
 }
 
+.filter-options {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+}
+
+.filter-button {
+    margin-right: 1rem;
+}
+
+#show-button, #apply-button, #filter-button, .card-butn {
+    background-color: #405389 !important;
+}
+
+canvas {
+    width: 100%;
+    height: auto;
+}

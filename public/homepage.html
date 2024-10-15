@@ -14,7 +14,9 @@
   <body>
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid">
-          <img src="img/hepa_logo.png" id="nav-logo" href="/homepage.html">
+          <a href="/homepage.html">
+            <img src="img/hepa_logo.png" id="nav-logo" alt="Logo">
+          </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -74,19 +76,13 @@
                             <label for="location" class="form-label">City:</label>
                             <select id="location" name="location" class="form-select">
                                 <option value="">Select a city</option>
-                                <option value="Haifa">Haifa</option>
-                                <option value="Jerusalem">Jerusalem</option>
-                                <option value="Tel Aviv">Tel Aviv</option>
-                                <option value="Rishon Lezion">Rishon Lezion</option>
-                                <option value="Eilat">Eilat</option>
-                                <option value="Beer Sheva">Beer Sheva</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="minPrice" class="form-label">Price Range:</label>
                             <div class="d-flex">
-                                <input type="number" id="minPrice" name="minPrice" class="form-control me-2" placeholder="Min" min="0"/>
+                                <input type="number" id="minPrice" name="minPrice" class="form-control me-2" placeholder="Min" />
                                 <input type="number" id="maxPrice" name="maxPrice" class="form-control" placeholder="Max" />
                             </div>
                         </div>
@@ -126,7 +122,7 @@
           <li class="nav-item"><a href="ourPlaces.html" class="nav-link px-2 text-body-secondary">Our Places</a></li>
         </ul>
         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          </ul>
+        </ul>
       </footer> 
       <script type="text/html" id="carousel-template">
         <div class="carousel-item" data-url="concert_page.html?id={_id}">

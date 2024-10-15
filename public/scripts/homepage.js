@@ -25,7 +25,6 @@ function loadMoreConcerts() {
 }
 
 function loadClosestConcerts(concerts) {
-    console.log(concerts);
     concerts.sort((a, b) => new Date(a.date) - new Date(b.date)); 
     // concerts = concerts.slice(0, 3); 
 
@@ -130,7 +129,6 @@ function clearFilters() {
 
 function searchByName() {
     const searchQuery = $('#search-input').val();
-    console.log(searchQuery);
     const filteredResults = allConcerts.filter(e => {
         const lowerCase = searchQuery.toLowerCase();
         return e.artist_name.toLowerCase().includes(lowerCase);
@@ -147,6 +145,21 @@ fetchConcerts().then(() => {
     cards(currentConcertIndex, concertsPerLoad)
     deploy(true, "carousel-template", "carousel-data", allConcerts.slice(0, 3));
 });
+
+async function enterCities() {
+    const url = "/api_places/"
+    const res = await fetch(url);
+    const places = await res.json();
+    const locationSelect = document.getElementById("location");
+    places.map(location => location.city).forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        locationSelect.appendChild(option);
+      });
+}
+
+enterCities()
 
 const today = new Date().toISOString().split('T')[0];
 const $startDate = $('#startDate');

@@ -11,8 +11,15 @@ router.get("/admin.html", loginController.isAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'admin.html'));
 });
 
-router.get("/edit_concert.html", loginController.isAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'edit_concert.html'));
+router.get("/edit_:page.html", loginController.isAdmin, (req, res) => {
+    const page = req.params.page;
+    res.sendFile(path.join(__dirname, '../public', `edit_${page}.html`));
 });
+
+router.get("/admin/:page.html", loginController.isAdmin, (req, res) => {
+    const page = req.params.page;
+    res.sendFile(path.join(__dirname, '../public/admin', `${page}.html`));
+});
+
 
 module.exports = router;

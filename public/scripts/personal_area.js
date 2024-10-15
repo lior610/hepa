@@ -11,6 +11,26 @@ async function getUserData() {
     return userDetailsRes;
 }
 
+async function hashPassword() {
+    const parent = document.getElementById("userDetails");
+    const password = document.getElementById("password").value
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+        // Convert hash to a hex string
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashedPassword = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'password';
+    hiddenInput.id = "hashed";
+    hiddenInput.value = hashedPassword;
+    parent.appendChild(hiddenInput);
+
+}
+
 // Function to load user data
 function loadUserData() {
     const userDetailsDiv = $("#userDetails");
@@ -58,12 +78,37 @@ function enableEditUserDetails() {
             <label for="addressCity">City:</label>
             <input type="text" id="addressCity" class="form-control" value="${userData.address.city}" required>
         </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm">Confirm Password:</label>
+            <input type="password" id="confirm" class="form-control" required>
+        </div>
+        <div id="passwordError" class="text-danger mt-1 small">Leave password and confirm empty to not change them</div>
         <button id="saveButton" class="btn btn-success">Save</button>
     `);
 
     // Add event listener to the Save button
-    $("#saveButton").on("click", function() {
-        saveUserDetails();
+    $("#saveButton").on("click", async function() {
+        let passwordValid;
+        const password = document.getElementById("password");
+        const confirm = document.getElementById("confirm");
+        const errorElement = document.getElementById('passwordError');
+    
+        if (password.value != confirm.value) {
+            errorElement.textContent = 'Passwords do not match!';
+            passwordValid = false;
+        } else {
+            errorElement.textContent = '';
+            passwordValid = true
+        }
+        if (passwordValid){
+            await hashPassword();
+            saveUserDetails();
+        }
     });
 }
 // save user details
@@ -72,7 +117,7 @@ function saveUserDetails() {
     const updatedUserData = {
         _id: userData._id,
         full_name: $("#fullName").val(),
-        password: userData.password,
+        password: $("#hashed").val(),
         mail: $("#email").val(),
         phone: $("#phone").val(),
         address_number: $("#addressNumber").val(),  
@@ -82,10 +127,9 @@ function saveUserDetails() {
         kind: userData.kind
 
     };
-
     // send the updated data to server
     $.ajax({
-        url: `/api_users/user/edit_details/${Id}`,  
+        url: `/api_users/user/${Id}`,  
         method: 'POST',
         data: updatedUserData,
         success: function(response) {

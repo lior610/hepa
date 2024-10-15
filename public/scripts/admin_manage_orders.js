@@ -1,3 +1,11 @@
+if (typeof allOrders === 'undefined') {
+    let allOrders = []; // Declare it if it hasn't been declared
+    let partOrders = [];
+    let index;
+}
+
+index = 6;
+
 function fetchOrders() {
     return $.ajax({
         url: "/api_orders",
@@ -6,38 +14,56 @@ function fetchOrders() {
     });
 }
 
-// Function to fetch orders and populate the table
-function loadOrders() {
-    fetchOrders().done(function(orders) {
-        const tableBody = $('#ordersTable tbody');
-        tableBody.empty(); // Clear existing rows
+function showLoadMoreButton() {
+    $('#load-more').show();
+}
 
-        orders.forEach(order => {
-            const row = `
-                <tr>
-                    <td>${order.owner}</td>
-                    <td>${order.concert}</td>
-                    <td>${order.tickets_number}</td>
-                    <td>${order.status}</td>
-                    <td>${order.date}</td>
-                    <td>${order.payment}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick="editOrder('${order._id}')">Edit</button>
-                        <button class="btn btn-remove" onclick="removeOrder('${order._id}')">Remove</button>
-                    </td>
-                </tr>
-            `;
-            tableBody.append(row);
-        });
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.error('Error loading orders:', textStatus, errorThrown);
+function hideLoadMoreButton() {
+    $('#load-more').hide();
+}
+
+// Load more concerts
+function loadMoreOrders() {
+    index += 6;
+    partOrders = allOrders.slice(0, index);
+    loadOrders(partOrders);
+    if (index >= allOrders.length) {
+        hideLoadMoreButton();
+    } else {
+        showLoadMoreButton();
+    }
+}
+
+// Function to fetch orders and populate the table
+function loadOrders(orders) {
+    const parent = $('#card-row');
+    parent.empty(); // Clear existing rows
+
+    orders.forEach(order => {
+        const card = `<div class="col-lg-4 col-md-6 col-sm-12 col-12 d-flex mb-4">
+                        <div class="card regular-card text-center w-100 p-2"> <!-- Reduced padding with p-2 -->
+                            <div class="card-body regular-card-body p-2"> <!-- Reduced padding with p-2 -->
+                                <h5 class="card-title regular-card-title mb-2">${order.owner}</h5> <!-- Less margin with mb-2 -->
+                                <p class="card-text regular-text mb-1">Concert: ${order.concert}</p> <!-- Less margin with mb-1 -->
+                                <p class="card-text regular-text mb-1">Tickets number: ${order.tickets_number}</p>
+                                <p class="card-text regular-text mb-1">Status: ${order.status}</p>
+                                <p class="card-text regular-text mb-1">Date: ${order.date}</p>
+                                <p class="card-text regular-text mb-1">Payment: ${order.payment}</p>
+                                <p class="card-text regular-text mb-1">concert ID: ${order.concert_id}</p>
+                                <button type="button" class="btn btn-primary my-1 card-butn" onclick="editOrder('${order._id}')">Edit</button> <!-- Small button with btn-sm -->
+                                <button type="button" class="btn btn-primary my-1 card-butn" onclick="removeOrder('${order._id}')">Remove</button> <!-- Small button with btn-sm -->
+                            </div>
+                        </div>
+                    </div>
+
+        `
+        parent.append(card);
     });
 }
 
 
 // Example Edit and Remove button functionality (stub)
 function editOrder(orderId) {
-    console.log('Edit order', orderId);
     window.location.href = `/edit_order.html?id=${orderId}`
     
 }
@@ -46,16 +72,10 @@ function removeOrder(orderId) {
     // Confirm deletion
     if (confirm('Are you sure you want to delete this order?')) {
         $.ajax({
-            url: `/api_orders/order/${orderId}`, // Adjust the URL according to your API
+            url: `/api_orders/order/${orderId}`,
             type: 'DELETE',
             success: function() {
-                // Find the row in the table and remove it
-                $(`#ordersTable tbody tr`).filter(function() {
-                    return $(this).find('td').first().text() === orderId; // Match based on order ID
-                }).remove();
-
-                // Optionally, you can refresh the orders table by re-fetching all orders
-                loadOrders();
+                location.reload();
             },
             error: function(error) {
                 console.error('Error deleting order:', error);
@@ -113,6 +133,8 @@ function renderClosedOrdersChart() {
                 }]
             },
             options: {
+                responsive: true, 
+                maintainAspectRatio: false,
                 scales: {
                     x: {
                         title: {
@@ -135,7 +157,38 @@ function renderClosedOrdersChart() {
     });
 }
 
+function applyFilters() {
+    const status = $('#status').val();
+    const date = $('#date').val();
+    const owner = $('#owner').val().toLowerCase();
+    const show = $('#show').val().toLowerCase();
+
+    let filtered_orders = allOrders.filter(e => {
+        const orderDate = new Date(e.date);
+        const statusMatch = status === "" || e.status === status;
+        const dateMatch = date == "" || date == e.date;
+        const ownerMatch = owner == "" || e.owner.toLowerCase().includes(owner)
+        const showMatch = show == "" || e.concert.toLowerCase().includes(show)
+        return statusMatch && dateMatch && ownerMatch && showMatch;
+    })
+    loadOrders(filtered_orders)
+    hideLoadMoreButton();
+}
+
+function clearFilters() {
+    loadOrders(partOrders);
+    if (index <= allOrders.length) {
+        showLoadMoreButton();
+    }
+}
+
 $(document).ready(function() {
-    loadOrders();
+    fetchOrders().done((orders) => { 
+        allOrders = orders;
+        partOrders = allOrders.slice(0, index);
+        loadOrders(partOrders);
+     }).fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Error loading orders:', textStatus, errorThrown);
+    });
     renderClosedOrdersChart();
 });

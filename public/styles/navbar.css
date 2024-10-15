@@ -1,0 +1,34 @@
+footer {
+    background-color: #405389;
+    color: white;
+    font-family: Assistant;
+    clear: both;
+    position: relative;
+    z-index: 0;
+}
+
+.nav-link {
+    color: white;
+}
+
+#nav-logo {
+    height: 7rem;
+    margin-bottom: -0.5rem;
+    margin-right: 10px;
+}
+
+nav {
+    background-color: #405389;
+    border-radius: 0 0 10px 10px;
+    font-family: Assistant;
+}
+
+.nav-item {
+    font-size: large;
+    margin: 7px;
+    font-weight: 200;
+}
+
+.active {
+    font-weight: 700 !important;
+}

@@ -41,7 +41,7 @@
     <!--edit part-->
     <div class="container">
         <h2>Edit User Form</h2>
-        <form id="editUserForm" action="/api_users/user/admin_edit_details/{_id}" method="post">
+        <form id="editUserForm" action="/api_users/user/{_id}" method="post" onsubmit="hashPassword(event)">
             <div class="form-group">
                 <label for="full_name">Full Name:</label>
                 <input type="text" id="full_name" name="full_name" required>
@@ -54,18 +54,18 @@
             </div>
     
             <div class="form-group">
-                <button type="button" id="togglePassword" class="btn btn-secondary btn-sm">Don't Change Password</button>
+                <button type="button" id="togglePassword" class="btn btn-secondary btn-sm">Change Password</button>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" style="display:none;">
+                <input type="password" id="password" style="display:none;">
             </div>
             
             <div class="form-group">
                 <label for="confirm">Confirm Password:</label>
-                <input type="password" id="confirm" name="confirm" style="display:none;">
+                <input type="password" id="confirm" style="display:none;">
             </div>
-    
+            <div id="passwordError" class="text-danger mt-1 small"></div>
             <div class="form-group">
                 <label for="mail">Email:</label>
                 <input type="email" id="mail" name="mail" required>
@@ -111,7 +111,7 @@
             </div>
     
             <div class="form-group">
-                <input type="submit" value="Edit">
+                <input type="submit" value="Edit" id="submit-button">
             </div>
         </form>
     </div>

@@ -23,7 +23,7 @@ async function getUser() {
 async function populateForm() {
     const data = await getUser();
     if (data) {
-        document.getElementById("editUserForm").action = `/api_users/user/admin_edit_details/${data._id}`;
+        document.getElementById("editUserForm").action = `/api_users/user/${data._id}`;
         document.getElementById("full_name").value = data.full_name;
         document.getElementById("username").value = data._id;
         document.getElementById("mail").value = data.mail;
@@ -46,11 +46,11 @@ $(document).ready(function() {
     toggleButton.on('click', function() {
         changePassword = !changePassword;
         if (changePassword) {
-            toggleButton.text("Change Password");
+            toggleButton.text("Don't Change Password");
             passwordInput.show().attr('required', true);
             confirmInput.show().attr('required', true);
         } else {
-            toggleButton.text("Don't Change Password");
+            toggleButton.text("Change Password");
             passwordInput.hide().val("").removeAttr('required');
             confirmInput.hide().val("").removeAttr('required');
         }

@@ -72,11 +72,9 @@ function removeOrder(orderId) {
     // Confirm deletion
     if (confirm('Are you sure you want to delete this order?')) {
         $.ajax({
-            url: `/api_orders/order/${orderId}`, // Adjust the URL according to your API
+            url: `/api_orders/order/${orderId}`,
             type: 'DELETE',
             success: function() {
-
-                // Optionally, you can refresh the orders table by re-fetching all orders
                 location.reload();
             },
             error: function(error) {

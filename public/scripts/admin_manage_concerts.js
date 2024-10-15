@@ -1,8 +1,10 @@
-// Initialize variables
-let currentConcertIndex = 0;
-let concertsPerLoad = 8;
-let allConcerts = []; // Store all concerts for loading
-let closestConcerts = [];
+if (typeof allConcerts === 'undefined') {// Initialize variables
+    let allConcerts = []; // Store all concerts for loading
+    let closestConcerts = [];
+}
+
+currentConcertIndex = 0;
+concertsPerLoad = 8;
 
 // Show/Hide 'Load More' button
 function showLoadMoreButton() {
@@ -28,7 +30,9 @@ function loadConcerts() {
             // Apply search filter
             if (searchQuery !== "") {
                 filteredConcerts = searchByName(allConcerts, searchQuery);
+                currentConcertIndex = 0
             }
+            console.log(filteredConcerts)
 
             // Clear previous content when starting a new search or loading for the first time
             if (currentConcertIndex === 0) {
@@ -209,6 +213,7 @@ function searchByName(concerts, searchQuery) {
         return e.artist_name.toLowerCase().includes(lowerCase);
     })
 
+    console.log(filteredResults)
     return filteredResults
 }
 
@@ -281,6 +286,6 @@ async function enterCities() {
 
 enterCities()
 
-const today = new Date().toISOString().split('T')[0];
-const $date = $('#concertDate');
-$date.attr('min', today);
+todayDate = new Date().toISOString().split('T')[0];
+$date = $('#concertDate');
+$date.attr('min', todayDate);

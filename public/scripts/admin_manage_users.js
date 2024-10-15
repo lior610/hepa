@@ -1,4 +1,6 @@
-let allUsers = []
+if (typeof allOrders === 'undefined') {
+    let allOrders = []; // Declare it if it hasn't been declared
+}
 
 // Fetch all users from the database and display in the table
 function fetchUsers() {
@@ -15,7 +17,6 @@ function loadUsers(users) {
     tableBody.empty(); // Clear existing rows
 
     users.forEach(user => {
-        console.log(user);
         const row = `
             <tr>
                 <td>${user._id}</td>

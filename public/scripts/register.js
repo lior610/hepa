@@ -1,6 +1,17 @@
-let emailValid = false;
-let passwordValid = false;
-let phoneValid = false;
+if (typeof emailValid === 'undefined') {
+    emailValid = false;
+}
+
+if (typeof passwordValid === 'undefined') {
+    passwordValid = false;
+}
+
+if (typeof phoneValid === 'undefined') {
+    phoneValid = false;
+}
+
+console.log(typeof emailValid);  // This will now print 'boolean' since it is assigned false
+
 
 function validateEmail() {
     var email = document.getElementById('mail').value;

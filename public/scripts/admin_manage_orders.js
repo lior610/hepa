@@ -1,4 +1,6 @@
-let allOrders = []
+if (typeof allOrders === 'undefined') {
+    let allOrders = []; // Declare it if it hasn't been declared
+}
 
 function fetchOrders() {
     return $.ajax({
@@ -10,7 +12,6 @@ function fetchOrders() {
 
 // Function to fetch orders and populate the table
 function loadOrders(orders) {
-    console.log(orders)
     const tableBody = $('#ordersTable tbody');
     tableBody.empty(); // Clear existing rows
 
@@ -36,7 +37,6 @@ function loadOrders(orders) {
 
 // Example Edit and Remove button functionality (stub)
 function editOrder(orderId) {
-    console.log('Edit order', orderId);
     window.location.href = `/edit_order.html?id=${orderId}`
     
 }

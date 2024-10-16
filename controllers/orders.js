@@ -125,7 +125,6 @@ const editOrder = async (req, res) => {
 async function getOrder(req, res) {
     const orderId = req.params.id  //export the id from the parameters of the request
     const order = await ordersService.getOrder(orderId);
-    // deletedOrderTicketsUpdate(orderId);
     return res.json(order);
 }
 

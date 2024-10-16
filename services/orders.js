@@ -24,13 +24,24 @@ const deleteOrder = async (orderId) => {
     return await Order.deleteOne({"_id": orderId});
 }
 
-const editOrder = async (orderId, owner, concert, concert_id, tickets_number,
-    status, date, payment) => {  
+const editOrderNONAVTIVE = async (orderId, owner, concert, concert_id, tickets_number,
+    status, payment) => {  
     //change the date to be today, edit day
+    console.log('in services, editing order')
     const today = new Date();
-    const changeDate = today.toISOString().slice(0, 10);
+    let date = today.toISOString().slice(0, 10);
     const data = {owner, concert, concert_id, tickets_number,
-        status, changeDate, payment}
+        status, date, payment}
+    return await Order.updateOne({"_id": orderId}, data)
+}
+async function editOrder(orderId, owner, concert, concert_id, tickets_number,
+    status, payment){
+    //change the date to be today, edit day
+    console.log('in services, editing order')
+    const today = new Date();
+    let date = today.toISOString().slice(0, 10);
+    const data = {owner, concert, concert_id, tickets_number,
+        status, date, payment}
     return await Order.updateOne({"_id": orderId}, data)
 }
 

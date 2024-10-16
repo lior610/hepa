@@ -112,8 +112,7 @@ const editOrder = async (req, res) => {
             req.body.concert_id, 
             req.body.tickets_number,
             req.body.status,
-            req.body.date,
-            req.body.payment,
+            req.body.payment
         )
         res.redirect("/admin.html") //redirect every func to rellevat page 
     } catch (error) {

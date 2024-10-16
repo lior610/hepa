@@ -120,7 +120,7 @@ async function loadOrders() {
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
                 <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Date:</strong> ${order.date}</p>
-                <p><strong>Status: Paid</strong> ${order.status}</p>
+                <p><strong>Status: </strong> Order Paid. State ${order.status}</p>
                 <hr>
             `;
             ordersDiv.appendChild(orderDiv);
@@ -261,7 +261,7 @@ async function updateOrderPayd(order){
     // update order date
     const today = new Date(); // Get today's date
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-    order.date = formattedDate; // Update the date property            
+    order.date = formattedDate; // Update the date property      
     return $.ajax({
         url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
         method: 'POST',

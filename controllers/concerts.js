@@ -7,7 +7,6 @@ const { postToFacebook } = require('../services/facebookService');
 
 // Set up multer to handle file uploads
 const storage = multer.memoryStorage(); // Store file in memory as a buffer
-const upload = multer({ storage: storage });
 
 
 const showAllConcerts = async (req, res) => {

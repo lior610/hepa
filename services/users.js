@@ -11,7 +11,6 @@ const deleteUser = async (username) => {
         if (result.deletedCount === 0) {
             return null;
         }
-        console.log(result);
         return result;
     } catch (error) {
         throw new Error(`Failed to delete user: ${error.message}`);

@@ -164,7 +164,7 @@ async function loadOrders() {
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
                 <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Date:</strong> ${order.date}</p>
-                <p><strong>Status: Paid</strong> ${order.status}</p>
+                <p><strong>Status: </strong> Order Paid. State ${order.status}</p>
                 <hr>
             `;
             ordersDiv.appendChild(orderDiv);
@@ -228,10 +228,10 @@ async function deleteOrder(id) {
     window.location.href = "/personal_area.html"; // Redirect after deletion
 }
 
-function handlePayment(){
-    console.log("start orders payment ");
+function handlePayment() {
+    console.log("Start processing payment");
 
-    // Step 1: Fetch all user's orders using AJAX
+    // Fetch all user's orders using AJAX
     $.ajax({
         url: `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData._id)}`,
         method: 'GET',
@@ -239,17 +239,29 @@ function handlePayment(){
             // Step 2: Prepare an array of promises for updating orders and tickets
             const updatePromises = allOrders.map(order => {
                 if (order.status === "open") {
-                    updateOrderPayd(order)
-                        .then(() => updateTickets(order));
+                    // Check if enough tickets are available before proceeding
+                    return checkTicketAvailability(order)
+                        .then((isAvailable) => {
+                            if (isAvailable) {
+                                // Proceed with updating the order and tickets
+                                return updateOrderPayd(order)
+                                    .then(() => updateTickets(order));
+                            } else {
+                                return Promise.reject(`Not enough tickets available for concert ${order.concert}`);
+                            }
+                        });
                 }
             }).filter(Boolean); // Filter out undefined promises
 
-            // Wait for all updates to finish
-            Promise.all(updatePromises).then(() => {
-                window.location.href = "/personal_area.html";
-            }).catch(error => {
-                console.error("Error during payment processing:", error);
-            });
+            // Wait for all updates to finish before redirecting
+            Promise.all(updatePromises)
+                .then(() => {
+                    window.location.href = "/personal_area.html"; // Redirect after successful payment
+                })
+                .catch(error => {f
+                    console.error("Error during payment processing:", error);
+                    alert(error); // Display the error to the user
+                });
         },
         error: function(error) {
             console.error("Error fetching user orders:", error);
@@ -257,13 +269,43 @@ function handlePayment(){
     });
 }
 
+async function checkTicketAvailability(order) {
+    return fetchConcert(order.concert_id)
+        .then(concert => {
+            const messageDiv = $('#ticketAvailabilityMessage'); // Select the message div
+
+            if (!concert) {
+                // Show an error message if the concert is not found
+                messageDiv.text("Concert not found").show();
+                return false;
+            }
+
+            // Check if there are enough available tickets
+            if (concert.tickets_available < order.tickets_number) {
+                // Display the message in the HTML if there aren't enough tickets
+                messageDiv.text(`Ops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
+                return false; // Not enough tickets
+            }
+
+            // If tickets are available, hide the message and return true
+            messageDiv.hide(); // Hide the message if tickets are available
+            return true;
+        })
+        .catch(error => {
+            console.error("Error checking ticket availability:", error);
+            $('#ticketAvailabilityMessage').text("Error checking ticket availability. Please try again.").show();
+            return false;
+        });
+}
+
+
 async function updateOrderPayd(order){
     // change to closed          
     order.status = "close" //close the order   
     // update order date
     const today = new Date(); // Get today's date
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-    order.date = formattedDate; // Update the date property            
+    order.date = formattedDate; // Update the date property      
     return $.ajax({
         url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
         method: 'POST',
@@ -271,32 +313,62 @@ async function updateOrderPayd(order){
         data: JSON.stringify(order) // Convert the object into a JSON string
     });
 }
-// update tickets avilable after payment
-async function updateTickets(order){
-    const concertID = order.concert_id
-    //get concert tickets
+async function updateTickets(order) {
+    const concertID = order.concert_id;
+
+    // Fetch concert data by ID
     return fetchConcert(concertID) // Call fetchConcert, ensure it returns a promise
         .then(concert => {
-            const prevNum = concert.tickets_available;
-            concert.tickets_available = prevNum - order.tickets_number;
-            console.log('now need to update tickets for concert: ', concertID);
-            console.log('new available num should be ', concert.tickets_available);
-            
+            if (!concert) {
+                console.error('Concert not found for ID:', concertID);
+                return Promise.reject('Concert not found.');
+            }
+
+            // Calculate the new number of available tickets
+            const newTicketsAvailable = concert.tickets_available - order.tickets_number;
+
+            // Check if there are enough tickets (this should not happen since it's checked earlier)
+            if (newTicketsAvailable < 0) {
+                console.error('Not enough tickets available');
+                return Promise.reject('Not enough tickets available');
+            }
+
+            console.log('Updating tickets for concert:', concertID);
+            console.log('Previous tickets available:', concert.tickets_available);
+            console.log('New tickets available:', newTicketsAvailable);
+
+            // Update the concert with the new ticket count
             return $.ajax({
-                url: `/api_concerts/concert/tickets/${concert._id}`, // Adjust the endpoint as needed
+                url: `/api_concerts/concert/tickets/${concert._id}`, // Update the concert's ticket count
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(concert) // Convert the object into a JSON string
+                data: JSON.stringify({
+                    tickets_available: newTicketsAvailable
+                })
+            }).then(response => {
+                console.log(`Concert ${concertID} tickets successfully updated.`);
+            }).catch(error => {
+                console.error('Error updating tickets:', error);
+                return Promise.reject('Failed to update tickets');
             });
+        })
+        .catch(error => {
+            console.error('Error fetching or updating concert:', error);
+            return Promise.reject(error);
         });
 }
 
+
+
 async function fetchConcert(concertId) {
-    const url = `/api_concerts/concert/${concertId}` //the url that provides me the data
-    const response = await fetch(url, {
-        method: "GET"
-    });       
-    const concert = await response.json() //convert the raw data to json -> new obj called concert       
-    return concert[0]
+    const url = `/api_concerts/concert/${concertId}`;
+    const response = await fetch(url, { method: "GET" });
     
+    if (response.ok) {
+        const concertData = await response.json();
+        return concertData[0]; // Assuming your API returns an array
+    } else {
+        console.error('Error fetching concert:', concertId);
+        return null;
+    }
 }

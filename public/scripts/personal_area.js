@@ -283,7 +283,7 @@ async function checkTicketAvailability(order) {
             // Check if there are enough available tickets
             if (concert.tickets_available < order.tickets_number) {
                 // Display the message in the HTML if there aren't enough tickets
-                messageDiv.text(`Ops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
+                messageDiv.text(`Oops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
                 return false; // Not enough tickets
             }
 

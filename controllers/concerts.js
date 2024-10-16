@@ -1,13 +1,8 @@
 const concerts = require("../models/concerts");
 const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
-const multer = require("multer");
 const mongoose = require('mongoose'); //for needed type convert 
 const { postToFacebook } = require('../services/facebookService'); 
-
-// Set up multer to handle file uploads
-const storage = multer.memoryStorage(); // Store file in memory as a buffer
-
 
 const showAllConcerts = async (req, res) => {
     let concerts = await concertsService.getConcerts();

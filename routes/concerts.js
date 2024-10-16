@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const concertsController = require("../controllers/concerts");
 const multer = require("multer");
+const loginController = require("../controllers/login")
 
 // Set up multer to store file in memory as a buffer
 const storage = multer.memoryStorage();
@@ -11,14 +12,14 @@ router.route("/")
     .get(concertsController.showAllConcerts);
 
 router.route("/concert/:id") 
-    .delete(concertsController.deleteConcert)
-    .post(upload.single('picture'), concertsController.editConcert) // Handle image upload
+    .delete(loginController.isAdmin, concertsController.deleteConcert)
+    .post(loginController.isAdmin, upload.single('picture'), concertsController.editConcert) // Handle image upload
     .get(concertsController.getConcert)
 
 router.route("/concert/tickets/:id")
-    .post(concertsController.editTicketsForConcert) // edit available tickets
+    .post(loginController.isLoggedIn, concertsController.editTicketsForConcert) // edit available tickets
 
-router.route("/addconcert").post(upload.single('picture'), (req, res) => {
+router.route("/addconcert").post(loginController.isAdmin, upload.single('picture'), (req, res) => {
     concertsController.createConcert(req, res)});
 
 router.route("/concert/:id/picture").get(async (req, res) => {

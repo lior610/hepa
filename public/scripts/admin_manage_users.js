@@ -95,12 +95,7 @@ function removeUser(userId) {
             type: 'DELETE',
             success: function() {
                 // Find the row in the table and remove it
-                $(`#usersTable tbody tr`).filter(function() {
-                    return $(this).find('td').first().text() === userId; // Match based on user ID
-                }).remove();
-
-                // Optionally, you can refresh the users table by re-fetching all users
-                loadUsers();
+                location.reload();
             },
             error: function(error) {
                 console.error('Error deleting user:', error);

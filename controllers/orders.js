@@ -1,4 +1,5 @@
 const ordersService = require("../services/orders")
+const concertService = require("../services/concerts")
 
 const showAllOrders = async (req, res) => {
     orders = await ordersService.getOrders();
@@ -138,14 +139,38 @@ async function getClosedOrders(req, res) {
     return res.json(orders); //use 'json' function of res, enter 'orders' inside to get all of the orders
 }
 
+async function deletedOrderTicketsUpdate(order_id) {
+
+    let order;
+
+    try {
+        order = await ordersService.getOrder(order_id);
+    } catch (e) {
+        res.status(404).send("order not found")
+        return;
+    }
+    const status = order[0]["status"]
+    const concert_id = order[0]["concert_id"]
+    let order_tickets = order[0]["tickets_number"]
+    const res = await concertService.getConcert(concert_id);
+    let ticketsNumber = res[0]["tickets_available"];
+
+    ticketsNumber += order_tickets;
+    if (status == "close") {
+        await concertService.editTicketsForConcert(concert_id, ticketsNumber)
+    }
+}
+
 async function deleteOrder(req, res) {
     const orderId = req.params.id //export the id from the parameters of the request
 
     try {
+        await deletedOrderTicketsUpdate(orderId);
         await ordersService.deleteOrder(orderId);
         res.status(200).send("deleted successfully");
     } catch (error) {
         res.status(500).send("Error deleting order: " + error.message);
+        console.log(error)
     }
 }
 module.exports = {showAllOrders, createOrder, deleteOrder, editOrder, getOrder, getUserOrders, getClosedOrders}

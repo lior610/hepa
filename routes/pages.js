@@ -3,6 +3,14 @@ const router = express.Router();
 const loginController = require("../controllers/login");
 const path = require("path");
 
+async function isNotLoggedIn(req, res, next) {
+    if (req.session.username) {
+        return res.redirect("/")
+    } else {
+        next()
+    }
+}
+
 router.get("/personal_area.html", loginController.isLoggedIn, (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'personal_area.html'));
 });
@@ -19,6 +27,14 @@ router.get("/edit_:page.html", loginController.isAdmin, (req, res) => {
 router.get("/admin/:page.html", loginController.isAdmin, (req, res) => {
     const page = req.params.page;
     res.sendFile(path.join(__dirname, '../public/admin', `${page}.html`));
+});
+
+router.get("/login.html", isNotLoggedIn, (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'login.html'));
+});
+
+router.get("/register.html", isNotLoggedIn, (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'register.html'));
 });
 
 

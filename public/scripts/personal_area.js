@@ -182,7 +182,7 @@ async function loadOrders() {
             orderDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-                <p><strong>Payment:</strong> $${order.payment}</p>
+                <p><strong>Payment:</strong>${order.payment} ₪</p>
                 <p><strong>Concert Date:</strong> ${concertDate}</p>
                 <p><strong>Status: Paid</strong></p>
                 <hr>

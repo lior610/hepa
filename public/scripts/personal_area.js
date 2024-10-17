@@ -177,7 +177,7 @@ async function loadOrders() {
             orderDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-                <p><strong>Payment:</strong> $${order.payment}</p>
+                <p><strong>Payment:</strong> ${order.payment} ₪</p>
                 <p><strong>Date:</strong> ${order.date}</p>
                 <p><strong>Status: Paid</strong></p>
                 <hr>
@@ -202,7 +202,7 @@ async function loadOrders() {
             canceledDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-                <p><strong>Payment:</strong> $${order.payment}</p>
+                <p><strong>Payment:</strong> $${order.payment} ₪</p>
                 <p><strong>Status: Canceled</strong></p>
                 <hr>
             `;

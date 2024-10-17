@@ -2,6 +2,7 @@ const usersService = require("../services/users")
 const ordersController = require("./orders")
 const ordersService = require("../services/orders")
 const concertsService = require("../services/concerts")
+const loginService = require("../services/login")
 
 const emptyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
@@ -10,9 +11,50 @@ const showAllUsers = async (req, res) => {
     return res.json(users);
 }
 
-const editUser = async (req, res) => {    
-    console.log("controller edit user details for ", req.params.id);
+const editUser = async (req, res) => {
+    // get the page that sends the request
+    let uri;
+    const referer = req.get('referer');
+    if (referer) {
+        const refererUrl = new URL(referer);
+        uri = `${refererUrl.pathname}${refererUrl.search}`;
+    } else {
+        return res.status(500).send("No referer found");
+    }
 
+    console.log("controller edit user details for ", req.params.id);
+    if (!loginService.validateEmail(req.body.mail)) {
+        const errorTitle = "Invalid Mail";
+        const errorMessage = "Oops! The e-mail is not on the right format. Please check and try again.";
+        
+        if (uri == "/personal_area.html") {
+            return res.status(400).json({ errorTitle, errorMessage });
+        } else {
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+        }
+    }
+    if (!loginService.validatePhone(req.body.phone)) {
+        const errorTitle = "Invalid phone number";
+        const errorMessage = "Oops! The phone number is not on the right format. Please check and try again.";
+            
+        if (uri.trim() == "/personal_area.html") {
+            return res.status(400).json({ errorTitle, errorMessage });
+        } else {
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+        }
+    }
+    if (!usersService.validateEditUserFields(req.body)) {
+        const errorTitle = "One of the fields is missing";
+        const errorMessage = "Oops! One of the fields is missing. Please check and try again.";
+        if (uri == "/personal_area.html") {
+            return res.status(400).json({ errorTitle, errorMessage });
+        } else {
+            res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
+            return;
+        }
+    }
     // Build the address object
     const address = {
         number: req.body.address_number,

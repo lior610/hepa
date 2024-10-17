@@ -78,14 +78,16 @@ form .form-control {
     flex: 1;
     min-width: 30%;
     max-width: 30%;
-    height: 100%;
-    overflow: hidden;
+    overflow: hidden;      
+    object-fit: cover;
 }
 
 .concert-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block; 
+    margin: 0;    
 }
 
 /* Content container */

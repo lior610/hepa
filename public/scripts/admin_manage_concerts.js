@@ -267,7 +267,6 @@ function setupValidation() {
         }
     });
 
-    console.log("Validation setup complete");
 }
 
 async function enterCities() {

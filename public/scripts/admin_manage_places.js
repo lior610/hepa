@@ -60,9 +60,6 @@ function setupValidation() {
 
         let errors = [];
 
-        console.log("City:", city);
-        console.log("Address:", address);
-        console.log("Type:", type);
         // Validate type
         if (!(type === "indoors" || type === "outdoors")) {
             errors.push("Type can be only indoors or outdoors.");
@@ -76,12 +73,10 @@ function setupValidation() {
         }
     });
 
-    console.log("Validation setup complete");
 }
 
 // Example Edit and Remove button functionality (stub)
 function editPlace(placeId) {
-    console.log('Edit place', placeId);
     window.location.href = `/edit_place.html?id=${placeId}`
     
 }

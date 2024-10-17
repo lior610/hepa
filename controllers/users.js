@@ -7,8 +7,7 @@ const showAllUsers = async (req, res) => {
     return res.json(users);
 }
 
-const editUser = async (req, res) => {    
-    console.log("controller edit user details for ", req.params.id);
+const editUser = async (req, res) => {   
 
     // Build the address object
     const address = {

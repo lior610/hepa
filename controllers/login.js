@@ -11,13 +11,13 @@ async function isAdmin(req, res, next) {
     if (isAdmin) {
         return next();
     } else {
-        res.redirect("/homepage.html");
+        res.redirect("/");
     }
 }
 
 function logout(req, res) {
     req.session.destroy(() => {
-        res.redirect("/homepage.html");
+        res.redirect("/");
     })
 }
 
@@ -29,7 +29,7 @@ async function login(req, res) {
         req.session.username = username;
         const user = await userService.getUser(username);
         req.session.fullname = user["full_name"];
-        res.redirect("/homepage.html")
+        res.redirect("/")
     } else {
         res.redirect("/login.html?error=1")
     }

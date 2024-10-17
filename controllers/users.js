@@ -48,7 +48,6 @@ const editUser = async (req, res) => {
     if (!usersService.validateEditUserFields(req.body)) {
         const errorTitle = "One of the fields is missing";
         const errorMessage = "Oops! One of the fields is missing. Please check and try again.";
-        console.log(uri)
         if (uri == "/personal_area.html") {
             return res.status(400).json({ errorTitle, errorMessage });
         } else {

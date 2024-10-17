@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 //what user action causes order creation?
 const createOrder = async (owner, concert, concert_id, tickets_number,
     payment,) => {
-        const order = new Order({ //new user how did it work? - why not found?
+        const order = new Order({ 
             owner, concert, concert_id, tickets_number, payment
         });
         order.status = "open"
@@ -24,26 +24,11 @@ const deleteOrder = async (orderId) => {
     return await Order.deleteOne({"_id": orderId});
 }
 
-
-// Update all orders for a specific concert ID to canceled
-const cancelOrdersForConcert = async (concertId) => {
-    try {
-        const result = await Order.updateMany(
-            { concert_id: concertId },  // Find all orders with matching concert_id
-            { $set: { status: "canceled" } } // Set their status to canceled
-        );
-        return result;
-    } catch (error) {
-        throw new Error(`Error updating orders: ${error.message}`);
-    }
-};
-
-const editOrder = async (orderId, owner, concert, concert_id, tickets_number,
-    status, payment) => {  
+async function editOrder(orderId, owner, concert, concert_id, tickets_number,
+    status, payment){
     //change the date to be today, edit day
     const today = new Date();
-    const date = today.toISOString().slice(0, 10);
-
+    let date = today.toISOString().slice(0, 10);
     const data = {owner, concert, concert_id, tickets_number,
         status, date, payment}
     return await Order.updateOne({"_id": orderId}, data)
@@ -111,6 +96,5 @@ module.exports = {
     ownerExists,
     concertExists,
     checkTicketAvailability,
-    checkConcertDate,
-    cancelOrdersForConcert
+    checkConcertDate
 };

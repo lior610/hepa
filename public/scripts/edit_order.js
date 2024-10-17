@@ -36,5 +36,29 @@ async function populateForm() {
         document.getElementById("concert_id").value = data.concert_id;
     }
 }
+$(document).ready(function () {
+    $('#editOrderForm').on('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission immediately
+        
+        // Serialize the form data
+        const formData = $(this).serialize();
+
+        // Send the AJAX request
+        $.ajax({
+            type: 'POST', 
+            url: $(this).attr('action'), // Use the form's action attribute as the URL
+            data: formData,
+            success: function (response) {
+                // Handle the success response here
+                alert(response.message); // Display success message or update UI accordingly
+            },
+            error: function (xhr) {
+                // Handle the error response here
+                const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred';
+                alert(errorMessage); // Display error message
+            }
+        });
+    });
+});
 
 populateForm();

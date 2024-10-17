@@ -11,26 +11,6 @@ async function getUserData() {
     return userDetailsRes;
 }
 
-async function hashPassword() {
-    const parent = document.getElementById("userDetails");
-    const password = document.getElementById("password").value
-
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-
-        // Convert hash to a hex string
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashedPassword = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    const hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'password';
-    hiddenInput.id = "hashed";
-    hiddenInput.value = hashedPassword;
-    parent.appendChild(hiddenInput);
-
-}
-
 // Function to load user data
 function loadUserData() {
     const userDetailsDiv = $("#userDetails");
@@ -78,38 +58,13 @@ function enableEditUserDetails() {
             <label for="addressCity">City:</label>
             <input type="text" id="addressCity" class="form-control" value="${userData.address.city}" required>
         </div>
-
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="confirm">Confirm Password:</label>
-            <input type="password" id="confirm" class="form-control" required>
-        </div>
-        <div id="passwordError" class="text-danger mt-1 small">Leave password and confirm empty to not change them</div>
         <button id="saveButton" class="btn btn-success">Save</button>
     `);
 
     // Add event listener to the Save button
-    $("#saveButton").on("click", async function() {
-    let passwordValid;
-    const password = document.getElementById("password");
-    const confirm = document.getElementById("confirm");
-    const errorElement = document.getElementById('passwordError');
-
-    if (password.value != confirm.value) {
-        errorElement.textContent = 'Passwords do not match!';
-        passwordValid = false;
-    } else {
-        errorElement.textContent = '';
-        passwordValid = true
-    }
-    if (passwordValid){
-        await hashPassword();
+    $("#saveButton").on("click", function() {
         saveUserDetails();
-    }
-});
+    });
 }
 // save user details
 function saveUserDetails() {
@@ -139,89 +94,60 @@ function saveUserDetails() {
                 userData = data;
                 loadUserData()});
         },
-        error: function(xhr) {
-            if (xhr.responseJSON && xhr.responseJSON.errorMessage) {
-                // If there's a custom error message from the server, show it in the alert
-                alert(`Error: ${xhr.responseJSON.errorMessage}`);
-            } else {
-                // Generic error if no message is returned
-                alert('Failed to update user details.');
-            }
+        error: function() {
+            alert('Failed to update user details.');
         }
     });
 }
 
-// Function to load paid orders, open orders (cart), and canceled orders
+// Function to load orders
 async function loadOrders() {
-    const ordersDiv = document.getElementById("paidOrders");  
-    const cartList = document.getElementById("shoppingCart");  
-    const canceledOrdersDiv = document.getElementById("canceledOrders");  
-
-    const allOrders = await fetchUserOrders();  
-
-    let openOrders = 0;
-    let closeOrders = 0;
-    let canceledOrders = 0;
-
-    // Clear previous order listings
-    ordersDiv.innerHTML = "";
-    cartList.innerHTML = "";
-    canceledOrdersDiv.innerHTML = "";
-
-    // Loop through all orders
+    const ordersDiv = document.getElementById("paidOrders");
+    const cartList = document.getElementById("shoppingCart");
+    allOrders = await fetchUserOrders() //get all orders
+    // count open\close orders
+    let openOrders = 0 
+    let closeOrders = 0 
+    // filer by status- close
     allOrders.forEach(order => {
-        // If the order status is "close" (paid)
-        if (order.status === "close") {
-            closeOrders++;
+        //add to my orders
+        if(order.status == "close")
+        {   
+            closeOrders ++;
             const orderDiv = document.createElement("div");
             orderDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
                 <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Date:</strong> ${order.date}</p>
-                <p><strong>Status: Paid</strong></p>
+                <p><strong>Status: Paid</strong> ${order.status}</p>
                 <hr>
             `;
-            ordersDiv.appendChild(orderDiv);  
+            ordersDiv.appendChild(orderDiv);
         }
-        // If the order status is "open" (in cart)
-        else if (order.status === "open") {
-            openOrders++;
+        //add to chart
+        else{
+            openOrders ++;
             const li = document.createElement("li");
-            li.innerHTML = `
-                <p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
-                <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> Remove</button>
-                <hr>
-            `;
-            cartList.appendChild(li);  
-        }
-        // If the order status is "canceled"
-        else if (order.status === "canceled") {
-            canceledOrders++;
-            const canceledDiv = document.createElement("div");
-            canceledDiv.innerHTML = `
-                <p><strong>Concert:</strong> ${order.concert}</p>
-                <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-                <p><strong>Payment:</strong> $${order.payment}</p>
-                <p><strong>Status: Canceled</strong></p>
-                <hr>
-            `;
-            canceledOrdersDiv.appendChild(canceledDiv);  
+            li.innerHTML = `<p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
+                        <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> remove</button>
+                        <hr>
+                        `;
+            cartList.appendChild(li);
         }
     });
-
-    // Update the UI if there are no orders in each section
-    if (closeOrders === 0) {
-        ordersDiv.innerHTML = "<p>No upcoming events</p>";
+    console.log('openOrders ', openOrders)
+    // if there are no open\close orders, write it to user
+    if (closeOrders == 0){
+        ordersDiv.innerHTML = "<p>No upcoming events </p>";
     }
-    if (openOrders === 0) {
-        cartList.innerHTML = "<p>Your cart is currently empty</p>";
+    console.log('closeOrders ', closeOrders)
+    if (openOrders == 0){
+        cartList.innerHTML = "<p>Your cart is currently empty </p>";
     }
-    if (canceledOrders === 0) {
-        canceledOrdersDiv.innerHTML = "<p>No canceled orders</p>"; 
-    }
+    
+    
 }
-
 
 async function fetchUserOrders() {
     const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData._id)}`;
@@ -286,10 +212,10 @@ function handlePayment() {
             // Wait for all updates to finish before redirecting
             Promise.all(updatePromises)
                 .then(() => {
+                    console.log('paid done')
                     window.location.href = "/personal_area.html"; // Redirect after successful payment
                 })
                 .catch(error => {
-
                     console.error("Error during payment processing:", error);
                     alert(error); // Display the error to the user
                 });
@@ -314,8 +240,7 @@ async function checkTicketAvailability(order) {
             // Check if there are enough available tickets
             if (concert.tickets_available < order.tickets_number) {
                 // Display the message in the HTML if there aren't enough tickets
-
-                messageDiv.text(`Oops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
+                messageDiv.text(`Ops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
                 return false; // Not enough tickets
             }
 
@@ -337,8 +262,9 @@ async function updateOrderPayd(order){
     // update order date
     const today = new Date(); // Get today's date
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-    order.date = formattedDate; // Update the date property      
-
+    order.date = formattedDate; // Update the date property
+    console.log('in updateOrderPaid: order ', order._id)
+    console.log(order.status)            
     return $.ajax({
         url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
         method: 'POST',
@@ -385,7 +311,6 @@ async function updateTickets(order) {
             }).fail((jqXHR, textStatus, errorThrown) => {
                 // Handle failure (server or network error)
                 console.error('Error updating tickets:', textStatus, errorThrown);
-
                 return Promise.reject('Failed to update tickets');
             });
         })
@@ -395,18 +320,53 @@ async function updateTickets(order) {
         });
 }
 
-
-
 async function fetchConcert(concertId) {
     const url = `/api_concerts/concert/${concertId}`;
     const response = await fetch(url, { method: "GET" });
     
     if (response.ok) {
         const concertData = await response.json();
-        return concertData[0]; // Assuming your API returns an array
+        return concertData[0]; 
     } else {
         console.error('Error fetching concert:', concertId);
         return null;
     }
 }
 
+async function hashPassword() {
+    const parent = document.getElementById("userDetails");
+    const password = document.getElementById("password").value
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+        // Convert hash to a hex string
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashedPassword = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'password';
+    hiddenInput.id = "hashed";
+    hiddenInput.value = hashedPassword;
+    parent.appendChild(hiddenInput);
+
+}
+$("#saveButton").on("click", async function() {
+    let passwordValid;
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm");
+    const errorElement = document.getElementById('passwordError');
+
+    if (password.value != confirm.value) {
+        errorElement.textContent = 'Passwords do not match!';
+        passwordValid = false;
+    } else {
+        errorElement.textContent = '';
+        passwordValid = true
+    }
+    if (passwordValid){
+        await hashPassword();
+        saveUserDetails();
+    }
+});

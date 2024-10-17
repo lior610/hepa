@@ -24,9 +24,9 @@ const deleteConcert = async (id) => {
 const editConcert = async (id, artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, price, picture) => {
     let data = { artist_name, date, hour, door_opening, location, ticket_amount, tickets_available, price };
     if (picture != null) {
-        data.picture = picture; // Add picture if available
+        data.picture = picture;
     }
-    return await Concert.updateOne({ "_id": id }, data); // Update the concert
+    return await Concert.updateOne({ "_id": id }, data);
 };
 
 
@@ -60,9 +60,9 @@ async function checkOpeningDoors(door_opening, hour) {
 }
 
 async function checkConcertDate(date) {
-    const providedDate = new Date(date); // Convert the provided date string to a Date object
-    const currentDate = new Date(); // Get the current date and time
-    // Check if the provided date is before the current date
+    const providedDate = new Date(date);
+    const currentDate = new Date();
+
     return providedDate > currentDate;
 }
 
@@ -119,19 +119,19 @@ const getTicketSoldPercentage= async () => {
         const result = await Concert.aggregate([
             {
                 $group: {
-                    _id: "$artist_name", // Group by artist name
+                    _id: "$artist_name",
                     totalTicketsSold: {
                         $sum: { 
-                            $subtract: ["$ticket_amount", "$tickets_available"] // Calculate tickets sold
+                            $subtract: ["$ticket_amount", "$tickets_available"]
                         }
                     },
-                    totalTicketsAmount: { $sum: "$ticket_amount" } // Calculate total tickets
+                    totalTicketsAmount: { $sum: "$ticket_amount" }
                 }
             },
             {
                 $project: {
-                    artist_name: "$_id", // Rename _id to artist_name
-                    _id: 0, // Exclude _id from the result
+                    artist_name: "$_id",
+                    _id: 0,
                     ticketSoldPercentage: {
                         $multiply: [
                             { $divide: ["$totalTicketsSold", "$totalTicketsAmount"] },
@@ -141,10 +141,10 @@ const getTicketSoldPercentage= async () => {
                 }
             },
             {
-                $sort: { ticketSoldPercentage: -1 } // Sort by tickets sold percentage in descending order
+                $sort: { ticketSoldPercentage: -1 }
             },
             {
-                $limit: 10 // Limit to top 10 artists
+                $limit: 10
             }
         ]);
     

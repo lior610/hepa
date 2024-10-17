@@ -13,11 +13,11 @@ router.route("/")
 
 router.route("/concert/:id") 
     .delete(loginController.isAdmin, concertsController.deleteConcert)
-    .post(loginController.isAdmin, upload.single('picture'), concertsController.editConcert) // Handle image upload
+    .post(loginController.isAdmin, upload.single('picture'), concertsController.editConcert)
     .get(concertsController.getConcert)
 
 router.route("/concert/tickets/:id")
-    .post(loginController.isLoggedIn, concertsController.editTicketsForConcert) // edit available tickets
+    .post(loginController.isLoggedIn, concertsController.editTicketsForConcert)
 
 router.route("/addconcert").post(loginController.isAdmin, upload.single('picture'), (req, res) => {
     concertsController.createConcert(req, res)});
@@ -36,7 +36,6 @@ router.route("/future").get(concertsController.getFutureConcerts);
 
 router.route("/artist/:artistName/latest-album").get(concertsController.showLatestAlbum);
 
-// New endpoint for chart data
 router.route('/api_concerts_chart').get(concertsController.getChartData); 
 
 module.exports = router;

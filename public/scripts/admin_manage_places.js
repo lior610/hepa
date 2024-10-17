@@ -19,7 +19,7 @@ function fetchPlaces() {
 function loadPlaces() {
     fetchPlaces().done(function(places) {
         const tableBody = $('#placesTable tbody');
-        tableBody.empty(); // Clear existing rows
+        tableBody.empty();
 
         places.forEach(place => {
             const row = `

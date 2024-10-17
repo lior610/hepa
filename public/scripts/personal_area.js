@@ -50,7 +50,6 @@ function loadUserData() {
 function enableEditUserDetails() {
     const userDetailsDiv = $("#userDetails");
 
-    // Replace the static text with input fields
     userDetailsDiv.html(`
         <div class="form-group">
             <label for="fullName">Full Name:</label>
@@ -141,10 +140,8 @@ function saveUserDetails() {
         },
         error: function(xhr) {
             if (xhr.responseJSON && xhr.responseJSON.errorMessage) {
-                // If there's a custom error message from the server, show it in the alert
                 alert(`Error: ${xhr.responseJSON.errorMessage}`);
             } else {
-                // Generic error if no message is returned
                 alert('Failed to update user details.');
             }
         }
@@ -163,12 +160,10 @@ async function loadOrders() {
     let closeOrders = 0;
     let canceledOrders = 0;
 
-    // Clear previous order listings
     ordersDiv.innerHTML = "";
     cartList.innerHTML = "";
     canceledOrdersDiv.innerHTML = "";
 
-    // Collect all promises in the loop
     const orderPromises = allOrders.map(async (order) => {
 
         // Take the concert date
@@ -196,7 +191,7 @@ async function loadOrders() {
             li.innerHTML = `
                 <p>${order.concert}</p>
                 <p> ${concertDate} </p>
-                <p> Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
+                <p> Quantity: ${order.tickets_number}, Price: ${order.payment} ₪</p>
                 <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> Remove</button>
                 <hr>
             `;
@@ -237,7 +232,7 @@ async function loadOrders() {
 
 async function fetchUserOrders() {
     const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData._id)}`;
-    const orders = await $.get(url); // Get the actual data from the db
+    const orders = await $.get(url);
     return orders;
 }
 
@@ -252,13 +247,13 @@ getUserData().then(data => {
 // Listeners
 $(document).ready(function() {
     const payButton = $('#payButton');
-    payButton.on('click', handlePayment); // Add click event listener to the Pay button
+    payButton.on('click', handlePayment);
 });
 
 // Event delegation for delete button
 cartList.on('click', '.btn-outline-danger', function() {
-    const orderId = $(this).data('id'); // Take the Order ID from the clicked button
-    deleteOrder(orderId); // Call deleteOrder function with the specific order ID
+    const orderId = $(this).data('id');
+    deleteOrder(orderId);
 });
 
 async function deleteOrder(id) {
@@ -297,12 +292,12 @@ function handlePayment() {
             // Wait for all updates to finish before redirecting
             Promise.all(updatePromises)
                 .then(() => {
-                    window.location.href = "/personal_area.html"; // Redirect after successful payment
+                    window.location.href = "/personal_area.html";
                 })
                 .catch(error => {
 
                     console.error("Error during payment processing:", error);
-                    alert(error); // Display the error to the user
+                    alert(error);
                 });
         },
         error: function(error) {
@@ -314,7 +309,7 @@ function handlePayment() {
 async function checkTicketAvailability(order) {
     return fetchConcert(order.concert_id)
         .then(concert => {
-            const messageDiv = $('#ticketAvailabilityMessage'); // Select the message div
+            const messageDiv = $('#ticketAvailabilityMessage');
 
             if (!concert) {
                 // Show an error message if the concert is not found
@@ -331,7 +326,7 @@ async function checkTicketAvailability(order) {
             }
 
             // If tickets are available, hide the message and return true
-            messageDiv.hide(); // Hide the message if tickets are available
+            messageDiv.hide();
             return true;
         })
         .catch(error => {
@@ -344,24 +339,24 @@ async function checkTicketAvailability(order) {
 
 async function updateOrderPayd(order){
     // change to closed          
-    order.status = "close" //close the order   
+    order.status = "close"   
     // update order date
-    const today = new Date(); // Get today's date
-    const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-    order.date = formattedDate; // Update the date property      
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    order.date = formattedDate;    
 
     return $.ajax({
-        url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
+        url: `/api_orders/order/${order._id}`,
         method: 'POST',
-        contentType: 'application/json', // Set the content type to JSON
-        data: JSON.stringify(order) // Convert the object into a JSON string
+        contentType: 'application/json',
+        data: JSON.stringify(order)
     });
 }
 async function updateTickets(order) {
     const concertID = order.concert_id;
 
     // Fetch concert data by ID
-    return fetchConcert(concertID) // Call fetchConcert, ensure it returns a promise
+    return fetchConcert(concertID)
         .then(concert => {
             if (!concert) {
                 console.error('Concert not found for ID:', concertID);
@@ -388,9 +383,8 @@ async function updateTickets(order) {
             }).done(response => {
                 // Handle success response
                 console.log(`Concert ${concertID} tickets successfully updated.`);
-                return response; // return the response to keep the chain alive
+                return response;
             }).fail((jqXHR, textStatus, errorThrown) => {
-                // Handle failure (server or network error)
                 console.error('Error updating tickets:', textStatus, errorThrown);
 
                 return Promise.reject('Failed to update tickets');
@@ -408,7 +402,7 @@ async function fetchConcert(concertId) {
     
     if (response.ok) {
         const concertData = await response.json();
-        return concertData[0]; // Assuming your API returns an array
+        return concertData[0];
     } else {
         console.error('Error fetching concert:', concertId);
         return null;

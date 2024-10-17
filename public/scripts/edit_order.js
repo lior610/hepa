@@ -30,7 +30,7 @@ async function populateForm() {
         document.getElementById("concert").value = data.concert;
         document.getElementById("tickets_number").value = data.tickets_number;
         document.getElementById("status").value = data.status;
-        document.getElementById("date").value = data.date;  // Ensure this matches the format used in the input
+        document.getElementById("date").value = data.date;
         document.getElementById("payment").value = data.payment;
         // Set the hidden concert_id field 
         document.getElementById("concert_id").value = data.concert_id;
@@ -46,16 +46,14 @@ $(document).ready(function () {
         // Send AJAX request
         $.ajax({
             type: 'POST', 
-            url: $(this).attr('action'), // Use the form's action attribute as the URL
+            url: $(this).attr('action'),
             data: formData,
             success: function (response) {
-                // Handle the success response here
-                alert(response.message); // Display success message or update UI accordingly
+                alert(response.message);
             },
             error: function (xhr) {
-                // Handle the error response here
                 const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred';
-                alert(errorMessage); // Display error message
+                alert(errorMessage);
             }
         });
     });

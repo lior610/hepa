@@ -1,5 +1,5 @@
 const path = require('path'); 
-require('custom-env').env(process.env.NODE_ENV, "./config") //take the env varible 
+require('custom-env').env(process.env.NODE_ENV, "./config")
 const axios = require('axios');
 const qs = require('qs');
 
@@ -8,7 +8,6 @@ const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const auth_token = Buffer.from(`${client_id}:${client_secret}`, 'utf-8').toString('base64');
 
-//Get an access token
 const getAuth = async () => {
     try {
         const token_url = 'https://accounts.spotify.com/api/token';
@@ -60,9 +59,7 @@ const searchArtistByName = async (artistName) => {
 // Get the latest album of an artist
 const getArtistLatestAlbum = async (artistName) => {
     try {
-        // Find artist ID by name
         const artistId = await searchArtistByName(artistName); 
-        // Get the access token
         const token = await getAuth(); 
 
         const albumResponse = await axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums`, {

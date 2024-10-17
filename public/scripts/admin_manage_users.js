@@ -18,7 +18,7 @@ function fetchUsers() {
 // Function to fetch users and populate the table
 function loadUsers(users) {
     const parent = $('#card-row');
-    parent.empty(); // Clear existing rows
+    parent.empty();
 
     users.forEach(user => {
         const card = `
@@ -72,9 +72,8 @@ function setupValidation() {
         let errors = [];
 
         if (errors.length > 0) {
-            alert(errors.join("\n"));  // Show errors
+            alert(errors.join("\n")); 
         } else {
-            // Submit the form if no errors
             form.submit();
         }
     });
@@ -93,7 +92,6 @@ function removeUser(userId) {
             url: `/api_users/user/${userId}`, 
             type: 'DELETE',
             success: function() {
-                // Find the row in the table and remove it
                 location.reload();
             },
             error: function(error) {

@@ -36,13 +36,13 @@ const editUser = async (username, full_name, password, mail, phone, address, gen
 
         // Find and update the user document
         const updatedUser = await User.findOneAndUpdate(
-            { "_id": username },  // Find by the username (_id)
-            updateFields,         // Only update the fields in the updateFields object
-            { new: true, runValidators: true }  // Return the updated document and apply validation
+            { "_id": username }, 
+            updateFields,       
+            { new: true, runValidators: true }
         );
 
         if (!updatedUser) {
-            return null;  // User not found
+            return null; 
         }
 
         return updatedUser;

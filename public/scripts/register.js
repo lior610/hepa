@@ -10,14 +10,13 @@ if (typeof phoneValid === 'undefined') {
     phoneValid = false;
 }
 
-console.log(typeof emailValid);  // This will now print 'boolean' since it is assigned false
+console.log(typeof emailValid); 
 
 
 function validateEmail() {
     var email = document.getElementById('mail').value;
     const errorElement = document.getElementById('emailError');
     
-    // Basic email validation
     var emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailPattern.test(email)) {
         errorElement.textContent = 'Please enter a valid email address.';
@@ -32,7 +31,6 @@ function validatePhone() {
     var phone = document.getElementById('phone').value;
     const errorElement = document.getElementById('phoneError');
 
-    // Basic phone number validation
     if (phone.length !== 10 || !/^[0-9]{10}$/.test(phone)) {
         errorElement.textContent = 'Please enter a valid 10-digit phone number.';
         phoneValid = false;

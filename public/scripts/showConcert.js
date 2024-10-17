@@ -9,7 +9,7 @@ function getConcert() {
         method: "GET",
         dataType: "json"
     })
-    .then(data => data[0]) // Return the first element of the data array
+    .then(data => data[0])
     .catch(error => {
         console.error("Error fetching concert:", error);
         return null;
@@ -22,7 +22,7 @@ async function fetchUserOrders() {
     const userDetailsRes = await $.get(`/api_users/user/${username}`);
     const name = userDetailsRes._id;
     const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(name)}`;
-    const orders = await $.get(url); // Get the actual data from the db
+    const orders = await $.get(url);
     return orders;
 }
 
@@ -33,7 +33,7 @@ function getLatestAlbum(artistName) {
         method: "GET",
         dataType: "json"
     })
-    .then(data => data) // Return the album data
+    .then(data => data)
     .catch(error => {
         console.error("Error fetching album:", error);
         return null;
@@ -42,7 +42,6 @@ function getLatestAlbum(artistName) {
 
 // Function to add tickets to the cart
 function addToCart(concertId, ticketAmount) {
-    // Hide any previous success message immediately
     hideSuccessMessage();
     
     //checks if the user is logged in
@@ -59,7 +58,7 @@ function addToCart(concertId, ticketAmount) {
 
             fetchUserOrders().then(orders => {
                 const existingOrder = orders.find(order => order.concert_id === concertId && order.status === 'open');
-                let messages = []; // Array to hold messages
+                let messages = [];
 
                 // If there's an existing order, notify the user how many tickets they already have
                 if (existingOrder) {
@@ -107,7 +106,7 @@ function displayError(message) {
     if (errorContainer) {
         errorContainer.textContent = message;
         errorContainer.style.display = "block";
-        errorContainer.style.color = "red"; // Red for errors
+        errorContainer.style.color = "red";
     } else {
         console.error("Error element not found.");
     }
@@ -152,7 +151,7 @@ function showConcert() {
             document.getElementById("addToCartButton").addEventListener("click", function() {
                 const concertId = document.getElementById("concertId").value;
                 const ticketAmount = document.getElementById("ticketAmount").value;
-                addToCart(concertId, ticketAmount); // Call the addToCart function
+                addToCart(concertId, ticketAmount);
             });
 
             function displayCartSuccessMessage() {
@@ -210,7 +209,6 @@ async function createOrder(concertId, ticketAmount) {
             contentType: 'application/json',
             data: JSON.stringify(newOrder),
             success: function(response) {
-                // Display success message and "View Cart" button
                 displayCartSuccessMessage();
             },
             error: function(error) {
@@ -227,13 +225,9 @@ async function createOrder(concertId, ticketAmount) {
 // Function to edit an existing order
 async function editOrder(orderId, newTicketAmount, newPayment) {
     try {
-        // Fetch the current order details
         const currentOrderRes = await $.get(`/api_orders/order/${orderId}`);
+        const currentOrder = currentOrderRes[0];
 
-        // Access the first order in the array
-        const currentOrder = currentOrderRes[0]; // Get the first element
-
-        // Check if currentOrder is defined
         if (!currentOrder) {
             alert("No order found with the specified ID.");
             return;
@@ -282,7 +276,7 @@ function displayAlbumInfo(album) {
         albumHeading.textContent = `Haven't heard ${album.name} yet?`;
         albumLink.href = album.external_urls.spotify;
         albumCover.src = album.images[0].url;
-        albumHeading.classList.add("album-heading"); // Add a specific class for styling
+        albumHeading.classList.add("album-heading");
     }
 }
 

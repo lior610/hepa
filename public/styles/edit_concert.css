@@ -33,7 +33,6 @@ label {
     margin-bottom: 5px;
 }
 
-/* Ensuring consistent styles for all input fields */
 input[type="text"],
 input[type="date"],
 input[type="time"],
@@ -65,21 +64,6 @@ input[type="submit"]:hover {
     background-color: #2e4b7d;
 }
 
-/* Footer
-footer {
-    background-color: #405389;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-}
-
-footer h4 {
-    font-size: 1.5rem;
-}
-
-footer p, .nav-link.px-2 {
-    color: #e7e7df;
-} */
 
 /* Form Button */
 input[type="submit"]:hover {

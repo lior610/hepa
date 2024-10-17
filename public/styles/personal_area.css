@@ -11,12 +11,12 @@ body {
 }
 
 .large-rounded {
-    border-radius: 30px; /* Adjust the size for larger rounded corners */
+    border-radius: 30px;
 }
 
 #carouselExampleCaptions {
     width: 50%;
-    margin: -40px auto; /* Center the carousel horizontally */
+    margin: -40px auto; 
 }
 
 .carousel-inner {
@@ -24,14 +24,14 @@ body {
 }
 
 .card {
-    height: 100%; /* Fixed height for all cards */
+    height: 100%; 
 }
 
 .carousel-card-body {
     background-color: #405389;
     color: white;
     height: 100%;
-    overflow: hidden; /* Prevent content overflow */
+    overflow: hidden;
 }
 
 .card-title {
@@ -151,7 +151,7 @@ small {
 }
 #payButton {
     align-self: flex-end;
-    margin-top: auto; /* Ensures the button stays at the bottom */
+    margin-top: auto; 
     background-color:#405389;
 }
 /* Add colors to inner divs in right section */
@@ -159,7 +159,7 @@ small {
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 5px;
-    background-color: #dbdbdb; /* Light grey background */
+    background-color: #dbdbdb;
 }
 
 h3 {

@@ -26,7 +26,6 @@ function loadMoreConcerts() {
 
 function loadClosestConcerts(concerts) {
     concerts.sort((a, b) => new Date(a.date) - new Date(b.date)); 
-    // concerts = concerts.slice(0, 3); 
 
     return concerts;
 }

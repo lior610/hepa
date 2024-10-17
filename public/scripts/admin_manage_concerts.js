@@ -1,4 +1,4 @@
-if (typeof allConcerts === 'undefined') {// Initialize variables
+if (typeof allConcerts === 'undefined') {
     let allConcerts = []; // Store all concerts for loading
     let closestConcerts = [];
 }
@@ -17,8 +17,8 @@ function hideLoadMoreButton() {
 
 // Load concerts initially and for "Load More" button
 function loadConcerts() {
-    const $concertsContainer = $('#concertList'); // Use jQuery to select the element
-    const searchQuery = $('#search-input').val().trim(); // Search bar input
+    const $concertsContainer = $('#concertList');
+    const searchQuery = $('#search-input').val().trim();
 
     // AJAX call to get all concerts
     $.ajax({
@@ -42,8 +42,8 @@ function loadConcerts() {
 
             // Loop through the next batch of concerts and display them
             nextConcerts.forEach(concert => {
-                const card = createConcertCard(concert); // Function to create the card HTML
-                $concertsContainer.append(card); // Append to the container
+                const card = createConcertCard(concert);
+                $concertsContainer.append(card);
             });
 
             // Update the current concert index for the next load
@@ -64,7 +64,7 @@ function loadConcerts() {
 
 // Load more concerts when "Load More" button is clicked
 function loadMoreConcerts() {
-    loadConcerts(); // Call loadConcerts to load the next batch
+    loadConcerts();
 }
 
 
@@ -97,12 +97,12 @@ function createConcertCard(concert) {
     // Create Edit button
     const editButton = $('<a>').addClass('btn btn-outline-primary btn-edit')
                                .text('Edit')
-                               .data('concert-id', concert._id); // Store concert ID in the button's data attribute
+                               .data('concert-id', concert._id);
     
     // Create Remove button
     const removeButton = $('<button>').addClass('btn btn-outline-danger bi bi-trash3')
                                       .text('Remove')
-                                      .data('concert-id', concert._id); // Store concert ID in the button's data attribute
+                                      .data('concert-id', concert._id);
 
     // Append buttons to actions container
     actionsContainer.append(editButton);
@@ -113,20 +113,20 @@ function createConcertCard(concert) {
     card.append(content);
     card.append(actionsContainer);
 
-    return card; // Return the constructed card
+    return card;
 }
 
 loadConcerts()
 
 // Event delegation for dynamic buttons
 $(document).on('click', '.btn-edit', function() {
-    const concertId = $(this).data('concert-id'); // Get concert ID from button's data attribute
-    editConcert(concertId); // Call the edit function
+    const concertId = $(this).data('concert-id');
+    editConcert(concertId);
 });
 
 $(document).on('click', '.btn-outline-danger', function() {
-    const concertId = $(this).data('concert-id'); // Get concert ID from button's data attribute
-    removeConcert(concertId); // Call the remove function
+    const concertId = $(this).data('concert-id');
+    removeConcert(concertId);
 });
 
 function removeConcert(concertId) {
@@ -167,7 +167,7 @@ function renderChart() {
 
         method: 'GET',
         success: function(chartData) {
-            const labels = chartData.map(concert => concert.artist_name); // Only artist names
+            const labels = chartData.map(concert => concert.artist_name);
             const ticketsSoldPercentage = chartData.map(concert => concert.ticketSoldPercentage);
 
             const ctx = document.getElementById('Chart').getContext('2d');

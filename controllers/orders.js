@@ -3,11 +3,11 @@ const concertService = require("../services/concerts")
 
 const showAllOrders = async (req, res) => {
     orders = await ordersService.getOrders();
-    return res.json(orders); //use 'json' function of res, enter 'orders' inside to get all of the orders
+    return res.json(orders);
 }
 
 const createOrder = async (req, res) => {
-    const { owner, concert, concert_id, tickets_number } = req.body; //short way for casting each part of body
+    const { owner, concert, concert_id, tickets_number } = req.body;
     try {
         // Validate owner
         const ownerValid = await ordersService.ownerExists(owner);

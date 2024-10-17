@@ -61,8 +61,6 @@ $(document).ready(function() {
             passwordInput.val(null);  // Set password to null if not changing
             confirmInput.val(null);   // Set confirm password to null if not changing
         }
-
-        // Allow password.js to run its validation on form submit
     });
 });
 

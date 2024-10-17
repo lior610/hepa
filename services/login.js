@@ -37,13 +37,11 @@ async function isAdmin(username) {
 }
 
 function validateEmail(email) {
-    // Basic email validation
     var emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     return emailPattern.test(email)
 }
 
 function validatePhone(phone) {
-    // Basic phone number validation
     return phone.length === 10 && /^[0-9]{10}$/.test(phone)
 }
 

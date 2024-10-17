@@ -110,6 +110,6 @@ body {
     transform: translateY(-2px);
 }
 #error-message {
-    color: red; /* Red color for error messages */
-    font-weight: bold; /* Make it bold */
+    color: red; 
+    font-weight: bold; 
 }

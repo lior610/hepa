@@ -68,7 +68,7 @@ const editUser = async (req, res) => {
         const updatedUser = await usersService.editUser(
             req.params.id,
             req.body.full_name,
-            password,  // Pass null if password should not be updated
+            password, 
             req.body.mail,
             req.body.phone,
             address,

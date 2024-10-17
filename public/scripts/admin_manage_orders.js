@@ -37,7 +37,7 @@ function loadMoreOrders() {
 // Function to fetch orders and populate the table
 function loadOrders(orders) {
     const parent = $('#card-row');
-    parent.empty(); // Clear existing rows
+    parent.empty();
 
     orders.forEach(order => {
         const card = `<div class="col-lg-4 col-md-6 col-sm-12 col-12 d-flex mb-4">

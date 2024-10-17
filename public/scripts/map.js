@@ -6,18 +6,17 @@ function initMap() {
         mapId: 'a6fb15e491a008ad',
     });
 
-    // fetch place locations (city + address) from the server
     $.ajax({
         url: 'http://localhost/api_places/concert-locations',
         method: 'GET',
-        dataType: 'json', // Expecting a JSON response
+        dataType: 'json',
         success: function(data) {
             // Create an InfoWindow for displaying address
             const infoWindow = new google.maps.InfoWindow();
 
             // Geocode each place and place a marker
             data.forEach(place => {
-                const fullAddress = `${place.city}, ${place.address}`; // Combine city and address
+                const fullAddress = `${place.city}, ${place.address}`;
 
                 // Use Geocoding API to get coordinates for each place
                 const geocoder = new google.maps.Geocoder();
@@ -32,8 +31,8 @@ function initMap() {
 
                         // Add a click listener to show the address in the InfoWindow
                         marker.addListener('click', () => {
-                            infoWindow.setContent(fullAddress); // Set the content of the InfoWindow
-                            infoWindow.open(map, marker); // Open the InfoWindow at the marker position
+                            infoWindow.setContent(fullAddress);
+                            infoWindow.open(map, marker);
                         });
                     } else {
                         console.error('Geocode failed: ' + status);

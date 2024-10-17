@@ -1,13 +1,11 @@
 const Order = require("../models/orders")
-//require the other models for validations
 const User = require('../models/users.js');
 const Concert = require('../models/concerts.js');
 const mongoose = require('mongoose');
 
-//what user action causes order creation?
 const createOrder = async (owner, concert, concert_id, tickets_number,
     payment,) => {
-        const order = new Order({ //new user how did it work? - why not found?
+        const order = new Order({
             owner, concert, concert_id, tickets_number, payment
         });
         order.status = "open"
@@ -29,8 +27,8 @@ const deleteOrder = async (orderId) => {
 const cancelOrdersForConcert = async (concertId) => {
     try {
         const result = await Order.updateMany(
-            { concert_id: concertId },  // Find all orders with matching concert_id
-            { $set: { status: "canceled" } } // Set their status to canceled
+            { concert_id: concertId }, 
+            { $set: { status: "canceled" } }
         );
         return result;
     } catch (error) {
@@ -56,7 +54,7 @@ const getOrder = async(orderId) => {
 
 const getUserOrders = async(owner) => {
     let orders = await Order.find({"owner": owner})
-    return orders; //returns an arr of all orders that owname is given user (by full name at the time)
+    return orders;
 }
 const getClosedOrders = async () => {
     let orders = await Order.find({"status": "close"})
@@ -91,9 +89,9 @@ async function checkTicketAvailability(concert_id, requestedTickets) {
 // Validate date is in the future
 async function checkConcertDate(concert_id){
     if(mongoose.Types.ObjectId.isValid(concert_id)){
-        const concert = await Concert.findOne({ "_id": concert_id }); //find the concert object
-        concertDate = new Date(concert.date) //take the date
-        let today = new Date() //take today
+        const concert = await Concert.findOne({ "_id": concert_id });
+        concertDate = new Date(concert.date)
+        let today = new Date()
         today.setHours(0, 0, 0, 0);
         return (concertDate > today )  
     }

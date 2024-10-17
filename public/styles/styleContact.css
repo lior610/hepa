@@ -5,21 +5,21 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f8f9fa; /* Light background for contrast */
+    background-color: #f8f9fa;
 }
 
 h2 {
-    color: #405389; /* Header color matching the site */
+    color: #405389;
     text-align: center;
 }
 
 form {
-    background-color: #fff; /* White background for the form */
+    background-color: #fff;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    margin: 0 auto; /* Center the form */
+    margin: 0 auto; 
 }
 
 button {
@@ -43,7 +43,7 @@ button:hover {
 }
 
 textarea {
-    resize: none; /* Prevents the textarea from being resized */
+    resize: none;
 }
 .contact-info {
     background-color: #fff;

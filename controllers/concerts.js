@@ -3,6 +3,7 @@ const concertsService = require("../services/concerts")
 const { getArtistLatestAlbum } = require('../services/spotifyService');
 const mongoose = require('mongoose'); //for needed type convert 
 const { postToFacebook } = require('../services/facebookService'); 
+const ordersService = require("../services/orders");
 
 const showAllConcerts = async (req, res) => {
     let concerts = await concertsService.getConcerts();
@@ -215,14 +216,19 @@ async function getConcert(req, res) {
 }
 
 async function deleteConcert(req, res) {
-    const concertId = req.params.id
+    const concertId = req.params.id;
 
     try {
+        // Delete the concert
         await concertsService.deleteConcert(concertId);
-        res.status(200).send("added successfully");
 
+        // Cancel all orders for this concert
+        const updatedOrders = await ordersService.cancelOrdersForConcert(concertId);
+
+        res.status(200).send("Concert deleted and matching orders canceled successfully.");
     } catch (error) {
-        res.status(500).send("Error deleting concert: " + error.message);
+        console.error("Error deleting concert or canceling orders: ", error);
+        res.status(500).send("Error deleting concert or canceling orders: " + error.message);
     }
 }
 

@@ -25,6 +25,19 @@ const deleteOrder = async (orderId) => {
 }
 
 
+// Update all orders for a specific concert ID to canceled
+const cancelOrdersForConcert = async (concertId) => {
+    try {
+        const result = await Order.updateMany(
+            { concert_id: concertId },  // Find all orders with matching concert_id
+            { $set: { status: "canceled" } } // Set their status to canceled
+        );
+        return result;
+    } catch (error) {
+        throw new Error(`Error updating orders: ${error.message}`);
+    }
+};
+
 const editOrder = async (orderId, owner, concert, concert_id, tickets_number,
     status, payment) => {  
     //change the date to be today, edit day
@@ -98,5 +111,6 @@ module.exports = {
     ownerExists,
     concertExists,
     checkTicketAvailability,
-    checkConcertDate
+    checkConcertDate,
+    cancelOrdersForConcert
 };

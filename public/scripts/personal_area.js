@@ -151,54 +151,77 @@ function saveUserDetails() {
     });
 }
 
-// Function to load paid orders
+// Function to load paid orders, open orders (cart), and canceled orders
 async function loadOrders() {
-    const ordersDiv = document.getElementById("paidOrders");
-    const cartList = document.getElementById("shoppingCart");
-    allOrders = await fetchUserOrders() //get all orders
-    // count open\close orders
-    let openOrders = 0 
-    let closeOrders = 0 
-    // filer by status- close
+    const ordersDiv = document.getElementById("paidOrders");  
+    const cartList = document.getElementById("shoppingCart");  
+    const canceledOrdersDiv = document.getElementById("canceledOrders");  
+
+    const allOrders = await fetchUserOrders();  
+
+    let openOrders = 0;
+    let closeOrders = 0;
+    let canceledOrders = 0;
+
+    // Clear previous order listings
+    ordersDiv.innerHTML = "";
+    cartList.innerHTML = "";
+    canceledOrdersDiv.innerHTML = "";
+
+    // Loop through all orders
     allOrders.forEach(order => {
-        //add to my orders
-        if(order.status == "close")
-        {   
-            closeOrders ++;
+        // If the order status is "close" (paid)
+        if (order.status === "close") {
+            closeOrders++;
             const orderDiv = document.createElement("div");
             orderDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
                 <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Date:</strong> ${order.date}</p>
-                <p><strong>Status: </strong> Order Paid. State ${order.status}</p>
+                <p><strong>Status: Paid</strong></p>
                 <hr>
             `;
-            ordersDiv.appendChild(orderDiv);
+            ordersDiv.appendChild(orderDiv);  
         }
-        //add to chart
-        else{
-            openOrders ++;
+        // If the order status is "open" (in cart)
+        else if (order.status === "open") {
+            openOrders++;
             const li = document.createElement("li");
-            li.innerHTML = `<p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
-                        <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> remove</button>
-                        <hr>
-                        `;
-            cartList.appendChild(li);
+            li.innerHTML = `
+                <p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
+                <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> Remove</button>
+                <hr>
+            `;
+            cartList.appendChild(li);  
+        }
+        // If the order status is "canceled"
+        else if (order.status === "canceled") {
+            canceledOrders++;
+            const canceledDiv = document.createElement("div");
+            canceledDiv.innerHTML = `
+                <p><strong>Concert:</strong> ${order.concert}</p>
+                <p><strong>Quantity:</strong> ${order.tickets_number}</p>
+                <p><strong>Payment:</strong> $${order.payment}</p>
+                <p><strong>Status: Canceled</strong></p>
+                <hr>
+            `;
+            canceledOrdersDiv.appendChild(canceledDiv);  
         }
     });
-    console.log('openOrders ', openOrders)
-    // if there are no open\close orders, write it to user
-    if (closeOrders == 0){
-        ordersDiv.innerHTML = "<p>No upcoming events </p>";
+
+    // Update the UI if there are no orders in each section
+    if (closeOrders === 0) {
+        ordersDiv.innerHTML = "<p>No upcoming events</p>";
     }
-    console.log('closeOrders ', closeOrders)
-    if (openOrders == 0){
-        cartList.innerHTML = "<p>Your cart is currently empty </p>";
+    if (openOrders === 0) {
+        cartList.innerHTML = "<p>Your cart is currently empty</p>";
     }
-    
-    
+    if (canceledOrders === 0) {
+        canceledOrdersDiv.innerHTML = "<p>No canceled orders</p>"; 
+    }
 }
+
 
 async function fetchUserOrders() {
     const url = `/api_orders/orders/by-owner?owner=${encodeURIComponent(userData._id)}`;

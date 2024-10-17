@@ -24,6 +24,7 @@ async function getOrder() {
 async function populateForm() {
     const data = await getOrder(); 
     if (data) {
+        
         document.getElementById("editOrderForm").action = `/api_orders/order/${data._id}`;
         document.getElementById("owner").value = data.owner;
         document.getElementById("concert").value = data.concert;
@@ -31,10 +32,33 @@ async function populateForm() {
         document.getElementById("status").value = data.status;
         document.getElementById("date").value = data.date;  // Ensure this matches the format used in the input
         document.getElementById("payment").value = data.payment;
-
         // Set the hidden concert_id field 
         document.getElementById("concert_id").value = data.concert_id;
     }
 }
+
+$(document).ready(function () {
+    $('#editOrderForm').on('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission immediately
+
+        const formData = $(this).serialize();
+
+        // Send AJAX request
+        $.ajax({
+            type: 'POST', 
+            url: $(this).attr('action'), // Use the form's action attribute as the URL
+            data: formData,
+            success: function (response) {
+                // Handle the success response here
+                alert(response.message); // Display success message or update UI accordingly
+            },
+            error: function (xhr) {
+                // Handle the error response here
+                const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'An error occurred';
+                alert(errorMessage); // Display error message
+            }
+        });
+    });
+});
 
 populateForm();

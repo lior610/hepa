@@ -120,7 +120,7 @@ async function loadOrders() {
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
                 <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Date:</strong> ${order.date}</p>
-                <p><strong>Status: Paid</strong> ${order.status}</p>
+                <p><strong>Status: </strong> Order Paid. State ${order.status}</p>
                 <hr>
             `;
             ordersDiv.appendChild(orderDiv);
@@ -212,10 +212,10 @@ function handlePayment() {
             // Wait for all updates to finish before redirecting
             Promise.all(updatePromises)
                 .then(() => {
-                    console.log('paid done')
                     window.location.href = "/personal_area.html"; // Redirect after successful payment
                 })
                 .catch(error => {
+
                     console.error("Error during payment processing:", error);
                     alert(error); // Display the error to the user
                 });
@@ -240,7 +240,8 @@ async function checkTicketAvailability(order) {
             // Check if there are enough available tickets
             if (concert.tickets_available < order.tickets_number) {
                 // Display the message in the HTML if there aren't enough tickets
-                messageDiv.text(`Ops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
+
+                messageDiv.text(`Oops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
                 return false; // Not enough tickets
             }
 
@@ -262,9 +263,8 @@ async function updateOrderPayd(order){
     // update order date
     const today = new Date(); // Get today's date
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-    order.date = formattedDate; // Update the date property
-    console.log('in updateOrderPaid: order ', order._id)
-    console.log(order.status)            
+    order.date = formattedDate; // Update the date property      
+
     return $.ajax({
         url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
         method: 'POST',
@@ -311,6 +311,7 @@ async function updateTickets(order) {
             }).fail((jqXHR, textStatus, errorThrown) => {
                 // Handle failure (server or network error)
                 console.error('Error updating tickets:', textStatus, errorThrown);
+
                 return Promise.reject('Failed to update tickets');
             });
         })
@@ -319,6 +320,8 @@ async function updateTickets(order) {
             return Promise.reject(error);
         });
 }
+
+
 
 async function fetchConcert(concertId) {
     const url = `/api_concerts/concert/${concertId}`;
@@ -370,3 +373,4 @@ $("#saveButton").on("click", async function() {
         saveUserDetails();
     }
 });
+

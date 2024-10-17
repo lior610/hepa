@@ -1,4 +1,7 @@
 const usersService = require("../services/users")
+const ordersController = require("./orders")
+const ordersService = require("../services/orders")
+const concertsService = require("../services/concerts")
 
 const emptyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
@@ -46,10 +49,23 @@ async function getUser(req, res) {
     return res.json(user);
 }
 
+async function deleteUserOrders(username) {
+    const orders = await ordersService.getUserOrders(username);
+    for (let order of orders) {
+        const concert = await concertsService.getConcert(order.concert_id)
+        let today = new Date();
+        if (new Date(concert[0].date) >= today) {
+            await ordersController.deleteOrder({ params: { id: order._id } }, { status: () => ({ send: () => {} }) });
+        }
+    }
+    
+}
+
 async function deleteUser(req, res) {
     const username = req.params.id
 
     try {
+        await deleteUserOrders(username)
         const result = await usersService.deleteUser(username);
         if (result){
             res.status(200).send("deleted successfully");

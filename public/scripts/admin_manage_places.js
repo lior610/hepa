@@ -93,13 +93,7 @@ function removePlace(placeId) {
             url: `/api_places/place/${placeId}`, 
             type: 'DELETE',
             success: function() {
-                // Find the row in the table and remove it
-                $(`#placesTable tbody tr`).filter(function() {
-                    return $(this).find('td').first().text() === placeId; // Match based on order ID
-                }).remove();
-
-                // Optionally, you can refresh the orders table by re-fetching all orders
-                loadPlaces();
+                location.reload();
             },
             error: function(error) {
                 console.error('Error deleting place:', error);

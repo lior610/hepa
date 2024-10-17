@@ -121,7 +121,6 @@ function applyFilters() {
 
 function clearFilters() {
     cards(currentConcertIndex, concertsPerLoad)
-    console.log(concertsPerLoad)
     if (concertsPerLoad <= allConcerts.length) {
         showLoadMoreButton()
     }

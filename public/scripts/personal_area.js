@@ -271,7 +271,6 @@ async function deleteOrder(id) {
 }
 
 function handlePayment() {
-    console.log("Start processing payment");
 
     // Fetch all user's orders using AJAX
     $.ajax({
@@ -377,10 +376,6 @@ async function updateTickets(order) {
                 console.error('Not enough tickets available');
                 return Promise.reject('Not enough tickets available');
             }
-
-            console.log('Updating tickets for concert:', concertID);
-            console.log('Previous tickets available:', concert.tickets_available);
-            console.log('New tickets available:', newTicketsAvailable);
 
             // Update the concert with the new ticket count
             return $.ajax({

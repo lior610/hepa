@@ -72,7 +72,7 @@ function saveUserDetails() {
     const updatedUserData = {
         _id: userData._id,
         full_name: $("#fullName").val(),
-        password: userData.password,
+        password: $("#hashed").val(),
         mail: $("#email").val(),
         phone: $("#phone").val(),
         address_number: $("#addressNumber").val(),  
@@ -85,7 +85,7 @@ function saveUserDetails() {
 
     // send the updated data to server
     $.ajax({
-        url: `/api_users/user/edit_details/${Id}`,  
+        url: `/api_users/user/${Id}`,
         method: 'POST',
         data: updatedUserData,
         success: function(response) {
@@ -215,7 +215,7 @@ function handlePayment() {
                     console.log('paid done')
                     window.location.href = "/personal_area.html"; // Redirect after successful payment
                 })
-                .catch(error => {f
+                .catch(error => {
                     console.error("Error during payment processing:", error);
                     alert(error); // Display the error to the user
                 });
@@ -320,8 +320,6 @@ async function updateTickets(order) {
         });
 }
 
-
-
 async function fetchConcert(concertId) {
     const url = `/api_concerts/concert/${concertId}`;
     const response = await fetch(url, { method: "GET" });
@@ -334,3 +332,41 @@ async function fetchConcert(concertId) {
         return null;
     }
 }
+
+async function hashPassword() {
+    const parent = document.getElementById("userDetails");
+    const password = document.getElementById("password").value
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+        // Convert hash to a hex string
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashedPassword = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'password';
+    hiddenInput.id = "hashed";
+    hiddenInput.value = hashedPassword;
+    parent.appendChild(hiddenInput);
+
+}
+$("#saveButton").on("click", async function() {
+    let passwordValid;
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm");
+    const errorElement = document.getElementById('passwordError');
+
+    if (password.value != confirm.value) {
+        errorElement.textContent = 'Passwords do not match!';
+        passwordValid = false;
+    } else {
+        errorElement.textContent = '';
+        passwordValid = true
+    }
+    if (passwordValid){
+        await hashPassword();
+        saveUserDetails();
+    }
+});

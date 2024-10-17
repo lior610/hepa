@@ -37,7 +37,6 @@ const editOrderNONAVTIVE = async (orderId, owner, concert, concert_id, tickets_n
 async function editOrder(orderId, owner, concert, concert_id, tickets_number,
     status, payment){
     //change the date to be today, edit day
-    console.log('in services, editing order')
     const today = new Date();
     let date = today.toISOString().slice(0, 10);
     const data = {owner, concert, concert_id, tickets_number,

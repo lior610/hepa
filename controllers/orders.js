@@ -62,7 +62,6 @@ const createOrder = async (req, res) => {
 }
 
 const editOrder = async (req, res) => {
-    console.log('editing order');
     const { owner, concert, concert_id, tickets_number } = req.body;
     try {
         // Validate owner

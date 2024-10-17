@@ -8,38 +8,6 @@ body {
     background-color: #f8f9fa; /* Light background for contrast */
 }
 
-#nav-logo {
-    height: 5rem;
-    margin-right: 10px;
-}
-
-nav {
-    background-color: #405389;
-    border-radius: 0 0 10px 10px;
-}
-
-.nav-item {
-    font-size: large;
-    margin: 7px;
-    font-weight: 200;
-}
-
-.active {
-    font-weight: 700;
-}
-
-footer {
-    background-color: #405389;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-    margin-top: auto; /* Pushes footer to bottom of page */
-}
-
-.nav-link {
-    color: white;
-}
-
 h2 {
     color: #405389; /* Header color matching the site */
     text-align: center;

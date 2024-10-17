@@ -2,22 +2,6 @@ body {
     font-family: assistant, Arial, Helvetica, sans-serif;
 }
 
-#nav-logo {
-    height: 5rem;
-    margin-right: 10px;
-}
-
-nav {
-    background-color: #405389;
-    border-radius: 0 0 10px 10px;
-}
-
-.nav-item {
-    font-size: large;
-    margin: 7px;
-    font-weight: 200;
-}
-
 /* Container */
 .container {
     width: 50%;
@@ -81,7 +65,7 @@ input[type="submit"]:hover {
     background-color: #2e4b7d;
 }
 
-/* Footer */
+/* Footer
 footer {
     background-color: #405389;
     color: white;
@@ -95,7 +79,7 @@ footer h4 {
 
 footer p, .nav-link.px-2 {
     color: #e7e7df;
-}
+} */
 
 /* Form Button */
 input[type="submit"]:hover {

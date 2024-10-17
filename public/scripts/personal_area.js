@@ -168,17 +168,22 @@ async function loadOrders() {
     cartList.innerHTML = "";
     canceledOrdersDiv.innerHTML = "";
 
-    // Loop through all orders
-    allOrders.forEach(order => {
+    // Collect all promises in the loop
+    const orderPromises = allOrders.map(async (order) => {
+
+        // Take the concert date
+        const concert = await fetchConcert(order.concert_id);
+        let concertDate = concert ? concert.date : 'concert canceled!';
+
         // If the order status is "close" (paid)
         if (order.status === "close") {
-            closeOrders++;
+            closeOrders += 1;
             const orderDiv = document.createElement("div");
             orderDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-                <p><strong>Payment:</strong> ${order.payment} ₪</p>
-                <p><strong>Date:</strong> ${order.date}</p>
+                <p><strong>Payment:</strong>${order.payment} ₪</p>
+                <p><strong>Concert Date:</strong> ${concertDate}</p>
                 <p><strong>Status: Paid</strong></p>
                 <hr>
             `;
@@ -186,10 +191,12 @@ async function loadOrders() {
         }
         // If the order status is "open" (in cart)
         else if (order.status === "open") {
-            openOrders++;
+            openOrders += 1;
             const li = document.createElement("li");
             li.innerHTML = `
-                <p>${order.concert} - Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
+                <p>${order.concert}</p>
+                <p> ${concertDate} </p>
+                <p> Quantity: ${order.tickets_number}, Price: $${order.payment}</p>
                 <button id="btn-delete-order" class="btn btn-outline-danger bi bi-trash3" data-id="${order._id}" onclick="deleteOrder('${order._id}')"> Remove</button>
                 <hr>
             `;
@@ -197,12 +204,13 @@ async function loadOrders() {
         }
         // If the order status is "canceled"
         else if (order.status === "canceled") {
-            canceledOrders++;
+            canceledOrders += 1;
             const canceledDiv = document.createElement("div");
             canceledDiv.innerHTML = `
                 <p><strong>Concert:</strong> ${order.concert}</p>
                 <p><strong>Quantity:</strong> ${order.tickets_number}</p>
-                <p><strong>Payment:</strong> ${order.payment} ₪</p>
+                <p><strong>Concert Date:</strong> ${concertDate}</p>
+                <p><strong>Payment:</strong> $${order.payment}</p>
                 <p><strong>Status: Canceled</strong></p>
                 <hr>
             `;
@@ -210,7 +218,10 @@ async function loadOrders() {
         }
     });
 
-    // Update the UI if there are no orders in each section
+    // Wait for all orders processing to complete
+    await Promise.all(orderPromises);
+
+    // Now update the UI for empty sections
     if (closeOrders === 0) {
         ordersDiv.innerHTML = "<p>No upcoming events</p>";
     }
@@ -221,6 +232,7 @@ async function loadOrders() {
         canceledOrdersDiv.innerHTML = "<p>No canceled orders</p>"; 
     }
 }
+
 
 
 async function fetchUserOrders() {
@@ -259,7 +271,6 @@ async function deleteOrder(id) {
 }
 
 function handlePayment() {
-    console.log("Start processing payment");
 
     // Fetch all user's orders using AJAX
     $.ajax({
@@ -366,10 +377,6 @@ async function updateTickets(order) {
                 return Promise.reject('Not enough tickets available');
             }
 
-            console.log('Updating tickets for concert:', concertID);
-            console.log('Previous tickets available:', concert.tickets_available);
-            console.log('New tickets available:', newTicketsAvailable);
-
             // Update the concert with the new ticket count
             return $.ajax({
                 url: `/api_concerts/concert/tickets/${concert._id}`, // Update the concert's ticket count
@@ -394,8 +401,6 @@ async function updateTickets(order) {
             return Promise.reject(error);
         });
 }
-
-
 
 async function fetchConcert(concertId) {
     const url = `/api_concerts/concert/${concertId}`;

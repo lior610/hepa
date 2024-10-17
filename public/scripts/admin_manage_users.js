@@ -83,7 +83,6 @@ function setupValidation() {
 
 // Example Edit and Remove button functionality (stub)
 function editUser(userId) {
-    console.log('Edit user', userId);
     window.location.href = `/edit_user.html?id=${userId}`;
 }
 

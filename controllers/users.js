@@ -22,7 +22,7 @@ const editUser = async (req, res) => {
         return res.status(500).send("No referer found");
     }
 
-    console.log("controller edit user details for ", req.params.id);
+    
     if (!loginService.validateEmail(req.body.mail)) {
         const errorTitle = "Invalid Mail";
         const errorMessage = "Oops! The e-mail is not on the right format. Please check and try again.";

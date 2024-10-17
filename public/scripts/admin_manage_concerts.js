@@ -32,7 +32,6 @@ function loadConcerts() {
                 filteredConcerts = searchByName(allConcerts, searchQuery);
                 currentConcertIndex = 0
             }
-            console.log(filteredConcerts)
 
             // Clear previous content when starting a new search or loading for the first time
             if (currentConcertIndex === 0) {
@@ -214,7 +213,6 @@ function searchByName(concerts, searchQuery) {
         return e.artist_name.toLowerCase().includes(lowerCase);
     })
 
-    console.log(filteredResults)
     return filteredResults
 }
 

@@ -93,23 +93,23 @@ function enableEditUserDetails() {
 
     // Add event listener to the Save button
     $("#saveButton").on("click", async function() {
-        let passwordValid;
-        const password = document.getElementById("password");
-        const confirm = document.getElementById("confirm");
-        const errorElement = document.getElementById('passwordError');
-    
-        if (password.value != confirm.value) {
-            errorElement.textContent = 'Passwords do not match!';
-            passwordValid = false;
-        } else {
-            errorElement.textContent = '';
-            passwordValid = true
-        }
-        if (passwordValid){
-            await hashPassword();
-            saveUserDetails();
-        }
-    });
+    let passwordValid;
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm");
+    const errorElement = document.getElementById('passwordError');
+
+    if (password.value != confirm.value) {
+        errorElement.textContent = 'Passwords do not match!';
+        passwordValid = false;
+    } else {
+        errorElement.textContent = '';
+        passwordValid = true
+    }
+    if (passwordValid){
+        await hashPassword();
+        saveUserDetails();
+    }
+});
 }
 // save user details
 function saveUserDetails() {
@@ -127,9 +127,10 @@ function saveUserDetails() {
         kind: userData.kind
 
     };
+
     // send the updated data to server
     $.ajax({
-        url: `/api_users/user/${Id}`,  
+        url: `/api_users/user/${Id}`,
         method: 'POST',
         data: updatedUserData,
         success: function(response) {
@@ -264,7 +265,8 @@ function handlePayment() {
                 .then(() => {
                     window.location.href = "/personal_area.html"; // Redirect after successful payment
                 })
-                .catch(error => {f
+                .catch(error => {
+
                     console.error("Error during payment processing:", error);
                     alert(error); // Display the error to the user
                 });
@@ -289,6 +291,7 @@ async function checkTicketAvailability(order) {
             // Check if there are enough available tickets
             if (concert.tickets_available < order.tickets_number) {
                 // Display the message in the HTML if there aren't enough tickets
+
                 messageDiv.text(`Oops, someone just bought those tickets. There are only ${concert.tickets_available} tickets left. Hurry to order!`).show();
                 return false; // Not enough tickets
             }
@@ -312,6 +315,7 @@ async function updateOrderPayd(order){
     const today = new Date(); // Get today's date
     const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
     order.date = formattedDate; // Update the date property      
+
     return $.ajax({
         url: `/api_orders/order/${order._id}`, // Adjust the endpoint as needed
         method: 'POST',
@@ -351,10 +355,14 @@ async function updateTickets(order) {
                 data: JSON.stringify({
                     tickets_available: newTicketsAvailable
                 })
-            }).then(response => {
+            }).done(response => {
+                // Handle success response
                 console.log(`Concert ${concertID} tickets successfully updated.`);
-            }).catch(error => {
-                console.error('Error updating tickets:', error);
+                return response; // return the response to keep the chain alive
+            }).fail((jqXHR, textStatus, errorThrown) => {
+                // Handle failure (server or network error)
+                console.error('Error updating tickets:', textStatus, errorThrown);
+
                 return Promise.reject('Failed to update tickets');
             });
         })
@@ -378,3 +386,4 @@ async function fetchConcert(concertId) {
         return null;
     }
 }
+

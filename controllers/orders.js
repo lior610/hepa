@@ -63,25 +63,22 @@ const createOrder = async (req, res) => {
 }
 
 const editOrder = async (req, res) => {
-    const { owner, concert, concert_id, tickets_number} = req.body; //short way for casting each part of body
+    const { owner, concert, concert_id, tickets_number } = req.body;
     try {
         // Validate owner
         const ownerValid = await ordersService.ownerExists(owner);
-        console.log(owner);
         if (!ownerValid) {
             const errorTitle = "Invalid Owner";
             const errorMessage = "Oops! Owner username does not exist. Please check and try again.";
-            
             res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
             return;
         }
 
-        // Validate concert exist and matches id
+        // Validate concert
         const concertValid = await ordersService.concertExists(concert, concert_id);
         if (!concertValid) {
             const errorTitle = "Invalid Request";
             const errorMessage = "Oops! Concert does not exist with this id. Please check and try again.";
-            
             res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
             return;
         }
@@ -91,35 +88,40 @@ const editOrder = async (req, res) => {
         if (!ticketsValid) {
             const errorTitle = "Invalid Request";
             const errorMessage = "Oops! Not enough tickets available. Please check and try again.";
-            
             res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
             return;
-        }    
+        }
 
-        // Validate date is in the future
+        // Validate date
         const concertDateValid = await ordersService.checkConcertDate(concert_id);
         if (!concertDateValid) {
             const errorTitle = "Invalid Request";
             const errorMessage = "Oops! Concert is in the past. Please check and try again.";
-            
             res.redirect(`/error_404.html?title=${errorTitle}&message=${errorMessage}`);
             return;
         }
-        // If validation passes, proceed to create the order
-        const updatedOrder = await ordersService.editOrder(req.params.id,
-            req.body.owner,
-            req.body.concert,
-            req.body.concert_id, 
-            req.body.tickets_number,
+
+        // Edit the order if validation passes
+        const updatedOrder = await ordersService.editOrder(
+            req.params.id,
+            owner,
+            concert,
+            concert_id,
+            tickets_number,
             req.body.status,
             req.body.payment
-        )
-        res.redirect("/admin.html") //redirect every func to rellevat page 
+
+        );
+
+        // Short success response
+        res.status(200).json({ message: "Order successfully updated", updatedOrder });
+
     } catch (error) {
-        console.log(error)
+        console.log('Error editing order:', error);
+        res.status(500).json({ message: 'Internal server error', error });
     }
-    
-}
+};
+
 
 async function getOrder(req, res) {
     const orderId = req.params.id  //export the id from the parameters of the request

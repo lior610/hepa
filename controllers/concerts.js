@@ -239,7 +239,19 @@ async function getFutureConcerts(req, res) {
 
 const editTicketsForConcert = async (req, res) => {
     const updatedTickets = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
-    
+    try {
+        // Call the service to update the concert tickets
+        const updatedTickets = await concertsService.editTicketsForConcert(req.params.id, req.body.tickets_available);
+        // Check if the update was successful
+        if (updatedTickets.modifiedCount >= 0) {
+            return res.status(200).json({ message: 'Tickets updated successfully' });
+        } else {
+            return res.status(404).json({ message: 'Concert not found or no changes made' });
+        }
+    } catch (error) {
+        console.error('Error updating tickets:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
 }
 const getChartData = async (req, res) => {
     try {

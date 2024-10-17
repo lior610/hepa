@@ -94,8 +94,14 @@ function saveUserDetails() {
                 userData = data;
                 loadUserData()});
         },
-        error: function() {
-            alert('Failed to update user details.');
+        error: function(xhr) {
+            if (xhr.responseJSON && xhr.responseJSON.errorMessage) {
+                // If there's a custom error message from the server, show it in the alert
+                alert(`Error: ${xhr.responseJSON.errorMessage}`);
+            } else {
+                // Generic error if no message is returned
+                alert('Failed to update user details.');
+            }
         }
     });
 }

@@ -58,6 +58,7 @@ function confirmPassword () {
 
 function submitButton() {
     const submit = document.getElementById("submit-button")
+    console.log(submit)
     if (passwordValid && emailValid && phoneValid) {
         submit.classList.remove("disabled")
     } else {

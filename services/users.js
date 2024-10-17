@@ -51,6 +51,20 @@ const editUser = async (username, full_name, password, mail, phone, address, gen
     }
 };
 
+function validateEditUserFields(data) {
+    for (let [key, value] of Object.entries(data)) {
+        if (value == null || value == "") {
+            if (key == "password") {
+                continue;
+            } else {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 const getUser = async(username) => {
     let users = await User.find({"_id": username})
     return users[0];
@@ -60,5 +74,6 @@ module.exports = {
     getUsers,
     deleteUser,
     editUser,
-    getUser
+    getUser,
+    validateEditUserFields
 };
